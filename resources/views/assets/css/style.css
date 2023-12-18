@@ -1,0 +1,296 @@
+/*============
+font-family: 'Athelas';
+ font-family: 'GE Elegant';
+=============*/
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: none;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+p {
+    margin: 0;
+    padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    padding: 0;
+}
+body{
+    padding-bottom: 20px;
+    font-family: 'Athelas';
+    margin: 25px 0px;
+}
+/*=========================Company Details Area Start===============================*/
+.wp_wapper{
+      width: 790px;
+    margin: 0 auto;
+    border: 1px solid black;
+    padding: 0px 50px;
+}
+.company_details_area {
+      padding-top: 50px;
+    font-family: 'Athelas';
+}
+
+.company_logo {
+    text-align: center;
+   /* border-right: 2px solid #cccccb;*/
+    position: relative;
+}
+.company_logo:after{
+    content: "";
+    clear: both;
+    position: absolute;
+    top: 0%;
+    right: -5%;
+    width: 2px;
+    height: 90%;
+    background: #cccccb;
+    
+}
+.company_logo_img {}
+
+.company_logo_img img {
+    max-height: 120px;
+    max-width: 120px;
+    border-radius: 50%;
+}
+
+.company_name {}
+
+.company_name h4 {
+    font-size: 17px;
+    color: #414042;
+    font-weight: 600;
+    position: relative;
+    padding-top: 35px;
+    padding-bottom: 18px;
+    letter-spacing: 2px;
+    
+}
+
+.company_name h4::after {
+	content: "";
+	position: absolute;
+	clear: both;
+	bottom: 10%;
+	right: 2%;
+	width: 110px;
+	height: 4px;
+	background: #cccccb;
+}
+.company_name p {
+	font-size: 16px;
+	color: #414042;
+	font-weight: 600;
+	text-align: end;
+	padding-right: 27px;
+}
+
+.company_details {
+    padding-left: 40px;
+}
+
+.company_details_left {
+    padding-bottom: 25px;
+   
+}
+
+.company_details_left p {
+    font-size: 13px;
+    color: #414042;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+.company_details_left span {
+    display: inline-block;
+    font-size: 13px;
+    color: #414042;
+    font-weight: 500;
+   
+}
+.bottom_border{
+    display: inline-block;
+    font-size: 13px;
+    color: #414042;
+    font-weight: 500;
+     position: relative;
+}
+.bottom_border:after {
+    content: "";
+    position: absolute;
+    clear: both;
+    bottom: -80%;
+    left: 0%;
+    width: 93px;
+    height: 2px;
+    background: #cccccb;
+}
+.company_details_left:nth-child() span{
+ color: red;
+}
+.company_details_right {
+    padding-left: 25px;
+}
+.company_details_right p{
+    font-size: 13px;
+    color: #414042;
+    font-weight: 500;
+}
+
+/*=========================Company Details Area End===============================*/
+
+/*=========================Tax Incoive Start===============================*/
+.tex_invoice_area{
+    padding-top: 55px;
+  
+}
+.heading{
+    text-align: center;
+}
+.heading h4{
+     font-size: 15px;
+    color: #414042;
+    font-weight: 600;
+    padding-bottom: 10px;
+}
+.heading h4 span{
+     font-size: 15px;
+    color: #414042;
+    font-weight: 600;
+    padding-bottom: 10px;
+    font-family: 'GE Elegant';
+}
+.padding_left{
+   padding:  0px 15px;
+}
+.t_head{
+   background: #cccccb;
+    height:50px;
+    padding-left: 10px;
+}
+.border_two{
+    position: relative;
+    padding: 25px 0px;
+    
+}
+.border_two:after {
+    content: "";
+    position: absolute;
+    clear: both;
+    bottom: 0%;
+    left: 5%;
+    width: 93px;
+    height: 2px;
+    background: #cccccb;
+    
+    
+}
+.main_table table thead tr th{
+     font-size: 13px;
+    color: #414042;
+    font-weight: 600;
+    font-family: 'Athelas';
+    letter-spacing: 1px;
+}
+.main_table table tbody tr td{
+     font-size: 13px;
+    color: #414042;
+    font-weight: 400;
+    font-family: 'Athelas';
+    letter-spacing: 1px;
+    padding-left: 15px;
+
+}
+
+/*=========================Tax Incoive end===============================*/
+
+
+/*=========================Footer Start===============================*/
+.footer_area{
+    padding-top: 50px;
+    margin-bottom: 15px;
+}
+.footer_item{
+    display: flex;
+    justify-content: flex-end;
+    
+}
+.footer_text{
+    padding-right: 25px;
+}
+.footer_text p{
+     font-size: 13px;
+    color: #414042;
+    font-weight: 600;
+}
+.footer_qr{}
+.footer_qr img{
+    max-height: 60px;
+    max-width: 60px;
+}
+.powerd_by{
+    border-bottom: 2px solid #cccccb;
+    width: 75%;
+    margin: 0 auto;
+    margin-top: -25px;
+}
+.powerd_by p{
+    font-size: 13px;
+    color: #414042;
+    font-weight: 600;
+    letter-spacing:2px;
+    cursor: pointer;
+}
+.powerd_by p img{
+    max-width: 25px;
+    max-height: 15px;
+    margin: 0px;
+    padding: 0px;
+}
+/*=========================Footer End===============================*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

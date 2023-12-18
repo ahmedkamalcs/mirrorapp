@@ -1,0 +1,75 @@
+
+@media all and (max-width:991px) {
+   .wp_wapper {
+	width: 100%;
+	margin: 0 auto;
+	border: none;
+	padding: 0px 35px;
+}
+}
+
+@media all and (max-width:768px) {
+  .company_name p {
+	
+	text-align: center;
+	padding-right: 45px;
+}
+    .company_name h4::after {
+	right: 39%;
+
+}
+        .company_name {
+	margin-bottom: 25px;
+}
+    .company_logo {
+	text-align: center;
+	border-right: none;
+	border-bottom: 2px solid #cccccb;
+
+	margin: 0 auto;
+	margin-bottom: 25px;
+}
+    .powerd_by {
+
+	width: 64%;
+
+}
+    .tex_invoice_area {
+	padding-top: 10px;
+}
+    .company_details_area {
+	padding-top: 10px;
+}
+    .company_logo::after {
+
+	display: none;
+}
+}
+
+@media all and (max-width:576px) {
+  
+}
+
+@media all and (max-width:480px) {
+   
+.company_name h4::after {
+	right: 33%;
+}
+    .company_name {
+	margin-bottom: 17px;
+}
+    .main_table table tbody tr td {
+	font-size: 11px;
+	color: #414042;
+	font-weight: 400;
+	padding-left: 10px;
+}
+    .powerd_by {
+	border-bottom: 2px solid #cccccb;
+	width: 48%;
+
+}
+    
+}
+
+@media all and (max-width:320px) {}
