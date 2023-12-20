@@ -30,6 +30,7 @@ class UserOtpClient  {
         $bUserOtp = new BUserOtp();
         $userOtpDTO = new UserOtpDTO();
         $userOtpDTO->setPhoneNumber($request->phoneNumber);
+        
 //        $userOtpDTO->setApiCall('0');
         return $bUserOtp->saveOtp($userOtpDTO);
     }
@@ -42,6 +43,15 @@ class UserOtpClient  {
 //        $userOtpDTO->setApiCall('0');
         $bUserOtp = new BUserOtp();
         return $bUserOtp->verify($userOtpDTO);
+    }
+    public function verifyLogingOtp(Request $request)
+    {
+        $userOtpDTO = new UserOtpDTO();
+        $userOtpDTO->setOTP($request->otp);
+        $userOtpDTO->setPhoneNumber($request->phoneNumber);
+//        $userOtpDTO->setApiCall('0');
+        $bUserOtp = new BUserOtp();
+        return $bUserOtp->verifyLogingOtp($userOtpDTO);
     }
     
     

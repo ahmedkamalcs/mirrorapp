@@ -14,7 +14,7 @@ use App\Http\Controllers\api\v1\dto\UserDTO;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\api\v1\dto\ModelInterface;
 use App\Http\Controllers\api\v1\dto\AppDTO;
-
+use App\Http\Controllers\api\v1\dto\UserOtpDTO;
 
 /**
  * @author ISG
@@ -54,7 +54,7 @@ class User extends Model implements ModelInterface{
         $user = new User();
         $user->user_name = $userDTO->getUserName();
         $user->password = Hash::make($userDTO->getPassword());
-        $user->first_name = $userDTO->getFirstName();
+        $user->first_name = $userDTO->getFullName();
         $user->last_name = $userDTO->getLastName();
         $user->user_active = $userDTO->isUserActive();
         $user->user_last_login = $userDTO->getUserLastLogin();
@@ -82,6 +82,22 @@ class User extends Model implements ModelInterface{
             return $targetUserDTO;
         }
         return null;
+    }
+    public function getDTOByPhoneNo(UserOtpDTO $userOtpDto)
+    {
+        $targetUserDTO = new UserDTO("", "");
+        $userArr1 = User::where('user_phone_no', $userOtpDto->getPhoneNumber())->get();
+        if($userArr1)
+        {
+        //    $targetUserDTO->setId($userArr[0]->id);
+        //    $targetUserDTO->setUserName($userArr[0]->user_name);
+         //   $targetUserDTO->setFirstName($userArr[0]->first_name);
+        //    $targetUserDTO->setLastName($userArr[0]->last_name);
+         //   $targetUserDTO->setIsPhoneVerified($userArr[0]->is_phone_verified);
+         //   return $targetUserDTO;
+         return 0;
+        }
+        return $userArr1;
     }
 
 

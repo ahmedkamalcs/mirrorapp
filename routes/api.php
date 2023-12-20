@@ -59,6 +59,7 @@ Route::group(['namespace' => 'App\Http\Controllers\api\v1\sns\client', 'prefix' 
     Route::post('pushSnsMessage', 'SnsServiceClient@pushMessage');
     Route::post('saveOtp', 'UserOtpClient@saveOtp');
     Route::post('verifyOtp', 'UserOtpClient@verifyOtp');
+    Route::post('verifyLogingOtp', 'UserOtpClient@verifyLogingOtp');
 });
 
 /*Rout Tax Model. Group v1*/

@@ -6,7 +6,8 @@ use App\Http\Controllers\api\v1\dto\AppDTO;
 use Illuminate\Http\Request;
 use App\Http\Controllers\api\v1\dto\UserDTO;
 use App\Http\Controllers\api\v1\dto\UserCompanyDTO;
-
+use App\Http\Controllers\api\v1\sns\bo\bUserOtp;
+use App\Http\Controllers\api\v1\dto\UserOtpDTO;
 class UserClient  {
 
     public function listAll() {
@@ -28,11 +29,15 @@ class UserClient  {
     public function loginByPhoneNumber(Request $request)
     {
         //Build User DTO
-        $userDTO = new UserDTO("", $request->password);
-        $userDTO->setPhoneNumber($request->phoneNo);
-        $buser = new BUser();
+        $userOtpDTO = new UserOtpDTO();
+        $userOtpDTO->setPhoneNumber($request->phoneNumber);
+        $bUserOtp = new bUserOtp();
+        return $bUserOtp->saveOtp($userOtpDTO);
+   
+        //$userDTO->setPhoneNumber($request->phoneNo);
+        //$buser = new BUser();
 //        $userDTO->setApiCall('0');
-        return $buser->loginByPhoneNumber($userDTO);
+       // return $buser->loginByPhoneNumber($userDTO);
     }
     
     public function createUser(Request $request)
@@ -55,14 +60,14 @@ class UserClient  {
     
     public function createUserByPhoneNumber(Request $request)
     {
-        $userDTO = new UserDTO("", "");
-        $userDTO->setFirstName($request->firstName);
-        $userDTO->setLastName($request->lastName);
-        $userDTO->setPassword($request->password);
-        $userDTO->setPhoneNumber($request->phoneNumber);
-//        $userDTO->setApiCall('1');
-        $bUser = new BUser();
-        return $bUser ->createUserByPhoneNumber($userDTO);
+        $userOtpDTO = new UserOtpDTO();
+        $userOtpDTO->setFullName($request->FullName);
+        $userOtpDTO->setPhoneNumber($request->phoneNumber);
+        //$userDTO->setLastName($request->lastName);
+        //$userDTO->setPassword($request->password);
+        //$userDTO->setApiCall('1');
+        $bUserOtp = new bUserOtp();
+        return $bUserOtp->saveOtp($userOtpDTO);
     }
     
     public function addUserToCompany(Request $request){

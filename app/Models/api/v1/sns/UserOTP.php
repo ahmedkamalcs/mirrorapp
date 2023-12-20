@@ -83,14 +83,14 @@ class UserOTP extends Model implements ModelInterface{
 
         $this->phone_number = $userOtpDTO->getPhoneNumber();
         $this->otp = $userOtpDTO->getOTP();
-
+        $this->full_name= $userOtpDTO->getFullName();
 
         $obj = $this->save();
         $userOtpDTO->setId($this->id);
 
         //Send SMS
-        $bSNSService = new BSnsService();
-        $bSNSService->sendSMS(new SnsDTO($userOtpDTO->getPhoneNumber(), $userOtpDTO->getOTP()));
+       // $bSNSService = new BSnsService();
+       // $bSNSService->sendSMS(new SnsDTO($userOtpDTO->getPhoneNumber(), $userOtpDTO->getOTP()));
 
         return $obj;
     }
@@ -117,7 +117,7 @@ class UserOTP extends Model implements ModelInterface{
     public function getDataDTO(UserOtpDTO $userOtpDTO)
     {
         $userOtp = new UserOtpDTO();
-        $query = "select * from ".$this->table." where phone_number = '%".$userOtpDTO->getPhoneNumber()."%'"
+        $query = "select * from ".$this->table." where phone_number like '%".$userOtpDTO->getPhoneNumber()."%'"
                    . " order by created_at desc limit 1";
         $userOtpArr = DBUtil::select($query);//UserOTP::where('phone_number', $userOtpDTO->getPhoneNumber() )->get();
         if($userOtpArr)
@@ -125,6 +125,7 @@ class UserOTP extends Model implements ModelInterface{
             $userOtp->setId($userOtpArr[0]->id);
             $userOtp->setPhoneNumber($userOtpArr[0]->phone_number);
             $userOtp->setOTP($userOtpArr[0]->otp);
+            $userOtp->setFullName($userOtpArr[0]->full_name);
             return $userOtp;
         }
         return null;
@@ -147,6 +148,7 @@ class UserOTP extends Model implements ModelInterface{
             $userOtpDTO->setId($userOtpArr[0]->id);
             $userOtpDTO->setEmail($userOtpArr[0]->email);
             $userOtpDTO->setOTP($userOtpArr[0]->otp);
+            $userOtpDTO->setFullName($userOtpArr[0]->full_name);
             return $userOtpDTO;
         }
         return null;

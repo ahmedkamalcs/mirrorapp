@@ -21,6 +21,7 @@ class UserDTO  implements DTOInterface{
     private $userName;
     private $password;
     private $firstName;
+    private $FullName;
     private $lastName;
     private $userActive;
     private $userLastLogin;
@@ -62,7 +63,12 @@ class UserDTO  implements DTOInterface{
     public function setUserName($userName) {
         $this->userName = $userName;
     }
-
+    public function setFullName($FullName) {
+        $this->FullName = $FullName;
+    }
+    public function getFullName() {
+        return $this->FullName;
+    }
     public function getUserName() {
         return $this->userName;
     }

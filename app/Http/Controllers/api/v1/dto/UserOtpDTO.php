@@ -23,7 +23,7 @@ class UserOtpDTO implements DTOInterface {
     private $apiCall = '1'; //API Calls Active by Default
     private $email;
     private $otpSent;
-
+    private $fullName;
     function getApiCall() {
         return $this->apiCall;
     }
@@ -43,7 +43,13 @@ class UserOtpDTO implements DTOInterface {
     public function getId() {
         return $this->id;
     }
+    public function setFullName($fullName) {
+        $this->fullName = $fullName;
+    }
 
+    public function getFullName() {
+        return $this->fullName;
+    }
     public function setPhoneNumber($phoneNumeber) {
         $this->phoneNumber = SnsDTO::formatePhoneNumber($phoneNumeber);
     }
