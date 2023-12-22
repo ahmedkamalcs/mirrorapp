@@ -6,7 +6,7 @@ use App\Http\Controllers\api\v1\dto\AppDTO;
 use Illuminate\Http\Request;
 use App\Http\Controllers\api\v1\dto\UserDTO;
 use App\Http\Controllers\api\v1\dto\UserCompanyDTO;
-use App\Http\Controllers\api\v1\sns\bo\bUserOtp;
+use App\Http\Controllers\api\v1\sns\bo\BUserOtp;
 use App\Http\Controllers\api\v1\dto\UserOtpDTO;
 class UserClient  {
 
@@ -66,7 +66,7 @@ class UserClient  {
         //$userDTO->setLastName($request->lastName);
         //$userDTO->setPassword($request->password);
         //$userDTO->setApiCall('1');
-        $bUserOtp = new bUserOtp();
+        $bUserOtp = new BUserOtp();
         return $bUserOtp->saveOtp($userOtpDTO);
     }
     
