@@ -88,9 +88,9 @@ class UserOTP extends Model implements ModelInterface{
         $obj = $this->save();
         $userOtpDTO->setId($this->id);
 
-        //Send SMS
-       // $bSNSService = new BSnsService();
-       // $bSNSService->sendSMS(new SnsDTO($userOtpDTO->getPhoneNumber(), $userOtpDTO->getOTP()));
+        //Send SMS.. Removed until Quota of the SMS is increased
+//        $bSNSService = new BSnsService();
+//        $bSNSService->sendSMS(new SnsDTO($userOtpDTO->getPhoneNumber(), $userOtpDTO->getOTP()));
 
         return $obj;
     }
