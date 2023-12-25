@@ -62,6 +62,12 @@ Route::group(['namespace' => 'App\Http\Controllers\api\v1\sns\client', 'prefix' 
     Route::post('verifyLogingOtp', 'UserOtpClient@verifyLogingOtp');
 });
 
+/*Rout Salon. Group v1*/
+Route::group(['namespace' => 'App\Http\Controllers\api\v1\salon\client', 'prefix' => 'v1'], function() {
+    Route::post('uploadSalonGalleryAndLogo', 'SalonClient@SalonGalleryAndLogo');
+    
+});
+
 /*Rout Tax Model. Group v1*/
 Route::group(['namespace' => 'App\Http\Controllers\api\v1\tax\client', 'prefix' => 'v1'], function() {
     Route::post('saveTax', 'TaxClient@save');

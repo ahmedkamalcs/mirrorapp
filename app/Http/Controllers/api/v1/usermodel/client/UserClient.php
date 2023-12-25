@@ -70,6 +70,7 @@ class UserClient  {
         return $bUserOtp->saveOtp($userOtpDTO);
     }
     
+   
     public function addUserToCompany(Request $request){
         $userCompanyDto = new UserCompanyDTO();
         
