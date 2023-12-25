@@ -31,7 +31,7 @@ class UserClient  {
         //Build User DTO
         $userOtpDTO = new UserOtpDTO();
         $userOtpDTO->setPhoneNumber($request->phoneNumber);
-        $bUserOtp = new bUserOtp();
+        $bUserOtp = new BUserOtp();
         return $bUserOtp->saveOtp($userOtpDTO);
    
         //$userDTO->setPhoneNumber($request->phoneNo);
