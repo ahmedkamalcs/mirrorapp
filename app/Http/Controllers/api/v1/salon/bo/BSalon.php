@@ -1,11 +1,13 @@
 <?php
 namespace App\Http\Controllers\api\v1\salon\bo;
+use App\Http\Controllers\api\v1\dto\ServicesDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\api\v1\dto\BusinessInterface;
 use App\Http\Controllers\api\v1\dto\SalonDTO;
 use App\Http\Controllers\api\v1\dto\AppDTO;
 use App\Http\Controllers\api\v1\util\APICodes;
 use App\Models\api\v1\salon\SalonGallery;
+use App\Models\api\v1\salon\SalonServices;
 use App\Http\Controllers\api\v1\util\JsonHandler;
 use Random\RandomError;
 class BSalon extends Controller implements BusinessInterface { 
@@ -47,4 +49,16 @@ class BSalon extends Controller implements BusinessInterface {
         
         }
       }
+    public function lstDefaultServices(ServicesDTO $servicesDTO){
+        $salonservicesModel=new SalonServices();
+        $salonservices= $salonservicesModel->lstDefaultServices($servicesDTO);
+        if ($servicesDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+            $response['Status'] = APICodes::$TRANSACTION_SUCCESS;
+            $response['Message'] = "Successfully Created!";
+            $response['data'] = $salonservices; //salone services Object
+            return JsonHandler::getJsonMessage($response);
+        } else {
+            return AppDTO::$TRUE_AS_STRING;
+        }
+    }
 }

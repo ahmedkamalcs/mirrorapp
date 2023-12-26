@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\v1\salon\client;
 use App\Http\Controllers\api\v1\salon\bo\BSalon;
 use App\Http\Controllers\api\v1\dto\SalonDTO;
+use App\Http\Controllers\api\v1\dto\ServicesDTO;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 class SalonClient {
@@ -16,4 +17,12 @@ public function SalonGalleryAndLogo(Request $request ) {
     return $bsalon->SalonGalleryAndLogo($salonDTO);
 }
 
+public  function lstDefaultServices(Request $request) {
+    $servicesDTO= new ServicesDTO();
+    $servicesDTO->setUserPhoneNo($request->userPhoneNo);
+    $servicesDTO->setCategoryId($request->serviceId);
+    $bsalon = new BSalon();
+   
+    return $bsalon->lstDefaultServices($servicesDTO);
 } 
+}

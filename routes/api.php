@@ -65,7 +65,7 @@ Route::group(['namespace' => 'App\Http\Controllers\api\v1\sns\client', 'prefix' 
 /*Rout Salon. Group v1*/
 Route::group(['namespace' => 'App\Http\Controllers\api\v1\salon\client', 'prefix' => 'v1'], function() {
     Route::post('uploadSalonGalleryAndLogo', 'SalonClient@SalonGalleryAndLogo');
-    
+    Route::post('lstDefaultServices', 'SalonClient@lstDefaultServices');
 });
 
 /*Rout Tax Model. Group v1*/

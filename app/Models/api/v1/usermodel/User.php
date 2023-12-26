@@ -68,7 +68,7 @@ class User extends Model implements ModelInterface{
 
         return $user;
     }
-
+    
     public function getDTOById($id)
     {
         $targetUserDTO = new UserDTO("", "");
