@@ -120,13 +120,26 @@ class SalonServices extends Model implements ModelInterface{
         return $data;
     }
 
-
+    public function SaveDefaultServices(ServicesDTO $servicesDTO) {
+        SalonServices::where([["category_id",$servicesDTO->getCategoryId()]
+        ,["user_phone_no",$servicesDTO->getUserPhoneNo()]
+        ,["subcategory_id",$servicesDTO->getSubCategoryId()]])->delete();
+        
+        $salonservice= new SalonServices();
+        
+        $salonservice->category_id=$servicesDTO->getCategoryId();
+        $salonservice->subcategory_id= $servicesDTO->getSubCategoryId();
+        $salonservice->user_phone_no= $servicesDTO->getUserPhoneNo();
+        $salonservice->isactive= $servicesDTO->getIsactive();
+        $salonservice->save();
+        return  $salonservice;
+    }
 
     /**
      * Instance Variables for the persistent object Model.
      * @var type
      */
     public $timestamps = true;
-    protected $table = 'service_category';
+    protected $table = 'salon_services';
 
 }

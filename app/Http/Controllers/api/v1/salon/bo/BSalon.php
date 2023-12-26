@@ -61,4 +61,26 @@ class BSalon extends Controller implements BusinessInterface {
             return AppDTO::$TRUE_AS_STRING;
         }
     }
+    public function SaveDefaultServices(ServicesDTO $servicesDTO){
+        $salonservicesModel=new SalonServices();
+        $salonservices=$servicesDTO->getSalonServices();
+        $serviceDTO=new ServicesDto();
+        foreach($salonservices as $salonservice){
+            $serviceDTO->setUserPhoneNo($servicesDTO->getUserPhoneNo());
+            $serviceDTO->setCategoryId($servicesDTO->getCategoryId());
+            $serviceDTO->setSubcategoryId($salonservice['subcategoryId']);
+            $serviceDTO->setIsactive($salonservice['isactive']);
+            $salonservicesModel->saveDefaultServices($serviceDTO);
+        }
+        $updatedServices=$salonservicesModel->lstDefaultServices($servicesDTO);
+        if ($servicesDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+            $response['Status'] = APICodes::$TRANSACTION_SUCCESS;
+            $response['Message'] = "Successfully Saved!";
+            $response['data'] = $updatedServices; //salone services Object
+            return JsonHandler::getJsonMessage($response);
+        } else {
+            return AppDTO::$TRUE_AS_STRING;
+        }
+    }
+        
 }

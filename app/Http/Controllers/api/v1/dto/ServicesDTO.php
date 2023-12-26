@@ -20,6 +20,9 @@ class ServicesDTO implements DTOInterface {
     private $userPhoneNo;
     private $categoryId;
     private $subcategory;
+    private $salonServices;
+    private $subcategoryId;
+    private $isactive;
     private $apiCall = '1'; //API Calls Active by Default
     function getApiCall() {
         return $this->apiCall;
@@ -47,5 +50,23 @@ class ServicesDTO implements DTOInterface {
     }
     function getUserPhoneNo() {
         return $this->userPhoneNo;
+    }
+    function setSalonServices($salonservices) {
+        $this->salonServices = $salonservices;
+    }
+    function getSalonServices() {
+        return $this->salonServices;
+    }
+    function setSubcategoryId($subcategoryId) {
+        $this->subcategoryId = $subcategoryId;
+    }  
+    function getSubCategoryId(){
+        return $this->subcategoryId;
+    }
+    function setIsactive($isactive) {
+        $this->isactive = $isactive;
+    }
+    function getIsactive() {
+        return $this->isactive;
     }
 }
