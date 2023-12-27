@@ -61,7 +61,7 @@ class BSalon extends Controller implements BusinessInterface {
             return AppDTO::$TRUE_AS_STRING;
         }
     }
-    public function SaveDefaultServices(ServicesDTO $servicesDTO){
+    public function saveDefaultServices(ServicesDTO $servicesDTO){
         $salonservicesModel=new SalonServices();
         $salonservices=$servicesDTO->getSalonServices();
         $serviceDTO=new ServicesDto();

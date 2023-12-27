@@ -25,14 +25,14 @@ public  function lstDefaultServices(Request $request) {
    
     return $bsalon->lstDefaultServices($servicesDTO);
 } 
-public function SaveDefaultServices(Request $request){
+public function saveDefaultServices(Request $request){
     $servicesDTO= new ServicesDTO();
     $servicesDTO->setUserPhoneNo($request->userPhoneNo);
     $servicesDTO->setCategoryId($request->salonCategoryId);
     $servicesDTO->setSalonServices($request->salonServices); 
     $bsalon = new BSalon();
     
-    return $bsalon->SaveDefaultServices($servicesDTO);
+    return $bsalon->saveDefaultServices($servicesDTO);
 
 }
 }
