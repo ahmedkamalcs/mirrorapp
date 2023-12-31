@@ -67,6 +67,10 @@ Route::group(['namespace' => 'App\Http\Controllers\api\v1\salon\client', 'prefix
     Route::post('uploadSalonGalleryAndLogo', 'SalonClient@SalonGalleryAndLogo');
     Route::post('lstDefaultServices', 'SalonClient@lstDefaultServices');
     Route::post('SaveDefaultServices', 'SalonClient@SaveDefaultServices');
+    Route::post('saveSalonData', 'SalonClient@saveSalonData');
+    Route::post('saveSalonWorkStyle', 'SalonClient@saveSalonWorkStyle');
+    Route::post('saveSalonServiceType', 'SalonClient@saveSalonServiceType');
+    Route::post('saveSalonServiceGender', 'SalonClient@saveSalonServiceGender');
 });
 
 /*Rout Tax Model. Group v1*/
