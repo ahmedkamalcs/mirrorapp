@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\v1\salon\client;
 use App\Http\Controllers\api\v1\salon\bo\BSalon;
 use App\Http\Controllers\api\v1\dto\SalonDTO;
+use App\Http\Controllers\api\v1\dto\SalonBranchesDTO;
 use App\Http\Controllers\api\v1\dto\ServicesDTO;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -44,7 +45,7 @@ public function saveSalonData(Request $request){
     $salonDTO->setSalonBusinessType($request->salonBusinessType);
     $salonDTO->setSalonTeamMember($request->salonTeamMember);
     $salonDTO->setSalonBranchesNo($request->salonBranchesNo);
-    $salonDTO->setSalonWorkingDays($request->salonWorkingDays);
+    $salonDTO->setSalonWorkingDaysNumbers($request->salonWorkingDays);
     $salonDTO->setSalonWorkingHoursFrom($request->salonWorkingHoursFrom);
     $salonDTO->setSalonWorkingHoursTill($request->salonWorkingHoursTill);
     $salonDTO->setSalonIsOffering24Services($request->salonIsOffering24Services);
@@ -79,5 +80,25 @@ public function saveSalonServiceGender(Request $request){
     $bsalon = new BSalon();
    
     return $bsalon->saveSalonServiceGender($salonDTO);
+}
+
+public function saveSalonWorkingDays(Request $request){
+    $salonDTO= new SalonDTO();
+    $salonDTO->setSalonId($request->salonId);
+    $salonDTO->setSalonWorkingDays($request->workingDays);
+    $bsalon = new BSalon();
+
+    return $bsalon->saveSalonWorkingDays($salonDTO);
+}
+public function saveSalonBranches(Request $request){
+    $salonbranchesDTO= new SalonBranchesDTO();
+    $salonbranchesDTO->setSalonId($request->salonId);
+    $salonbranchesDTO->setBranchAddress($request->branchAddress);
+    $salonbranchesDTO->setBranchLatitude($request->branchLatitude);
+    $salonbranchesDTO->setBranchLongtitude($request->branchLongtitude);
+    $salonbranchesDTO->setBranchId($request->branchId);
+    $bsalon = new BSalon();
+
+   return $bsalon->saveSalonBranches($salonbranchesDTO);
 }
 }

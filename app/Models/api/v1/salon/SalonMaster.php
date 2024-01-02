@@ -85,7 +85,7 @@ class SalonMaster extends Model implements ModelInterface{
         $SalonMaster->business_type= $salonDTO->getSalonBusinessType();
         $SalonMaster->team_member= $salonDTO->getSalonTeamMember();
         $SalonMaster->branches_no= $salonDTO->getSalonBranchesNo();
-        $SalonMaster->working_days= $salonDTO->getSalonWorkingDays();
+        $SalonMaster->working_days= $salonDTO->getSalonWorkingDaysNumbers();
         $SalonMaster->working_hours_from= $salonDTO->getSalonWorkingHoursFrom();
         $SalonMaster->working_hours_till= $salonDTO->getSalonWorkingHoursTill();
         $SalonMaster->offering_24h_services= $salonDTO->getSalonIsOffering24Services();
@@ -93,9 +93,7 @@ class SalonMaster extends Model implements ModelInterface{
         $SalonMaster->save();
         
         return  $SalonMaster;
-        
-       
-        
+ 
     }
 
     public function updateSalonData(SalonDTO $salonDTO) {
@@ -109,16 +107,13 @@ class SalonMaster extends Model implements ModelInterface{
         $SalonMaster->business_type= $salonDTO->getSalonBusinessType();
         $SalonMaster->team_member= $salonDTO->getSalonTeamMember();
         $SalonMaster->branches_no= $salonDTO->getSalonBranchesNo();
-        $SalonMaster->working_days= $salonDTO->getSalonWorkingDays();
+        $SalonMaster->working_days= $salonDTO->getSalonWorkingDaysNumbers();
         $SalonMaster->working_hours_from= $salonDTO->getSalonWorkingHoursFrom();
         $SalonMaster->working_hours_till= $salonDTO->getSalonWorkingHoursTill();
         $SalonMaster->offering_24h_services= $salonDTO->getSalonIsOffering24Services();
         $SalonMaster->clients_type= $salonDTO->getSalonClientsType();
         $SalonMaster->save();
         return  $SalonMaster;
-        
-       
-        
     }
     public function saveSalonWorkStyle(SalonDTO $salonDTO) {
         
@@ -145,6 +140,20 @@ class SalonMaster extends Model implements ModelInterface{
         $SalonMaster->save();
         return  $SalonMaster;
        
+    }
+    public function saveSalonWorkingDays(SalonDTO $salonDTO){
+        $SalonMaster= SalonMaster::find($salonDTO->getSalonId());
+
+        $SalonWorkingDays= $salonDTO->getSalonWorkingDays();
+        $SalonMaster->working_monday=$SalonWorkingDays['Monday'];
+        $SalonMaster->working_tuesday=$SalonWorkingDays['Tuesday'];
+        $SalonMaster->working_wednesday=$SalonWorkingDays['Wednesday'];
+        $SalonMaster->working_thrusday=$SalonWorkingDays['Thrusday'];
+        $SalonMaster->working_friday=$SalonWorkingDays['Friday'];
+        $SalonMaster->working_saturday=$SalonWorkingDays['Saturday'];
+        $SalonMaster->working_sunday=$SalonWorkingDays['Sunday'];
+        $SalonMaster->save();
+        return  $SalonMaster;
     }
    public Function getSalonDataByPhoneNumber($phoneNumber){
     $SalonMaster= SalonMaster::where("user_phone_no",$phoneNumber)->get();

@@ -26,7 +26,7 @@ class SalonDTO implements DTOInterface {
      private $salonBusinessType;
      private $salonTeamMember;
      private $salonBranchesNo;
-     private $salonWorkingDays;
+     private $salonWorkingDaysNo;
      private $salonWorkingHoursFrom;
      private $salonWorkingHoursTill;
      private $salonIsOffering24Services;
@@ -36,8 +36,8 @@ class SalonDTO implements DTOInterface {
      private $salonId;
      private $isServingFemales;
      private $isServingMales;
-
     private $salonWorkStyle;
+    private $salonWorkingDays;
     private $apiCall = '1'; //API Calls Active by Default
     function getApiCall() {
         return $this->apiCall;
@@ -102,11 +102,11 @@ class SalonDTO implements DTOInterface {
     function getSalonBranchesNo() {
         return $this->salonBranchesNo;
     }
-    function setSalonWorkingDays( $salonWorkingDays) {
-        $this->salonWorkingDays = $salonWorkingDays;
+    function setSalonWorkingDaysNumbers( $salonWorkingDaysNo) {
+        $this->salonWorkingDaysNo = $salonWorkingDaysNo;
     }
-    function getSalonWorkingDays() {
-        return $this->salonWorkingDays;
+    function getSalonWorkingDaysNumbers() {
+        return $this->salonWorkingDaysNo;
     }
     function setSalonWorkingHoursFrom( $salonWorkingHoursFrom) {
         $this->salonWorkingHoursFrom = $salonWorkingHoursFrom;
@@ -168,5 +168,11 @@ function setIsServingMales( $isServingMales) {
 }
 function getIsServingMales() {
     return $this->isServingMales;
+}
+function setSalonWorkingDays( $salonWorkingDays) {
+    $this->salonWorkingDays = $salonWorkingDays;
+}
+function getSalonWorkingDays() {
+    return $this->salonWorkingDays;
 }
 }

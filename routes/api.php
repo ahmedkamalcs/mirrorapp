@@ -72,6 +72,8 @@ Route::group(['namespace' => 'App\Http\Controllers\api\v1\salon\client', 'prefix
     Route::post('saveSalonServiceType', 'SalonClient@saveSalonServiceType');
     Route::post('saveSalonServiceGender', 'SalonClient@saveSalonServiceGender');
     Route::post('saveDefaultServices', 'SalonClient@saveDefaultServices');
+    Route::post('saveSalonWorkingDays', 'SalonClient@saveSalonWorkingDays');
+    Route::post('saveSalonBranches', 'SalonClient@saveSalonBranches');
 
 });
 

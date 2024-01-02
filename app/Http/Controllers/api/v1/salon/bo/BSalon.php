@@ -9,6 +9,8 @@ use App\Http\Controllers\api\v1\util\APICodes;
 use App\Models\api\v1\salon\SalonGallery;
 use App\Models\api\v1\salon\SalonServices;
 use App\Models\api\v1\salon\SalonMaster;
+use App\Models\api\v1\salon\SalonBranches;
+use App\Http\Controllers\api\v1\dto\SalonBranchesDTO;
 use App\Http\Controllers\api\v1\util\JsonHandler;
 use Random\RandomError;
 class BSalon extends Controller implements BusinessInterface { 
@@ -88,7 +90,7 @@ class BSalon extends Controller implements BusinessInterface {
         $salonData=$salonMasterModel->getSalonDataByPhoneNumber($salonDTO->getUserPhoneNo());
 
         if(!$salonData->isEmpty()){
-           $salonDTO->setSalonId($salonData[0]->id);
+            $salonDTO->setSalonId($salonData[0]->id);
             $salonData=$salonMasterModel->updateSalonData($salonDTO);
         }else {
             $salonData=$salonMasterModel->SaveSalonData($salonDTO);
@@ -177,5 +179,54 @@ public function saveSalonServiceGender(SalonDTO $salonDTO){
         }
     }
     
+}
+public function saveSalonWorkingDays(SalonDTO $salonDTO){
+    $salonMasterModel=new SalonMaster();
+    $salonData=$salonMasterModel->getSalonDataById($salonDTO->getSalonId());
+   
+    if(!$salonData->isEmpty()){
+        $salonData=$salonMasterModel->saveSalonWorkingDays($salonDTO); 
+        if ($salonDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+            $response['Status'] = APICodes::$TRANSACTION_SUCCESS;
+            $response['Message'] = "Successfully Saved!";
+            $response['SalonData'] = $salonData; //salone data Object
+            return JsonHandler::getJsonMessage($response);
+        } else {
+            return AppDTO::$TRUE_AS_STRING;
+        }
+    }else{
+        if ($salonDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+            $response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
+            $response['Message'] = "Salon '" .$salonDTO->getSalonId() . "' does not exist!" ;
+            return JsonHandler::getJsonMessage($response);
+        } else {
+            return AppDTO::$TRUE_AS_STRING;
+        }
+    }
+}
+public function saveSalonBranches(SalonBranchesDTO $salonBranchesDTO){
+    $salonMasterModel=new SalonMaster();
+    $salonData=$salonMasterModel->getSalonDataById($salonBranchesDTO->getSalonId());
+   
+    if(!$salonData->isEmpty()){
+        $salonbranchesModel = new SalonBranches();
+        $branchData=$salonbranchesModel->SaveBrachData($salonBranchesDTO); 
+        if ($salonBranchesDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+            $response['Status'] = APICodes::$TRANSACTION_SUCCESS;
+            $response['Message'] = "Successfully Saved!";
+            $response['BranchData'] = $branchData; //salone data Object
+            return JsonHandler::getJsonMessage($response);
+        } else {
+            return AppDTO::$TRUE_AS_STRING;
+        }
+    }else{
+        if ($salonBranchesDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+            $response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
+            $response['Message'] = "Salon '" .$salonBranchesDTO->getSalonId() . "' does not exist!" ;
+            return JsonHandler::getJsonMessage($response);
+        } else {
+            return AppDTO::$TRUE_AS_STRING;
+        }
+    }
 }
 }
