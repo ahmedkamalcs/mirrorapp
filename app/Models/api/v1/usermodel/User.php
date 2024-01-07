@@ -28,7 +28,16 @@ class User extends Model implements ModelInterface{
 
         return $result;
     }
+    public function activateUser(UserDTO $userDTO){
+        $user=User::find($userDTO->getId());
+        $user->user_active = $userDTO->isUserActive();
+        $user->is_phone_verified = $userDTO->isPhoneVerified();
 
+        $user->save();
+
+        return $user;
+
+    }
     public function getUserByUserName(UserDTO $userDTO) {
         $query = "select * from isg_user where user_name ='" . $userDTO->getUserName() ."'"
                 . " and user_active ='". AppDTO::$TRUE_AS_STRING ."'";
@@ -39,8 +48,8 @@ class User extends Model implements ModelInterface{
     }
 
     public function getUserByPhoneNumber(UserDTO $userDTO) {
-        $query = "select * from isg_user where user_phone_no ='" . $userDTO->getPhoneNumber() ."'"
-                . " and user_active ='". AppDTO::$TRUE_AS_STRING ."'";
+        $query = "select * from isg_user where user_phone_no ='" . $userDTO->getPhoneNumber() ."'";
+               // . " and user_active ='". AppDTO::$TRUE_AS_STRING ."'";
 
         $result = DBUtil::select($query);
 

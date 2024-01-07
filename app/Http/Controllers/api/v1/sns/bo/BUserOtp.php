@@ -28,11 +28,29 @@ use App\Http\Controllers\api\v1\dto\AppDTO;
 class BUserOtp {
 
     public function saveOtp(UserOtpDTO $userOtpDTO) {
+        $user = new user();
+        $userDTO = new UserDTO("","");
+        $userDTO->setFullName($userOtpDTO->getFullName());
+        $userDTO->setPhoneNumber($userOtpDTO->getPhoneNumber());
+        $userarr= $user->getUserByPhoneNumber($userDTO);
+      
+        if($userarr){ // user already exist
+            $response['Status'] = APICodes::$TRANSACTION_SUCCESS;
+            $response['Message'] = "user already exist!";
+            return JsonHandler::getJsonMessage($response);
+        }
+        $userDTO->setIsPhoneVerified("0");
+        $userDTO->setUserActive("0");
+        $userarr=$user->createUser($userDTO);
         //Generate OTP
         //$otp = rand(100000, 999999);
         $otp="1234";
         $userOtpDTO->setOTP($otp);
         $userOtp = new UserOTP();
+        if ($userOtpDTO->getUserType()=="Employee"){
+            $user = $userOtp->saveObject($userOtpDTO);
+            return $user;
+        }
         if ($userOtp->saveObject($userOtpDTO)) {
             if ($userOtpDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 $response['Status'] = APICodes::$TRANSACTION_SUCCESS;
@@ -53,6 +71,7 @@ class BUserOtp {
     }
 
     public function verify(UserOtpDTO $userOtpDto) {
+       
         $userOtp = new UserOTP();
         $userDTO = new UserDTO("","");
         $user = new user();
@@ -67,15 +86,24 @@ class BUserOtp {
                 return AppDTO::$FALSE_AS_STRING;
             }
         }
-        // check if verified 
+    // check if verified 
+
         $userDTO->setFullName($userDataDTO->getFullName());
         $userDTO->setPhoneNumber($userDataDTO->getPhoneNumber());
         $userarr= $user->getUserByPhoneNumber($userDTO);
       
-        if(!$userarr){ // Create the new user
+        if(!$userarr){ // user not found
+            $response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
+                $response['Message'] = "user not found!";
+                $response['user'] = $userarr;
+                return JsonHandler::getJsonMessage($response);
+        }
+        //Activate User
+        if($userarr[0]->is_phone_verified=="0"){
+            $userDTO->setId($userarr[0]->id);
             $userDTO->setIsPhoneVerified("1");
             $userDTO->setUserActive("1");
-            $userarr=$user->createUser($userDTO);
+            $userarr=$user->activateUser($userDTO);
         }
         //Delete After Verification.
         $userOtp->deleteById($userDataDTO->getId());

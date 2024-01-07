@@ -117,7 +117,7 @@ class UserOTP extends Model implements ModelInterface{
     public function getDataDTO(UserOtpDTO $userOtpDTO)
     {
         $userOtp = new UserOtpDTO();
-        $query = "select * from ".$this->table." where phone_number like '%".$userOtpDTO->getPhoneNumber()."%'"
+        $query = "select * from ".$this->table." where phone_number = '".$userOtpDTO->getPhoneNumber()."'"
                    . " order by created_at desc limit 1";
         $userOtpArr = DBUtil::select($query);//UserOTP::where('phone_number', $userOtpDTO->getPhoneNumber() )->get();
         if($userOtpArr)

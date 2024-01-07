@@ -74,7 +74,8 @@ Route::group(['namespace' => 'App\Http\Controllers\api\v1\salon\client', 'prefix
     Route::post('saveDefaultServices', 'SalonClient@saveDefaultServices');
     Route::post('saveSalonWorkingDays', 'SalonClient@saveSalonWorkingDays');
     Route::post('saveSalonBranches', 'SalonClient@saveSalonBranches');
-
+    Route::post('saveSalonEmployee', 'SalonClient@saveSalonEmployee');
+    Route::post('updateSalonEmployee', 'SalonClient@updateSalonEmployee');
 });
 
 /*Rout Tax Model. Group v1*/

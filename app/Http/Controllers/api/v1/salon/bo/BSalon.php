@@ -5,13 +5,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\api\v1\dto\BusinessInterface;
 use App\Http\Controllers\api\v1\dto\SalonDTO;
 use App\Http\Controllers\api\v1\dto\AppDTO;
+use App\Http\Controllers\api\v1\dto\UserOtpDTO;
 use App\Http\Controllers\api\v1\util\APICodes;
 use App\Models\api\v1\salon\SalonGallery;
 use App\Models\api\v1\salon\SalonServices;
 use App\Models\api\v1\salon\SalonMaster;
 use App\Models\api\v1\salon\SalonBranches;
+use App\Models\api\v1\salon\SalonEmployee;
+use App\Http\Controllers\api\v1\dto\SalonEmployeeDTO;
 use App\Http\Controllers\api\v1\dto\SalonBranchesDTO;
 use App\Http\Controllers\api\v1\util\JsonHandler;
+use App\Http\Controllers\api\v1\sns\bo\BUserOtp;
 use Random\RandomError;
 class BSalon extends Controller implements BusinessInterface { 
     public function SalonGalleryAndLogo(SalonDTO $salonDTO ) {
@@ -229,4 +233,90 @@ public function saveSalonBranches(SalonBranchesDTO $salonBranchesDTO){
         }
     }
 }
+public function saveSalonEmployee(SalonEmployeeDTO $salonEmployeeDTO){
+    //checking salon 
+    $salonMasterModel=new SalonMaster();
+    $salonData=$salonMasterModel->getSalonDataById($salonEmployeeDTO->getSalonId());
+   
+    if($salonData->isEmpty()){
+        if ($salonEmployeeDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+            $response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
+            $response['Message'] = "Salon '" .$salonEmployeeDTO->getSalonId() . "' does not exist!" ;
+            return JsonHandler::getJsonMessage($response);
+        } else {
+            return AppDTO::$TRUE_AS_STRING;
+        }
+    }
+
+    $salonEmployeeModel= new SalonEmployee();
+    $employeeData= $salonEmployeeModel->getSalonEmployeebyPhoneNo($salonEmployeeDTO);
+    if($employeeData->isEmpty()){
+        $employeeData=$salonEmployeeModel->SaveSalonEmployee($salonEmployeeDTO);
+        if($employeeData){
+            //Sent OTP to employee
+            $userOtpDTO = new UserOtpDTO();
+            $userOtpDTO->setFullName($salonEmployeeDTO->getEmployeeName());
+            $userOtpDTO->setPhoneNumber($salonEmployeeDTO->getEmployeePhoneNo());
+            $userOtpDTO->setUserType("Employee");
+            $bUserOtp = new BUserOtp();
+            $otp=$bUserOtp->saveOtp($userOtpDTO);
+
+            if ($salonEmployeeDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+                $response['Status'] = APICodes::$TRANSACTION_SUCCESS;
+                $response['Message'] = "Successfully Saved!";
+                $response['BranchData'] = $employeeData; //salone data Object
+                return JsonHandler::getJsonMessage($response);
+            } else {
+                return AppDTO::$TRUE_AS_STRING;
+            }
+        }
+    }else{
+        if ($salonEmployeeDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+            $response['Status'] = APICodes::$TRANSACTION_SUCCESS;
+            $response['Message'] = "Phone Number Already Exist! ";
+            $response['BranchData'] = $employeeData; //salone data Object
+            return JsonHandler::getJsonMessage($response);
+        } else {
+            return AppDTO::$TRUE_AS_STRING;
+        }
+    }
+}
+public function updateSalonEmployee(SalonEmployeeDTO $salonEmployeeDTO){
+    //checking salon 
+    $salonMasterModel=new SalonMaster();
+    $salonData=$salonMasterModel->getSalonDataById($salonEmployeeDTO->getSalonId());
+   
+    if($salonData->isEmpty()){
+        if ($salonEmployeeDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+            $response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
+            $response['Message'] = "Salon '" .$salonEmployeeDTO->getSalonId() . "' does not exist!" ;
+            return JsonHandler::getJsonMessage($response);
+        } else {
+            return AppDTO::$TRUE_AS_STRING;
+        }
+    }
+
+    $salonEmployeeModel= new SalonEmployee();
+    $employeeData= $salonEmployeeModel->getSalonEmployeebyId($salonEmployeeDTO);
+    if(!$employeeData->isEmpty()){
+        $employeeData=$salonEmployeeModel->UpdateSalonEmployee($salonEmployeeDTO);
+        if ($salonEmployeeDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+            $response['Status'] = APICodes::$TRANSACTION_SUCCESS;
+            $response['Message'] = "Successfully updated!";
+            $response['BranchData'] = $employeeData; //salone data Object
+            return JsonHandler::getJsonMessage($response);
+        } else {
+            return AppDTO::$TRUE_AS_STRING;
+        }
+    }else{
+        if ($salonEmployeeDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+            $response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
+            $response['Message'] = "Employee does not exist! ";
+            return JsonHandler::getJsonMessage($response);
+        } else {
+            return AppDTO::$TRUE_AS_STRING;
+        }
+    }
+}
+
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\api\v1\salon\bo\BSalon;
 use App\Http\Controllers\api\v1\dto\SalonDTO;
 use App\Http\Controllers\api\v1\dto\SalonBranchesDTO;
 use App\Http\Controllers\api\v1\dto\ServicesDTO;
+use App\Http\Controllers\api\v1\dto\SalonEmployeeDTO;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 class SalonClient {
@@ -100,5 +101,26 @@ public function saveSalonBranches(Request $request){
     $bsalon = new BSalon();
 
    return $bsalon->saveSalonBranches($salonbranchesDTO);
+}
+public function saveSalonEmployee(Request $request){
+    $salonemployeeDTO= new SalonEmployeeDTO();
+    $salonemployeeDTO->setSalonId($request->salonId);
+    $salonemployeeDTO->setEmployeePhoneNo($request->employeePhoneNo);
+    $salonemployeeDTO->setEmployeeName($request->employeeName);
+    $bsalon = new BSalon();
+
+   return $bsalon->saveSalonEmployee($salonemployeeDTO);
+
+}
+public function updateSalonEmployee(Request $request){
+    $salonemployeeDTO= new SalonEmployeeDTO();
+    $salonemployeeDTO->setSalonId($request->salonId);
+    $salonemployeeDTO->setEmployeePhoneNo($request->employeePhoneNo);
+    $salonemployeeDTO->setEmployeeName($request->employeeName);
+    $salonemployeeDTO->setEmployeehId($request->employeehId);
+    $bsalon = new BSalon();
+
+   return $bsalon->updateSalonEmployee($salonemployeeDTO);
+
 }
 }

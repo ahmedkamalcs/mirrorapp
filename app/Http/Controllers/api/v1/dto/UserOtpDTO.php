@@ -24,6 +24,7 @@ class UserOtpDTO implements DTOInterface {
     private $email;
     private $otpSent;
     private $fullName;
+    private $userType;
     function getApiCall() {
         return $this->apiCall;
     }
@@ -82,6 +83,11 @@ class UserOtpDTO implements DTOInterface {
     public function setOtpSent($otpSent) {
         $this->otpSent = $otpSent;
     }
-
+    public function setUserType($userType) {
+        $this->userType = $userType;
+    }
+    public function getUserType(){
+        return $this->userType;
+    }
 
 }
