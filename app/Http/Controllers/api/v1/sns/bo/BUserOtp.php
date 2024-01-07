@@ -117,7 +117,7 @@ class BUserOtp {
         if ($userOtpDto->getApiCall() == AppDTO::$TRUE_AS_STRING) {
             $response['Status'] = APICodes::$TRANSACTION_SUCCESS;
             $response['Message'] = "Verified";
-            $response['$userarr'] = $userarr;
+            $response['userDetails'] = $userarr;
             return JsonHandler::getJsonMessage($response);
         }else{
             return AppDTO::$TRUE_AS_STRING;
