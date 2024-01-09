@@ -37,6 +37,35 @@ public function saveDefaultServices(Request $request){
     return $bsalon->saveDefaultServices($servicesDTO);
 
 }
+public function lstSalonData(Request $request){
+    $salonDTO= new SalonDTO();
+    $salonDTO->setUserPhoneNo($request->userPhoneNo);
+    $bsalon = new BSalon();
+   
+    return $bsalon->lstSalonData($salonDTO);
+}
+public function lstWorkStyles(Request $request){
+    $salonDTO= new SalonDTO();
+
+    $bsalon = new BSalon();
+   
+    return $bsalon->LstWorkStyles($salonDTO);
+}
+public function lstServiceTypes(Request $request){
+    $salonDTO= new SalonDTO();
+
+    $bsalon = new BSalon();
+   
+    return $bsalon->LstServiceTypes($salonDTO);
+}
+public function lstBusinessTypes(Request $request){
+    $salonDTO= new SalonDTO();
+
+    $bsalon = new BSalon();
+   
+    return $bsalon->lstBusinessTypes($salonDTO);
+}
+
 public function saveSalonData(Request $request){
     $salonDTO= new SalonDTO();
     $salonDTO->setUserPhoneNo($request->userPhoneNo);
@@ -91,6 +120,14 @@ public function saveSalonWorkingDays(Request $request){
 
     return $bsalon->saveSalonWorkingDays($salonDTO);
 }
+public function lstSalonBranches(Request $request){
+    $salonbranchesDTO= new SalonBranchesDTO();
+    $salonbranchesDTO->setSalonId($request->salonId);
+    $salonbranchesDTO->setBranchId($request->branchId);
+    $bsalon = new BSalon();
+
+   return $bsalon->lstSalonBranches($salonbranchesDTO);
+}
 public function saveSalonBranches(Request $request){
     $salonbranchesDTO= new SalonBranchesDTO();
     $salonbranchesDTO->setSalonId($request->salonId);
@@ -101,6 +138,16 @@ public function saveSalonBranches(Request $request){
     $bsalon = new BSalon();
 
    return $bsalon->saveSalonBranches($salonbranchesDTO);
+}
+public function lstSalonEmployee(Request $request){
+    $salonemployeeDTO= new SalonEmployeeDTO();
+    $salonemployeeDTO->setSalonId($request->salonId);
+    $salonemployeeDTO->setEmployeehId($request->employeeId);
+    
+    $bsalon = new BSalon();
+
+   return $bsalon->lstSalonEmployee($salonemployeeDTO);
+
 }
 public function saveSalonEmployee(Request $request){
     $salonemployeeDTO= new SalonEmployeeDTO();

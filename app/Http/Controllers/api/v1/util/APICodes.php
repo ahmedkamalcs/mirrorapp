@@ -14,6 +14,7 @@ class  APICodes {
     public static $TRANSACTION_SUCCESS = "200";
     public static $TRANSACTION_DATA_NOT_FOUND = "300";
     public static $TRANSACTION_FAILUE = "500";
+    public static $TRANSACTION_ALREADY_EXIST = "403";
     
     public static $TRANSACTION_LIKE_CODE = "1";
     public static $TRANSACTION_UNLIKE_CODE = "0";

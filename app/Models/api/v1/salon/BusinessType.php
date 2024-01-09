@@ -9,7 +9,7 @@
 namespace App\Models\api\v1\salon;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Http\Controllers\api\v1\dto\SalonEmployeeDTO;
+use App\Http\Controllers\api\v1\dto\SalonDTO;
 use App\Http\Controllers\api\v1\dto\PaymentVendorDetailsDTO;
 use App\Http\Controllers\api\v1\dto\ModelInterface;
 use App\Http\Controllers\api\v1\util\DBUtil;
@@ -21,7 +21,7 @@ use App\Http\Controllers\isgapi\api\v1\util\StringUtil;
  * @author Saad Aly
  * EventDetailsModel class. EventDetailsModel persistent object.
  */
-class SalonEmployee extends Model implements ModelInterface{
+class BusinessType extends Model implements ModelInterface{
 
 
 
@@ -74,52 +74,18 @@ class SalonEmployee extends Model implements ModelInterface{
     }
 
    
-    public function SaveSalonEmployee(SalonEmployeeDTO $salonEmployeeDTO) {
-       
-        $employee= new SalonEmployee();
-        
-        $employee->salon_id=$salonEmployeeDTO->getSalonId();
-        $employee->employee_name= $salonEmployeeDTO->getEmployeeName();
-        $employee->employee_phone_no= $salonEmployeeDTO->getEmployeePhoneNo();
+    public function listAll() {
+        $query = "select id, english_name,arabic_name from business_type";
 
-        $employee->save();
-        
-        return  $employee;
- 
-    }
-    public function UpdateSalonEmployee(SalonEmployeeDTO $salonEmployeeDTO) {
-       
-        $employee=  SalonEmployee::find([$salonEmployeeDTO->getEmployeehId()]);
-        
-        $employee->salon_id=$salonEmployeeDTO->getSalonId();
-        $employee->employee_name= $salonEmployeeDTO->getEmployeeName();
-        $employee->employee_phone_no= $salonEmployeeDTO->getEmployeePhoneNo();
+        $result = DBUtil::select($query);
 
-        $employee->save();
-        
-        return  $employee;
- 
+        return $result;
     }
-   public Function getSalonEmployeebyId(SalonEmployeeDTO $salonEmployeeDTO){
-    $salonEmploy= SalonEmployee::where([["salon_id",$salonEmployeeDTO->getSalonId()]
-    ,["id",$salonEmployeeDTO->getEmployeehId()]])->get();
-    return $salonEmploy;    
-   }
-   public Function getSalonEmployeebyPhoneNo(SalonEmployeeDTO $salonEmployeeDTO){
-    $salonEmploy= SalonEmployee::where([["salon_id",$salonEmployeeDTO->getSalonId()]
-    ,["employee_phone_no",$salonEmployeeDTO->getEmployeePhoneNo()]])->get();
-    return $salonEmploy;    
-   }
-   public Function getSalonEmployees(SalonEmployeeDTO $salonEmployeeDTO){
-    $salonEmploy= SalonEmployee::where("salon_id",$salonEmployeeDTO->getSalonId())->get();
-    return $salonEmploy;    
-   }
-  
     /**
      * Instance Variables for the persistent object Model.
      * @var type
      */
     public $timestamps = true;
-    protected $table = 'salon_employee';
+    protected $table = 'business_type';
 
 }

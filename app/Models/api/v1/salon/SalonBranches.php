@@ -94,6 +94,19 @@ class SalonBranches extends Model implements ModelInterface{
     $branchData= SalonBranches::where("salon_id",$salonId)->get();
     return $branchData;    
    }
+   public Function getBranchDataDTO(SalonBranchesDTO $salonBranchesDTO){
+
+    if($salonBranchesDTO->getBranchId()==""){
+        $query = "select * from salon_branches where salon_id='" . $salonBranchesDTO->getSalonId() . "'";
+    }else{
+ 
+        $query = "select * from salon_branches where salon_id='" . $salonBranchesDTO->getSalonId() . "' and id='" . $salonBranchesDTO->getBranchId() . "'";
+   }
+   $result = DBUtil::select($query);
+
+   return $result;
+      
+   }
   
     /**
      * Instance Variables for the persistent object Model.

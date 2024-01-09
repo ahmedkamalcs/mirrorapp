@@ -35,13 +35,11 @@ class BUserOtp {
         $userarr= $user->getUserByPhoneNumber($userDTO);
       
         if($userarr){ // user already exist
-            $response['Status'] = APICodes::$TRANSACTION_SUCCESS;
+            $response['Status'] = APICodes::$TRANSACTION_ALREADY_EXIST;
             $response['Message'] = "user already exist!";
             return JsonHandler::getJsonMessage($response);
         }
-        $userDTO->setIsPhoneVerified("0");
-        $userDTO->setUserActive("0");
-        $userarr=$user->createUser($userDTO);
+        
         //Generate OTP
         //$otp = rand(100000, 999999);
         $otp="1234";
@@ -52,6 +50,11 @@ class BUserOtp {
             return $user;
         }
         if ($userOtp->saveObject($userOtpDTO)) {
+            // save the user
+            $userDTO->setIsPhoneVerified("0");
+            $userDTO->setUserActive("0");
+            $userarr=$user->createUser($userDTO);
+
             if ($userOtpDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 $response['Status'] = APICodes::$TRANSACTION_SUCCESS;
                 $response['Message'] = "OTP Sent!";

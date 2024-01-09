@@ -76,6 +76,12 @@ Route::group(['namespace' => 'App\Http\Controllers\api\v1\salon\client', 'prefix
     Route::post('saveSalonBranches', 'SalonClient@saveSalonBranches');
     Route::post('saveSalonEmployee', 'SalonClient@saveSalonEmployee');
     Route::post('updateSalonEmployee', 'SalonClient@updateSalonEmployee');
+    Route::post('lstSalonData', 'SalonClient@lstSalonData');
+    Route::post('lstWorkStyles', 'SalonClient@lstWorkStyles');
+    Route::post('lstServiceTypes', 'SalonClient@lstServiceTypes');
+    Route::post('lstBusinessTypes', 'SalonClient@lstBusinessTypes');
+    Route::post('lstSalonBranches', 'SalonClient@lstSalonBranches');
+    Route::post('lstSalonEmployee', 'SalonClient@lstSalonEmployee');
 });
 
 /*Rout Tax Model. Group v1*/
