@@ -32,7 +32,7 @@ class UserClient  {
         $userOtpDTO = new UserOtpDTO();
         $userOtpDTO->setPhoneNumber($request->phoneNumber);
         $bUserOtp = new BUserOtp();
-        return $bUserOtp->saveOtp($userOtpDTO);
+        return $bUserOtp->saveLoginOtp($userOtpDTO);
    
         //$userDTO->setPhoneNumber($request->phoneNo);
         //$buser = new BUser();
@@ -67,7 +67,7 @@ class UserClient  {
         //$userDTO->setPassword($request->password);
         //$userDTO->setApiCall('1');
         $bUserOtp = new BUserOtp();
-        return $bUserOtp->saveOtp($userOtpDTO);
+        return $bUserOtp->saveRegistrationOtp($userOtpDTO);
     }
     
    
