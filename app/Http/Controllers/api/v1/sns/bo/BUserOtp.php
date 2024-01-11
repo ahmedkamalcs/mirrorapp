@@ -32,13 +32,15 @@ class BUserOtp {
         $userDTO->setFullName($userOtpDTO->getFullName());
         $userDTO->setPhoneNumber($userOtpDTO->getPhoneNumber());
         $userarr= $user->getUserByPhoneNumber($userDTO);
+        
+        /*
         if($userarr){ // user  exist
             $response=[ 'Message'=>"User Already Exist!",
                         'isSucces'=>APICodes::$TRANSACTION_ALREADY_EXIST,
                         'jsonData'=>['UserDetails'=>$userarr]];
             return JsonHandler::getJsonMessage($response);
         }
-        
+        */
         
         //Generate OTP
         //$otp = rand(100000, 999999);
