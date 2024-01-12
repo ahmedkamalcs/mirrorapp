@@ -20,6 +20,7 @@ use App\Http\Controllers\api\v1\dto\SalonBranchesDTO;
 use App\Http\Controllers\api\v1\util\JsonHandler;
 use App\Http\Controllers\api\v1\sns\bo\BUserOtp;
 use Random\RandomError;
+use App\Http\Controllers\api\v1\dto\JsonHandlerDTO;
 class BSalon extends Controller implements BusinessInterface { 
     public function SalonGalleryAndLogo(SalonDTO $salonDTO ) {
         //Salon Logo 
@@ -53,10 +54,15 @@ class BSalon extends Controller implements BusinessInterface {
             //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
             //$response['Message'] = "Successfully Created!";
             //$response['SalonGallery'] = $salon; //SalonGallery Object
-            $response=['Message'=>"Successfully Created!",
+            /*$response=['Message'=>"Successfully Created!",
                          'isSucces'=>APICodes::$TRANSACTION_SUCCESS,
-                         'jsonData'=>['SalonGallery'=>$salon]];
-            return JsonHandler::getJsonMessage($response);
+                         'jsonData'=>['SalonGallery'=>$salon]];*/
+                $jsonHandlerDto = new JsonHandlerDTO();
+                $jsonHandlerDto->setMessage("Successfully Created!");
+                $jsonHandlerDto->setResultHead('SalonGallery');
+                $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                $jsonHandlerDto->setResultInArr($salon);              
+            return JsonHandler::getJsonMessage($jsonHandlerDto);
         } else {
             return AppDTO::$TRUE_AS_STRING;
         
@@ -70,10 +76,15 @@ class BSalon extends Controller implements BusinessInterface {
                 //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
                 //$response['Message'] = "Salone Services Details ";
                 //$response['data'] = $salonservices; //salone services Object
-                $response=['Message'=>"Salone Services Details",
+                /*$response=['Message'=>"Salone Services Details",
                          'isSucces'=>APICodes::$TRANSACTION_SUCCESS,
-                         'jsonData'=>['SaloneServicesDetails'=>$salonservices]];
-                return JsonHandler::getJsonMessage($response);
+                         'jsonData'=>['SaloneServicesDetails'=>$salonservices]];*/
+                $jsonHandlerDto = new JsonHandlerDTO();
+                $jsonHandlerDto->setMessage("Salone Services Details");
+                $jsonHandlerDto->setResultHead('SaloneServicesDetails');
+                $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                $jsonHandlerDto->setResultInArr($salonservices[0]); 
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -81,10 +92,14 @@ class BSalon extends Controller implements BusinessInterface {
             if ($servicesDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                //$response['Status'] = APICodes::$TRANSACTION_FAILUE;
                 //$response['Message'] = "Something went wrong!";
-                $response=['Message'=>"Something went wrong!",
+                /*$response=['Message'=>"Something went wrong!",
                          'isSucces'=>APICodes::$TRANSACTION_FAILUE,
-                         'jsonData'=>[]];
-                return JsonHandler::getJsonMessage($response);
+                         'jsonData'=>[]];*/
+                         $jsonHandlerDto = new JsonHandlerDTO();
+                         $jsonHandlerDto->setMessage("Something went wrong!");
+                         $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_FAILUE);
+                           
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$FALSE_AS_STRING;
             }
@@ -106,10 +121,15 @@ class BSalon extends Controller implements BusinessInterface {
             //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
             //$response['Message'] = "Successfully Saved!";
             //$response['data'] = $updatedServices; //salone services Object
-            $response=[ 'Message'=>"Successfully Saved!",
+            /*$response=[ 'Message'=>"Successfully Saved!",
                         'isSucces'=>APICodes::$TRANSACTION_SUCCESS,
-                        'jsonData'=>['SaloneServicesDetails'=>$updatedServices]];
-            return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>['SaloneServicesDetails'=>$updatedServices]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Successfully Saved!");
+                        $jsonHandlerDto->setResultHead('SaloneServicesDetails');
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                        $jsonHandlerDto->setResultInArr($updatedServices[0]); 
+            return JsonHandler::getJsonMessage($jsonHandlerDto);
         } else {
             return AppDTO::$TRUE_AS_STRING;
         }
@@ -122,10 +142,17 @@ class BSalon extends Controller implements BusinessInterface {
                 //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
                 //$response['Message'] = "Salone Master Data ";
                 //$response['SalonData'] = $salonData; //salone Data Object
-                $response=[ 'Message'=>"Salone Master Data",
+                
+                /*$response=[ 'Message'=>"Salone Master Data",
                         'isSucces'=>APICodes::$TRANSACTION_SUCCESS,
-                        'jsonData'=>['SaloneDetails'=>$salonData]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>['SaloneDetails'=>$salonData]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Salone Master Data!");
+                        $jsonHandlerDto->setResultHead('SaloneDetails');
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+
+                        $jsonHandlerDto->setResultInArr($salonData[0]); 
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -133,10 +160,14 @@ class BSalon extends Controller implements BusinessInterface {
             if ($salonDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 //$response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
                 //$response['Message'] = "Salon does not exist!";
-                $response=[ 'Message'=>"Salon does not exist!",
+                /*$response=[ 'Message'=>"Salon does not exist!",
                         'isSucces'=>APICodes::$TRANSACTION_DATA_NOT_FOUND,
-                        'jsonData'=>[]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>[]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Salon does not exist!");
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
+
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$FALSE_AS_STRING;
             }
@@ -157,10 +188,15 @@ class BSalon extends Controller implements BusinessInterface {
             //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
             //$response['Message'] = "Successfully Saved!";
             //$response['SalonData'] = $salonData; //salone data Object
-            $response=[ 'Message'=>"Successfully Saved!",
+            /*$response=[ 'Message'=>"Successfully Saved!",
                         'isSucces'=>APICodes::$TRANSACTION_SUCCESS,
-                        'jsonData'=>['SaloneDetails'=>$salonData]];
-            return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>['SaloneDetails'=>$salonData]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Successfully Saved!");
+                        $jsonHandlerDto->setResultHead('SaloneDetails');
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                        $jsonHandlerDto->setResultInArr($salonData);         
+            return JsonHandler::getJsonMessage($jsonHandlerDto);
         } else {
             return AppDTO::$TRUE_AS_STRING;
         }
@@ -172,10 +208,15 @@ class BSalon extends Controller implements BusinessInterface {
             //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
             //$response['Message'] = "Work Styles List ";
             //$response['WorkStyleList'] = $WorkStylesData; // Work Styles Data Object
-            $response=['Message'=>"Work Styles List ",
+            /*$response=['Message'=>"Work Styles List ",
                          'isSucces'=>APICodes::$TRANSACTION_SUCCESS,
-                         'jsonData'=>['WorkStyleList'=>$WorkStylesData]];
-            return JsonHandler::getJsonMessage($response);
+                         'jsonData'=>['WorkStyleList'=>$WorkStylesData]];*/
+                         $jsonHandlerDto = new JsonHandlerDTO();
+                         $jsonHandlerDto->setMessage("Work Styles List");
+                         $jsonHandlerDto->setResultHead('WorkStyleList');
+                         $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                         $jsonHandlerDto->setResultInArr($WorkStylesData);  
+            return JsonHandler::getJsonMessage($jsonHandlerDto);
         } else {
             return AppDTO::$TRUE_AS_STRING;
         }
@@ -187,10 +228,16 @@ class BSalon extends Controller implements BusinessInterface {
             //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
             //$response['Message'] = "Service Types List ";
             //$response['ServiceTypeList'] = $serviceType; // Service Types List Data Object
-            $response=[ 'Message'=>"Service Type List",
+           
+           /* $response=[ 'Message'=>"Service Type List",
                         'isSucces'=>APICodes::$TRANSACTION_SUCCESS,
-                        'jsonData'=>['ServiceTypeList'=>$serviceType]];
-            return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>['ServiceTypeList'=>$serviceType]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Service Type List");
+                        $jsonHandlerDto->setResultHead('ServiceTypeList');
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                        $jsonHandlerDto->setResultInArr($serviceType); 
+            return JsonHandler::getJsonMessage($jsonHandlerDto);
         } else {
             return AppDTO::$TRUE_AS_STRING;
         }
@@ -202,10 +249,15 @@ class BSalon extends Controller implements BusinessInterface {
             //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
             //$response['Message'] = "Business Types List ";
             //$response['BusinessTypeList'] = $businessType; // Business Types List Data Object
-            $response=[ 'Message'=>"Business Type List",
+           /* $response=[ 'Message'=>"Business Type List",
                         'isSucces'=>APICodes::$TRANSACTION_SUCCESS,
-                        'jsonData'=>['BusinessTypeList'=>$businessType]];
-            return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>['BusinessTypeList'=>$businessType]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Business Type List");
+                        $jsonHandlerDto->setResultHead('BusinessTypeList');
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                        $jsonHandlerDto->setResultInArr($businessType); 
+            return JsonHandler::getJsonMessage($jsonHandlerDto);
         } else {
             return AppDTO::$TRUE_AS_STRING;
         }
@@ -220,10 +272,16 @@ class BSalon extends Controller implements BusinessInterface {
                 //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
                 //$response['Message'] = "Successfully Saved!";
                 //$response['SalonData'] = $salonData; //salone data Object
-                $response=[ 'Message'=>"Successfully Saved!",
+               
+               /* $response=[ 'Message'=>"Successfully Saved!",
                         'isSucces'=>APICodes::$TRANSACTION_SUCCESS,
-                        'jsonData'=>['SaloneDetails'=>$salonData]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>['SaloneDetails'=>$salonData]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Successfully Saved!");
+                        $jsonHandlerDto->setResultHead('SaloneDetails');
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                        $jsonHandlerDto->setResultInArr($salonData); 
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -231,10 +289,14 @@ class BSalon extends Controller implements BusinessInterface {
             if ($salonDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 //$response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
                 //$response['Message'] = "Salon '" .$salonDTO->getSalonId() . "' does not exist!" ;
-                $response=[ 'Message'=>"Salon '" .$salonDTO->getSalonId() . "' does not exist!",
+                /*$response=[ 'Message'=>"Salon '" .$salonDTO->getSalonId() . "' does not exist!",
                         'isSucces'=>APICodes::$TRANSACTION_DATA_NOT_FOUND,
-                        'jsonData'=>[]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>[]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Salon '" .$salonDTO->getSalonId() . "' does not exist!");
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
+
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -251,10 +313,15 @@ class BSalon extends Controller implements BusinessInterface {
                 //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
                 //$response['Message'] = "Successfully Saved!";
                 //$response['SalonData'] = $salonData; //salone data Object
-                $response=[ 'Message'=>"Successfully Saved!",
+               /* $response=[ 'Message'=>"Successfully Saved!",
                         'isSucces'=>APICodes::$TRANSACTION_SUCCESS,
-                        'jsonData'=>['SaloneDetails'=>$salonData]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>['SaloneDetails'=>$salonData]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Successfully Saved!");
+                        $jsonHandlerDto->setResultHead('SaloneDetails');
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                        $jsonHandlerDto->setResultInArr($salonData);
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -262,10 +329,13 @@ class BSalon extends Controller implements BusinessInterface {
             if ($salonDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 //$response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
                 //$response['Message'] = "Salon '" .$salonDTO->getSalonId() . "' does not exist!" ;
-                $response=[ 'Message'=>"Salon '" .$salonDTO->getSalonId() . "' does not exist!",
+   /*             $response=[ 'Message'=>"Salon '" .$salonDTO->getSalonId() . "' does not exist!",
                         'isSucces'=>APICodes::$TRANSACTION_DATA_NOT_FOUND,
-                        'jsonData'=>[]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>[]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Salon '" .$salonDTO->getSalonId() . "' does not exist!");
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -282,10 +352,16 @@ class BSalon extends Controller implements BusinessInterface {
                 //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
                 //$response['Message'] = "Successfully Saved!";
                 //$response['SalonData'] = $salonData; //salone data Object
-                $response=[ 'Message'=>"Successfully Saved!",
+              
+              /*  $response=[ 'Message'=>"Successfully Saved!",
                         'isSucces'=>APICodes::$TRANSACTION_SUCCESS,
-                        'jsonData'=>['SaloneDetails'=>$salonData]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>['SaloneDetails'=>$salonData]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Successfully Saved!");
+                        $jsonHandlerDto->setResultHead('SaloneDetails');
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                        $jsonHandlerDto->setResultInArr($salonData);
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -293,10 +369,13 @@ class BSalon extends Controller implements BusinessInterface {
             if ($salonDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 //$response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
                 //$response['Message'] = "Salon '" .$salonDTO->getSalonId() . "' does not exist!" ;
-                $response=[ 'Message'=>"Salon '" .$salonDTO->getSalonId() . "' does not exist!",
+               /* $response=[ 'Message'=>"Salon '" .$salonDTO->getSalonId() . "' does not exist!",
                         'isSucces'=>APICodes::$TRANSACTION_DATA_NOT_FOUND,
-                        'jsonData'=>[]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>[]];*/
+                 $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Salon '" .$salonDTO->getSalonId() . "' does not exist!");
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -313,10 +392,15 @@ class BSalon extends Controller implements BusinessInterface {
                 //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
                 //$response['Message'] = "Successfully Saved!";
                 //$response['SalonData'] = $salonData; //salone data Object
-                $response=[ 'Message'=>"Successfully Saved!",
+               /* $response=[ 'Message'=>"Successfully Saved!",
                         'isSucces'=>APICodes::$TRANSACTION_SUCCESS,
-                        'jsonData'=>['SaloneDetails'=>$salonData]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>['SaloneDetails'=>$salonData]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Successfully Saved!");
+                        $jsonHandlerDto->setResultHead('SaloneDetails');
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                        $jsonHandlerDto->setResultInArr($salonData);
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -324,10 +408,10 @@ class BSalon extends Controller implements BusinessInterface {
             if ($salonDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 //$response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
                 //$response['Message'] = "Salon '" .$salonDTO->getSalonId() . "' does not exist!" ;
-                $response=[ 'Message'=>"Salon '" .$salonDTO->getSalonId() . "' does not exist!",
-                        'isSucces'=>APICodes::$TRANSACTION_DATA_NOT_FOUND,
-                        'jsonData'=>[]];
-                return JsonHandler::getJsonMessage($response);
+                $jsonHandlerDto = new JsonHandlerDTO();
+                $jsonHandlerDto->setMessage("Salon '" .$salonDTO->getSalonId() . "' does not exist!");
+                $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -341,10 +425,13 @@ class BSalon extends Controller implements BusinessInterface {
             if ($salonBranchesDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 //$response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
                 //$response['Message'] = "Salon '" .$salonBranchesDTO->getSalonId() . "' does not exist!" ;
-                $response=[ 'Message'=>"Salon '" . $salonBranchesDTO->getSalonId()  . "' does not exist!",
+                /*$response=[ 'Message'=>"Salon '" . $salonBranchesDTO->getSalonId()  . "' does not exist!",
                         'isSucces'=>APICodes::$TRANSACTION_DATA_NOT_FOUND,
-                        'jsonData'=>[]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>[]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Salon '" .$salonBranchesDTO->getSalonId() . "' does not exist!");
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -358,10 +445,15 @@ class BSalon extends Controller implements BusinessInterface {
                 //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
                 //$response['Message'] = "Salon Branches List!";
                 //$response['BrancheList'] = $salonBranches; //salone data Object
-                $response=[ 'Message'=>"Salon Branches List!",
+               /* $response=[ 'Message'=>"Salon Branches List!",
                         'isSucces'=>APICodes::$TRANSACTION_SUCCESS,
-                        'jsonData'=>['BrancheList'=>$salonBranches]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>['BrancheList'=>$salonBranches]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Salon Branches List!");
+                        $jsonHandlerDto->setResultHead('BrancheList');
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                        $jsonHandlerDto->setResultInArr($salonBranches);
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -369,10 +461,11 @@ class BSalon extends Controller implements BusinessInterface {
             if ($salonBranchesDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 //$response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
                 //$response['Message'] = "Branch'" .$salonBranchesDTO->getBranchId() . "' does not exist!" ;
-                $response=[ 'Message'=>"Branch'" .$salonBranchesDTO->getBranchId() . "' does not exist!",
-                        'isSucces'=>APICodes::$TRANSACTION_DATA_NOT_FOUND,
-                        'jsonData'=>[]];
-                return JsonHandler::getJsonMessage($response);
+                $jsonHandlerDto = new JsonHandlerDTO();
+                $jsonHandlerDto->setMessage("Branch'" .$salonBranchesDTO->getBranchId() . "' does not exist!");
+                $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
+
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -389,10 +482,15 @@ class BSalon extends Controller implements BusinessInterface {
                 //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
                 //$response['Message'] = "Successfully Saved!";
                 //$response['BranchData'] = $branchData; //salone data Object
-                $response=[ 'Message'=>"Successfully Saved!",
+                /*$response=[ 'Message'=>"Successfully Saved!",
                         'isSucces'=>APICodes::$TRANSACTION_SUCCESS,
-                        'jsonData'=>['BranchData'=>$branchData]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>['BranchData'=>$branchData]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Successfully Saved!");
+                        $jsonHandlerDto->setResultHead('BranchData');
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                        $jsonHandlerDto->setResultInArr($branchData);
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -400,10 +498,14 @@ class BSalon extends Controller implements BusinessInterface {
             if ($salonBranchesDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 //$response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
                 //$response['Message'] = "Salon '" .$salonBranchesDTO->getSalonId() . "' does not exist!" ;
-                $response=[ 'Message'=>"Salon '" .$salonBranchesDTO->getSalonId() . "' does not exist!",
+                /*$response=[ 'Message'=>"Salon '" .$salonBranchesDTO->getSalonId() . "' does not exist!",
                         'isSucces'=>APICodes::$TRANSACTION_DATA_NOT_FOUND,
-                        'jsonData'=>[]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>[]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Salon '" .$salonBranchesDTO->getSalonId() . "' does not exist!");
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
+
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -418,10 +520,14 @@ class BSalon extends Controller implements BusinessInterface {
             if ($salonEmployeeDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 //$response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
                 //$response['Message'] = "Salon '" .$salonEmployeeDTO->getSalonId() . "' does not exist!" ;
-                $response=[ 'Message'=>"Salon '" .$salonEmployeeDTO->getSalonId() . "' does not exist!",
+                /*$response=[ 'Message'=>"Salon '" .$salonEmployeeDTO->getSalonId() . "' does not exist!",
                         'isSucces'=>APICodes::$TRANSACTION_DATA_NOT_FOUND,
-                        'jsonData'=>[]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>[]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Salon '" .$salonEmployeeDTO->getSalonId() . "' does not exist!");
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
+
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -438,10 +544,15 @@ class BSalon extends Controller implements BusinessInterface {
                 //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
                 //$response['Message'] = "Salon Employee List!";
                 //$response['EmployeeList'] = $employeeData; //salone data Object
-                $response=[ 'Message'=>"Salon Employee List!",
+               /* $response=[ 'Message'=>"Salon Employee List!",
                         'isSucces'=>APICodes::$TRANSACTION_SUCCESS,
-                        'jsonData'=>['EmployeeList'=>$employeeData]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>['EmployeeList'=>$employeeData]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Salon Employee List!");
+                        $jsonHandlerDto->setResultHead('EmployeeList');
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                        $jsonHandlerDto->setResultInArr($employeeData);
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -449,10 +560,14 @@ class BSalon extends Controller implements BusinessInterface {
             if ($salonEmployeeDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 //$response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
                 //$response['Message'] = "Employee '" .$salonEmployeeDTO->getEmployeehId() . "' does not exist!" ;
-                $response=[ 'Message'=>"Employee '" .$salonEmployeeDTO->getEmployeehId() . "' does not exist!",
+/*              $response=[ 'Message'=>"Employee '" .$salonEmployeeDTO->getEmployeehId() . "' does not exist!",
                         'isSucces'=>APICodes::$TRANSACTION_DATA_NOT_FOUND,
-                        'jsonData'=>[]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>[]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Employee '" .$salonEmployeeDTO->getEmployeehId() . "' does not exist!" );
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -467,10 +582,15 @@ class BSalon extends Controller implements BusinessInterface {
             if ($salonEmployeeDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 //$response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
                 //$response['Message'] = "Salon '" .$salonEmployeeDTO->getSalonId() . "' does not exist!" ;
-                $response=[ 'Message'=>"Salon '" .$salonEmployeeDTO->getSalonId() . "' does not exist!" ,
+                /*$response=[ 'Message'=>"Salon '" .$salonEmployeeDTO->getSalonId() . "' does not exist!" ,
                         'isSucces'=>APICodes::$TRANSACTION_DATA_NOT_FOUND,
-                        'jsonData'=>[]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>[]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Salon '" .$salonEmployeeDTO->getSalonId() . "' does not exist!");
+
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
+
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -493,10 +613,16 @@ class BSalon extends Controller implements BusinessInterface {
                     //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
                     //$response['Message'] = "Successfully Saved!";
                     //$response['EmployDetails'] = $employeeData; //salone data Object
-                    $response=[ 'Message'=>"Successfully Saved!",
+                    /*$response=[ 'Message'=>"Successfully Saved!",
                         'isSucces'=>APICodes::$TRANSACTION_SUCCESS,
-                        'jsonData'=>['EmployeeDetails'=>$employeeData]];
-                    return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>['EmployeeDetails'=>$employeeData]];*/
+
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Successfully Saved!");
+                        $jsonHandlerDto->setResultHead('EmployeeDetails');
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                        $jsonHandlerDto->setResultInArr($employeeData);
+                    return JsonHandler::getJsonMessage($jsonHandlerDto);
                 } else {
                     return AppDTO::$TRUE_AS_STRING;
                 }
@@ -506,10 +632,15 @@ class BSalon extends Controller implements BusinessInterface {
                 //$response['Status'] = APICodes::$TRANSACTION_ALREADY_EXIST;
                 //$response['Message'] = " Phone Number Already Exist! ";
                 //$response['EmployDetails'] = $employeeData; //salone data Object
-                $response=[ 'Message'=>"Phone Number Already Exist!",
+               /* $response=[ 'Message'=>"Phone Number Already Exist!",
                         'isSucces'=>APICodes::$TRANSACTION_ALREADY_EXIST,
-                        'jsonData'=>['EmployeeDetails'=>$employeeData]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>['EmployeeDetails'=>$employeeData]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Phone Number Already Exist!");
+                        $jsonHandlerDto->setResultHead('EmployeeDetails');
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_ALREADY_EXIST);
+                        $jsonHandlerDto->setResultInArr($employeeData[0]);
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -524,10 +655,14 @@ class BSalon extends Controller implements BusinessInterface {
             if ($salonEmployeeDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 //$response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
                 //$response['Message'] = "Salon '" .$salonEmployeeDTO->getSalonId() . "' does not exist!" ;
-                $response=[ 'Message'=>"Salon '" .$salonEmployeeDTO->getSalonId() . "' does not exist!" ,
+              /*  $response=[ 'Message'=>"Salon '" .$salonEmployeeDTO->getSalonId() . "' does not exist!" ,
                         'isSucces'=>APICodes::$TRANSACTION_DATA_NOT_FOUND,
-                        'jsonData'=>[]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>[]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Salon '" .$salonEmployeeDTO->getSalonId() . "' does not exist!");
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
+
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -541,10 +676,15 @@ class BSalon extends Controller implements BusinessInterface {
                 //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
                 //$response['Message'] = "Successfully updated!";
                 //$response['BranchData'] = $employeeData; //salone data Object
-                $response=[ 'Message'=>"Successfully Saved!",
+                /*$response=[ 'Message'=>"Successfully Saved!",
                         'isSucces'=>APICodes::$TRANSACTION_SUCCESS,
-                        'jsonData'=>['EmployeeDetails'=>$employeeData]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>['EmployeeDetails'=>$employeeData]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Successfully Saved!");
+                        $jsonHandlerDto->setResultHead('EmployeeDetails');
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                        $jsonHandlerDto->setResultInArr($employeeData);
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
@@ -552,10 +692,15 @@ class BSalon extends Controller implements BusinessInterface {
             if ($salonEmployeeDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 //$response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
                 //$response['Message'] = "Employee does not exist! ";
-                $response=[ 'Message'=>"Employee does not exist!",
+                /*$response=[ 'Message'=>"Employee does not exist!",
                         'isSucces'=>APICodes::$TRANSACTION_DATA_NOT_FOUND,
-                        'jsonData'=>[]];
-                return JsonHandler::getJsonMessage($response);
+                        'jsonData'=>[]];*/
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Employee does not exist! ");
+
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
+
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }

@@ -13,7 +13,7 @@ namespace App\Http\Controllers\api\v1\dto;
  *
  * @author Ahmed Kamal
  */
-use App\Http\Controllers\api\v1\dto\JsonHandlerDTO;
+//use App\Http\Controllers\api\v1\dto\JsonHandlerDTO;
 class JsonHandlerDTO implements DTOInterface{
 
     private $message;

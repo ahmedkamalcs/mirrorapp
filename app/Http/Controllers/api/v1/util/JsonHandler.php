@@ -19,7 +19,7 @@ use App\Http\Controllers\api\v1\dto\JsonHandlerDTO;
 final class JsonHandler {
 
     public static function getJsonMessage(JsonHandlerDTO $jsonHandlerDTO) {
-       
+      
 
         if (is_object($jsonHandlerDTO->getResultInArr() )) {
             
@@ -41,6 +41,7 @@ final class JsonHandler {
             echo $jsonResult;
             exit();
         } else if (count($jsonHandlerDTO->getResultInArr()) == 1) {
+
             $response = ['Message' => $jsonHandlerDTO->getMessage(),
                 'isSucces' => $jsonHandlerDTO->getIsSuccess(),
                 'jsonData' => [$jsonHandlerDTO->getResultHead() => (object) $jsonHandlerDTO->getResultInArr()[0]]];

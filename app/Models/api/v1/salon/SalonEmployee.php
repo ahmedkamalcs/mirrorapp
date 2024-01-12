@@ -101,18 +101,31 @@ class SalonEmployee extends Model implements ModelInterface{
  
     }
    public Function getSalonEmployeebyId(SalonEmployeeDTO $salonEmployeeDTO){
-    $salonEmploy= SalonEmployee::where([["salon_id",$salonEmployeeDTO->getSalonId()]
-    ,["id",$salonEmployeeDTO->getEmployeehId()]])->get();
-    return $salonEmploy;    
+    //$salonEmploy= SalonEmployee::where([["salon_id",$salonEmployeeDTO->getSalonId()]
+    //,["id",$salonEmployeeDTO->getEmployeehId()]])->get();
+    //return $salonEmploy;  
+    $query = "select * from salon_employee where salon_id='" . $salonEmployeeDTO->getSalonId() . "' and id='" .$salonEmployeeDTO->getEmployeehId() .  "'";
+    
+    $result = DBUtil::select($query);  
+    
+    return $result;
    }
    public Function getSalonEmployeebyPhoneNo(SalonEmployeeDTO $salonEmployeeDTO){
-    $salonEmploy= SalonEmployee::where([["salon_id",$salonEmployeeDTO->getSalonId()]
-    ,["employee_phone_no",$salonEmployeeDTO->getEmployeePhoneNo()]])->get();
-    return $salonEmploy;    
+   // $salonEmploy= SalonEmployee::where([["salon_id",$salonEmployeeDTO->getSalonId()]
+    //,["employee_phone_no",$salonEmployeeDTO->getEmployeePhoneNo()]])->get();
+
+    
+    $query = "select * from salon_employee where salon_id='" . $salonEmployeeDTO->getSalonId() . "' and employee_phone_no='" .$salonEmployeeDTO->getEmployeePhoneNo() .  "'";
+    
+   $result = DBUtil::select($query);
+
+   return $result; 
    }
    public Function getSalonEmployees(SalonEmployeeDTO $salonEmployeeDTO){
-    $salonEmploy= SalonEmployee::where("salon_id",$salonEmployeeDTO->getSalonId())->get();
-    return $salonEmploy;    
+    $query = "select * from salon_employee where salon_id='" . $salonEmployeeDTO->getSalonId() . "'";
+    
+   $result = DBUtil::select($query); 
+   return $result; 
    }
   
     /**

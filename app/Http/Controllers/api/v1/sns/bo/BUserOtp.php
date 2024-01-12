@@ -77,7 +77,7 @@ class BUserOtp {
                 $jsonHandlerDto->setMessage("OTP has been sent to user!");
                 $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
 
-                return JsonHandler::getJsonMessage($response);
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
