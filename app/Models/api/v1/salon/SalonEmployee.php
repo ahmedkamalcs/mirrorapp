@@ -89,9 +89,9 @@ class SalonEmployee extends Model implements ModelInterface{
     }
     public function UpdateSalonEmployee(SalonEmployeeDTO $salonEmployeeDTO) {
        
-        $employee=  SalonEmployee::find([$salonEmployeeDTO->getEmployeehId()]);
+        $employee=  SalonEmployee::find($salonEmployeeDTO->getEmployeehId());
         
-        $employee->salon_id=$salonEmployeeDTO->getSalonId();
+       // $employee->salon_id=$salonEmployeeDTO->getSalonId();
         $employee->employee_name= $salonEmployeeDTO->getEmployeeName();
         $employee->employee_phone_no= $salonEmployeeDTO->getEmployeePhoneNo();
 

@@ -598,7 +598,7 @@ class BSalon extends Controller implements BusinessInterface {
 
         $salonEmployeeModel= new SalonEmployee();
         $employeeData= $salonEmployeeModel->getSalonEmployeebyPhoneNo($salonEmployeeDTO);
-        if($employeeData->isEmpty()){
+        if(!$employeeData){
             $employeeData=$salonEmployeeModel->SaveSalonEmployee($salonEmployeeDTO);
             if($employeeData){
                 //Sent OTP to employee
@@ -670,7 +670,8 @@ class BSalon extends Controller implements BusinessInterface {
 
         $salonEmployeeModel= new SalonEmployee();
         $employeeData= $salonEmployeeModel->getSalonEmployeebyId($salonEmployeeDTO);
-        if(!$employeeData->isEmpty()){
+        
+        if($employeeData){
             $employeeData=$salonEmployeeModel->UpdateSalonEmployee($salonEmployeeDTO);
             if ($salonEmployeeDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
