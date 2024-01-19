@@ -159,6 +159,18 @@ public function saveSalonEmployee(Request $request){
    return $bsalon->saveSalonEmployee($salonemployeeDTO);
 
 }
+public function saveSalonCommercial(Request $request){
+    $salonDTO= new SalonDTO();
+    $salonDTO->setSalonId($request->salonId);
+    $salonDTO->setCommercailFile($request->commercialRegistration);
+    $salonDTO->setTaxDocument($request->taxDocument);
+    $salonDTO->setBank($request->bank);
+    $salonDTO->setIBANDocument($request->IBANDocument);
+    $bsalon = new BSalon();
+
+   return $bsalon->saveSalonCommercial($salonDTO);
+
+}
 public function updateSalonEmployee(Request $request){
     $salonemployeeDTO= new SalonEmployeeDTO();
     $salonemployeeDTO->setSalonId($request->salonId);
@@ -169,5 +181,10 @@ public function updateSalonEmployee(Request $request){
 
    return $bsalon->updateSalonEmployee($salonemployeeDTO);
 
+}
+public function lstBank(Request $reques){
+    $bsalon = new BSalon();
+
+    return $bsalon->lstBank();
 }
 }

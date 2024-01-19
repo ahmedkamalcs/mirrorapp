@@ -95,7 +95,18 @@ class SalonMaster extends Model implements ModelInterface{
         return  $SalonMaster;
  
     }
+    public function saveSalonCommercial(SalonDTO $salonDTO){
+        $SalonMaster= SalonMaster::find($salonDTO->getSalonId());
 
+        $SalonMaster->commercial_file=$salonDTO->getCommercailFile();
+        $SalonMaster->tax_file= $salonDTO->getTaxDocument();
+        $SalonMaster->bank_id= $salonDTO->getBank();
+        $SalonMaster->IBAN_file= $salonDTO->getIBANDocument();
+        
+        $SalonMaster->save();
+        return  $SalonMaster;
+
+    }
     public function updateSalonData(SalonDTO $salonDTO) {
         
         $SalonMaster= SalonMaster::find($salonDTO->getSalonId());

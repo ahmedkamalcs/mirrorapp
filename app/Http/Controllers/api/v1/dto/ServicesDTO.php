@@ -23,6 +23,11 @@ class ServicesDTO implements DTOInterface {
     private $salonServices;
     private $subcategoryId;
     private $isactive;
+    private $isServingFemales;
+    private $isServingMales;
+    private $serviceDescription;
+    private $serviceDuration;
+    private $servicePrice;
     private $apiCall = '1'; //API Calls Active by Default
     function getApiCall() {
         return $this->apiCall;
@@ -69,4 +74,39 @@ class ServicesDTO implements DTOInterface {
     function getIsactive() {
         return $this->isactive;
     }
+    function setIsServingFemales($isServingFemales){
+        $this->isServingFemales=$isServingFemales;
+    }
+    function getIsServingFemales(){
+        return $this->isServingFemales;
+    }
+    
+    function setIsServingMales($isServingMales){
+        $this->isServingMales=$isServingMales;
+    }
+    function getIsServingMales(){
+        return $this->isServingMales;
+    }
+    function setServiceDescription($serviceDescription){
+        $this->serviceDescription=$serviceDescription;
+    }
+    
+    function getServiceDescription(){
+        return $this->serviceDescription;
+    }
+    function setServiceDuration($serviceDuration){
+        $this->serviceDuration=$serviceDuration;
+    }
+    
+    function getServiceDuration(){
+        return $this->serviceDuration;
+    }
+    function setServicePrice($servicePrice){
+        $this->servicePrice=$servicePrice;
+    }
+    
+    function getServicePrice(){
+        return $this->servicePrice;
+    }
+
 }

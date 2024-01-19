@@ -93,20 +93,38 @@ class SalonServices extends Model implements ModelInterface{
             $subcategories = DBUtil::select($query);
             $subitem=[];
             foreach($subcategories as $subcategory){
-                $query = "select isactive from salon_services where category_id='".$subcategory->category_id ."' and subcategory_id='".$subcategory->id."' and user_phone_no='".$servicesDTO->getUserPhoneNo()."'";
+                $query = "select isactive ,serving_females,serving_males,service_description,service_duration,service_price from salon_services where category_id='".$subcategory->category_id ."' and subcategory_id='".$subcategory->id."' and user_phone_no='".$servicesDTO->getUserPhoneNo()."'";
                 $salonservice = DBUtil::select($query);
                 if (!$salonservice){
-                    $isactive=0;
+                    
+                    $subitem[]=[
+                        "id"=> $subcategory->id,
+                        "category_id"=> $subcategory->category_id,
+                        "arabic_name"=> $subcategory->arabic_name,
+                        "english_name"=>$subcategory->english_name,
+                        "serving_females"=>"0",
+                        "serving_males"=>"0",
+                        "service_description"=>"",
+                        "service_duration"=>"",
+                        "service_price"=>"",
+                        "is_active"=> "0"
+                    ];
                 }else{
-                    $isactive=$salonservice[0]->isactive;
+                    
+                    $subitem[]=[
+                        "id"=> $subcategory->id,
+                        "category_id"=> $subcategory->category_id,
+                        "arabic_name"=> $subcategory->arabic_name,
+                        "english_name"=>$subcategory->english_name,
+                        "serving_females"=>$salonservice[0]->serving_females,
+                        "serving_males"=>$salonservice[0]->serving_males,
+                        "service_description"=>$salonservice[0]->service_description,
+                        "service_duration"=>$salonservice[0]->service_duration,
+                        "service_price"=>$salonservice[0]->service_price,
+                        "is_active"=> $salonservice[0]->isactive
+                    ];
                 }
-                $subitem[]=[
-                    "id"=> $subcategory->id,
-                    "category_id"=> $subcategory->category_id,
-                    "arabic_name"=> $subcategory->arabic_name,
-                    "english_name"=>$subcategory->english_name,
-                    "is_active"=> $isactive
-                ];
+              
             }
           $item[] = [
             "CategoryId" => $category->id,
@@ -130,6 +148,11 @@ class SalonServices extends Model implements ModelInterface{
         $salonservice->category_id=$servicesDTO->getCategoryId();
         $salonservice->subcategory_id= $servicesDTO->getSubCategoryId();
         $salonservice->user_phone_no= $servicesDTO->getUserPhoneNo();
+        $salonservice->serving_females= $servicesDTO->getIsServingFemales();
+        $salonservice->serving_males= $servicesDTO->getIsServingMales();
+        $salonservice->service_description= $servicesDTO->getServiceDescription();
+        $salonservice->service_duration= $servicesDTO->getServiceDuration();
+        $salonservice->service_price= $servicesDTO->getServicePrice();
         $salonservice->isactive= $servicesDTO->getIsactive();
         $salonservice->save();
         return  $salonservice;

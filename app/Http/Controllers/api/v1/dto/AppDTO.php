@@ -17,6 +17,9 @@ class AppDTO {
     // Salon Gallery & logo path
     public static $salonGalleryPath = "public/Salon Gallery/";
     public static $salonLogoPath = "public/Salon Logo/";
+    public static $salonCommercialPath = "public/Salon Commercial/";
+    public static $salonTaxPath = "public/Salon Tax/";
+    public static $salonIBANPath = "public/Salon IBAN/";
     public static $_EP = true;
     public static $TRUE_AS_STRING = '1';
     public static $FALSE_AS_STRING = '0';

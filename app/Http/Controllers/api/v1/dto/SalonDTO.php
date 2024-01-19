@@ -38,6 +38,11 @@ class SalonDTO implements DTOInterface {
      private $isServingMales;
     private $salonWorkStyle;
     private $salonWorkingDays;
+    private $commercailFile;
+    private $taxDocument;
+    private $bank;
+    private $IBANDocument;
+
     private $apiCall = '1'; //API Calls Active by Default
     function getApiCall() {
         return $this->apiCall;
@@ -47,6 +52,30 @@ class SalonDTO implements DTOInterface {
         $this->apiCall = $apiCall;
     }
         public function getDTOById($id) {
+    }
+    function setIBANDocument($IBANDocument){
+        $this->IBANDocument=$IBANDocument;
+    }
+    function getIBANDocument(){
+        return $this->IBANDocument;
+    }
+    function setBank($bank){
+        $this->bank=$bank;
+    }
+    function getBank(){
+        return $this->bank;
+    }
+    function setTaxDocument($taxDocument){
+        $this->taxDocument=$taxDocument;
+    }
+    function getTaxDocument(){
+        return $this->taxDocument;
+    }
+    function setCommercailFile($commercailFile){
+        $this->commercailFile=$commercailFile;
+    }
+    function getCommercailFile(){
+        return $this->commercailFile;
     }
     function setSalonLogo($logo){
         $this->salonLogo = $logo;

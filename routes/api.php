@@ -34,7 +34,11 @@ Route::group(['namespace' => 'App\Http\Controllers\api\v1\usermodel\client', 'pr
     Route::post('listUserCompaniesByEmailId', 'UserClient@listUserCompaniesByEmailId');
     //Route::post('validateUser', 'UserClient@validateUser');
 });
-
+//Rout booking
+Route::group(['namespace' => 'App\Http\Controllers\api\v1\client\client', 'prefix' => 'v1'], function() {
+    Route::post('saveBooking', 'ClientBooking@saveBooking');
+    
+});
 /*Rout Payment Model. Group v1*/
 Route::group(['namespace' => 'App\Http\Controllers\api\v1\paymentmodel\client', 'prefix' => 'v1'], function() {
     Route::post('savePaymentProviderConfig', 'PaymentProviderConfigClient@save');
@@ -82,6 +86,8 @@ Route::group(['namespace' => 'App\Http\Controllers\api\v1\salon\client', 'prefix
     Route::post('lstBusinessTypes', 'SalonClient@lstBusinessTypes');
     Route::post('lstSalonBranches', 'SalonClient@lstSalonBranches');
     Route::post('lstSalonEmployee', 'SalonClient@lstSalonEmployee');
+    Route::post('lstBank', 'SalonClient@lstBank');
+    Route::post('saveSalonCommercial', 'SalonClient@saveSalonCommercial');
 });
 
 /*Rout Tax Model. Group v1*/

@@ -12,6 +12,7 @@ use App\Models\api\v1\salon\SalonServices;
 use App\Models\api\v1\salon\SalonMaster;
 use App\Models\api\v1\salon\WorkStyle;
 use App\Models\api\v1\salon\ServiceType;
+use App\Models\api\v1\salon\Bank;
 use App\Models\api\v1\salon\BusinessType;
 use App\Models\api\v1\salon\SalonBranches;
 use App\Models\api\v1\salon\SalonEmployee;
@@ -22,7 +23,7 @@ use App\Http\Controllers\api\v1\sns\bo\BUserOtp;
 use Random\RandomError;
 use App\Http\Controllers\api\v1\dto\JsonHandlerDTO;
 class BSalon extends Controller implements BusinessInterface { 
-    public function SalonGalleryAndLogo(SalonDTO $salonDTO ) {
+         public function SalonGalleryAndLogo(SalonDTO $salonDTO ) {
         //Salon Logo 
         $salonLogo= $salonDTO->getSalonLogo();
         $salonLogo_name= md5(Rand(1000,10000));
@@ -30,7 +31,7 @@ class BSalon extends Controller implements BusinessInterface {
         $salonLogo_full_name=  $salonLogo_name.".". $salonLogo_ext;
         $salonLogo_url= AppDTO::$salonLogoPath.".".$salonLogo_full_name;
         $salonLogo->move(AppDTO::$salonLogoPath,$salonLogo_full_name);
-
+  
         // Salon Gallery 
        
         $salonGallery= $salonDTO->getSalonGallery();
@@ -43,6 +44,7 @@ class BSalon extends Controller implements BusinessInterface {
                 $salonGallery_full_name=  $salonGallery_name.".". $salonGallery_ext;
                 $salonGallery_url= AppDTO::$salonGalleryPath.".".$salonGallery_full_name;
                 $image->move(AppDTO::$salonGalleryPath,$salonGallery_full_name);
+                
                 $Galleries[]=$salonGallery_full_name;
             }
         }
@@ -113,6 +115,11 @@ class BSalon extends Controller implements BusinessInterface {
             $serviceDTO->setUserPhoneNo($servicesDTO->getUserPhoneNo());
             $serviceDTO->setCategoryId($servicesDTO->getCategoryId());
             $serviceDTO->setSubcategoryId($salonservice['subcategoryId']);
+            $serviceDTO->setServiceDescription($salonservice['serviceDescription']);
+            $serviceDTO->setIsServingFemales($salonservice['servingFemales']);
+            $serviceDTO->setIsServingMales($salonservice['servingMales']);
+            $serviceDTO->setServiceDuration($salonservice['serviceDuration']);
+            $serviceDTO->setServicePrice($salonservice['servicePrice']);
             $serviceDTO->setIsactive($salonservice['isactive']);
             $salonservicesModel->saveDefaultServices($serviceDTO);
         }
@@ -707,5 +714,74 @@ class BSalon extends Controller implements BusinessInterface {
             }
         }
     }
+    public function lstBank(){
+        $bankModel= new Bank();
+        $bankDetails=$bankModel->listAll();
+        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Success!");
+                        $jsonHandlerDto->setResultHead('BankList');
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                        $jsonHandlerDto->setResultInArr($bankDetails);
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
+    }
+    public function saveSalonCommercial(SalonDTO $salonDTO){
+        //checking salon 
+        $salonMasterModel=new SalonMaster();
+        $salonData=$salonMasterModel->getSalonDataById($salonDTO->getSalonId());
+    
+        if($salonData->isEmpty()){
+            if ($salonDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Salon '" .$salonDTO->getSalonId() . "' does not exist!");
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
 
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
+            } else {
+                return AppDTO::$TRUE_AS_STRING;
+            }
+        }
+
+        //Salon Commercial file 
+        $salonCommercial= $salonDTO->getCommercailFile();
+        $salonCommercial_name= md5(Rand(1000,10000));
+        $salonCommercial_ext=strtolower($salonCommercial->getClientOriginalExtension());
+        $salonCommercial_full_name=  $salonCommercial_name.".". $salonCommercial_ext;
+        $salonCommercial_url= AppDTO::$salonCommercialPath.".".$salonCommercial_full_name;
+        $salonCommercial->move(AppDTO::$salonCommercialPath,$salonCommercial_full_name);
+
+         //Salon Tax file 
+         $salonTax= $salonDTO->getTaxDocument();
+         $salonTax_name= md5(Rand(1000,10000));
+         $salonTax_ext=strtolower($salonTax->getClientOriginalExtension());
+         $salonTax_full_name=  $salonTax_name.".". $salonTax_ext;
+         $salonTax_url= AppDTO::$salonTaxPath.".".$salonTax_full_name;
+         $salonTax->move(AppDTO::$salonTaxPath,$salonTax_full_name);
+
+          //Salon IBAN file 
+          $salonIBAN= $salonDTO->getIBANDocument();
+          $salonIBAN_name= md5(Rand(1000,10000));
+          $salonIBAN_ext=strtolower($salonIBAN->getClientOriginalExtension());
+          $salonIBAN_full_name=  $salonIBAN_name.".". $salonIBAN_ext;
+          $salonIBAN_url= AppDTO::$salonIBANPath.".".$salonIBAN_full_name;
+          $salonIBAN->move(AppDTO::$salonIBANPath,$salonIBAN_full_name);
+
+          $salonDTO->setCommercailFile($salonCommercial_full_name);
+          $salonDTO->setTaxDocument($salonTax_full_name);
+          $salonDTO->setIBANDocument($salonIBAN_full_name);
+
+          $salonModel= new SalonMaster();
+          $salonData=$salonModel->saveSalonCommercial($salonDTO);
+          if ($salonDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+
+                    $jsonHandlerDto = new JsonHandlerDTO();
+                    $jsonHandlerDto->setMessage("Successfully Saved!");
+                    $jsonHandlerDto->setResultHead('SaloneDetails');
+                    $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                    $jsonHandlerDto->setResultInArr($salonData);         
+            return JsonHandler::getJsonMessage($jsonHandlerDto);
+        } else {
+            return AppDTO::$TRUE_AS_STRING;
+        }
+
+    }
 }
