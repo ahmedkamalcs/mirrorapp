@@ -164,7 +164,7 @@ public function saveSalonCommercial(Request $request){
     $salonDTO->setSalonId($request->salonId);
     $salonDTO->setCommercailFile($request->commercialRegistration);
     $salonDTO->setTaxDocument($request->taxDocument);
-    $salonDTO->setBank($request->bank);
+    $salonDTO->setBank($request->bankId);
     $salonDTO->setIBANDocument($request->IBANDocument);
     $bsalon = new BSalon();
 
