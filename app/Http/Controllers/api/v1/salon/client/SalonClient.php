@@ -115,7 +115,15 @@ public function saveSalonServiceGender(Request $request){
 public function saveSalonWorkingDays(Request $request){
     $salonDTO= new SalonDTO();
     $salonDTO->setSalonId($request->salonId);
-    $salonDTO->setSalonWorkingDays($request->workingDays);
+    $workingDays=array();
+    $workingDays['Monday']=$request->isWorkingMonday;
+    $workingDays['Tuesday']=$request->isWorkingTuesday;
+    $workingDays['Wednesday']=$request->isWorkingWednesday;
+    $workingDays['Thrusday']=$request->isWorkingThrusday;
+    $workingDays['Friday']=$request->isWorkingFriday;
+    $workingDays['Saturday']=$request->isWorkingSaturday;
+    $workingDays['Sunday']=$request->isWorkingSunday;
+    $salonDTO->setSalonWorkingDays($workingDays);
     $bsalon = new BSalon();
 
     return $bsalon->saveSalonWorkingDays($salonDTO);
