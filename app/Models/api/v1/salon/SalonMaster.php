@@ -10,12 +10,14 @@ namespace App\Models\api\v1\salon;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Controllers\api\v1\dto\SalonDTO;
+use App\Http\Controllers\api\v1\dto\AppDTO;
 use App\Http\Controllers\api\v1\dto\PaymentVendorDetailsDTO;
 use App\Http\Controllers\api\v1\dto\ModelInterface;
 use App\Http\Controllers\api\v1\util\DBUtil;
 use App\Http\Controllers\api\v1\sns\bo\BSnsService;
 use App\Http\Controllers\api\v1\dto\SnsDTO;
 use App\Http\Controllers\isgapi\api\v1\util\StringUtil;
+use Illuminate\Validation\Rules\Exists;
 
 /**
  * @author Saad Aly
@@ -168,7 +170,15 @@ class SalonMaster extends Model implements ModelInterface{
     }
    public Function getSalonDataByPhoneNumber($phoneNumber){
     $SalonMaster= SalonMaster::where("user_phone_no",$phoneNumber)->get();
-    return $SalonMaster;    
+    $query=" select gallery from salon_gallery where user_phone_no='".$phoneNumber."'";
+    $galleryResult=DBUtil::select($query);
+    $galleries=explode("|",$galleryResult[0]->gallery);
+    foreach($galleries as $gallery){
+        $galleryarr[]=AppDTO::$serverlink . "" . AppDTO::$salonGalleryPath . $gallery;
+    }
+    $SalonMaster[0]->{"Gallery"}=$galleryarr; 
+    return $SalonMaster;
+   
    }
    public Function getSalonDataById($salonId){
     $SalonMaster= SalonMaster::where("id",$salonId)->get();
