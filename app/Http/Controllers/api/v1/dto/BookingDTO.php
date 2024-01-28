@@ -25,6 +25,11 @@ class BookingDTO implements DTOInterface {
     private $branchId;
      private $emplyeeId;
      private $status;
+     private $serviceCategory;
+     private $serviceSubCategory;
+     private $quantity ;
+     private $price;
+     private $bookingDate;
 
     private $apiCall = '1'; //API Calls Active by Default
     function getApiCall() {
@@ -35,6 +40,36 @@ class BookingDTO implements DTOInterface {
         $this->apiCall = $apiCall;
     }
         public function getDTOById($id) {
+    }
+    function setServiceCategory($serviceCategory){
+        $this->serviceCategory=$serviceCategory;
+    }
+       function getServiceCategory(){
+        return $this->serviceCategory;
+    }
+    function setBookingDate($bookingDate){
+        $this->bookingDate=$bookingDate;
+    }
+  function getBookingDate(){
+        return $this->bookingDate;
+    }
+    function setServiceSubCategory($serviceSubCategory){
+        $this->serviceSubCategory=$serviceSubCategory;
+    }
+    function getServiceSubCategory(){
+        return $this->serviceSubCategory;
+    }
+    function setQuantity($quantity){
+        $this->quantity=$quantity;
+    }
+    function getQuantity(){
+        return $this->quantity;
+    }
+    function setPrice($price){
+        $this->price=$price;
+    }
+    function getPrice(){
+        return $this->price;
     }
     function setBookingId($bookingId){
         $this->bookingId=$bookingId;

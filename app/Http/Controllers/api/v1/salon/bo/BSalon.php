@@ -116,16 +116,16 @@ class BSalon extends Controller implements BusinessInterface {
         $salonservicesModel = new SalonServices();
         $salonservices = $servicesDTO->getSalonServices();
         $serviceDTO = new ServicesDto();
-        foreach ($salonservices as $salonservice) { 
+        foreach ($salonservices as $salonservice) {
             $serviceDTO->setUserPhoneNo($servicesDTO->getUserPhoneNo());
             $serviceDTO->setCategoryId($servicesDTO->getCategoryId());
-            $serviceDTO->setSubcategoryId($salonservice->subcategoryId);
-            $serviceDTO->setServiceDescription($salonservice->serviceDescription);
-            $serviceDTO->setIsServingFemales($salonservice->servingFemales);
-            $serviceDTO->setIsServingMales($salonservice->servingMales);
-            $serviceDTO->setServiceDuration($salonservice->serviceDuration);
-            $serviceDTO->setServicePrice($salonservice->servicePrice);
-            $serviceDTO->setIsactive($salonservice->isactive);
+            $serviceDTO->setSubcategoryId($salonservice['subcategoryId']);
+            $serviceDTO->setServiceDescription($salonservice['serviceDescription']);
+            $serviceDTO->setIsServingFemales($salonservice['servingFemales']);
+            $serviceDTO->setIsServingMales($salonservice['servingMales']);
+            $serviceDTO->setServiceDuration($salonservice['serviceDuration']);
+            $serviceDTO->setServicePrice($salonservice['servicePrice']);
+            $serviceDTO->setIsactive($salonservice['isactive']);
             $salonservicesModel->saveDefaultServices($serviceDTO);
         }
         $updatedServices = $salonservicesModel->lstDefaultServices($servicesDTO);

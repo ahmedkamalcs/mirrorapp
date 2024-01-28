@@ -28,13 +28,13 @@ public  function lstDefaultServices(Request $request) {
     return $bsalon->lstDefaultServices($servicesDTO);
 } 
 public function saveDefaultServices(Request $request){
-    $object=file_get_contents('php://input');
-    $request=json_decode($object);
-
+    //return $object->salonServices;
+    //$object=file_get_contents('php://input');
+    //return $request['salonCategoryId'];
     $servicesDTO= new ServicesDTO();
-    $servicesDTO->setUserPhoneNo($request->userPhoneNo);
-    $servicesDTO->setCategoryId($request->salonCategoryId);
-    $servicesDTO->setSalonServices($request->salonServices); 
+    $servicesDTO->setUserPhoneNo($request['userPhoneNo']);
+    $servicesDTO->setCategoryId($request['salonCategoryId']);
+    $servicesDTO->setSalonServices($request['salonServices']); 
     $bsalon = new BSalon();
     
     return $bsalon->saveDefaultServices($servicesDTO);

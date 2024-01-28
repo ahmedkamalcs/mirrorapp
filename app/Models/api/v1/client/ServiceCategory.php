@@ -21,7 +21,7 @@ use App\Http\Controllers\isgapi\api\v1\util\StringUtil;
  * @author Saad Aly
  * EventDetailsModel class. EventDetailsModel persistent object.
  */
-class ClientBooking extends Model implements ModelInterface{
+class ServiceCategory extends Model implements ModelInterface{
 
 
 
@@ -73,76 +73,18 @@ class ClientBooking extends Model implements ModelInterface{
     public function construct2($userId, $eventTitleEn, $eventTitleAr) {
     }
 
-    public function SaveBooking(BookingDTO $bookingDTO) {
-
-        $booking= new ClientBooking();
-        
-        $booking->client_phone=$bookingDTO->getClientPhoneNumber();
-        $booking->booking_status="Pending";
-        $booking->booking_date=$bookingDTO->getBookingDate();
-        $booking->booking_from= $bookingDTO->getBookingFrom();
-        $booking->booking_to= $bookingDTO->getBookingTo();
-        $booking->salon_id= $bookingDTO->getSalonId();
-        $booking->branch_id= $bookingDTO->getBranchId();
-        $booking->employee_id= $bookingDTO->getEmployeeId();
-        $booking->category_id=$bookingDTO->getServiceCategory();
-        $booking->subcategory_id=$bookingDTO->getServiceSubCategory();
-        $booking->quantity=$bookingDTO->getQuantity();
-        $booking->price=$bookingDTO->getPrice();
-        
-        $booking->save();
-        
-        return  $booking;
- 
-    }
-
-    public function updateBooking(BookingDTO $bookingDTO) {
-
-        $booking= ClientBooking::find($bookingDTO->getBookingId());
-        
-        $booking->booking_status="Pending";
-        $booking->booking_date=$bookingDTO->getBookingDate();
-        $booking->booking_from= $bookingDTO->getBookingFrom();
-        $booking->booking_to= $bookingDTO->getBookingTo();
-    
-        $booking->save();
-        
-        return  $booking;
- 
-    }
-    public function confirmBooking(BookingDTO $bookingDTO) {
-
-        $booking= ClientBooking::find($bookingDTO->getBookingId());
-        
-        $booking->booking_status="Confirmed";
-        
-    
-        $booking->save();
-        
-        return  $booking;
- 
-    }
-    public function cancellBooking(BookingDTO $bookingDTO) {
-
-        $booking= ClientBooking::find($bookingDTO->getBookingId());
-        
-        $booking->booking_status="Cancelled";
-        
-    
-        $booking->save();
-        
-        return  $booking;
- 
-    }
-
-    public function lstBooking(BookingDTO $bookingDTO){
+    public function lstCategory() {
+        $query = "select * from service_category ";
+        $categories = DBUtil::select($query);
+        return $categories;
         
     }
+
     /**
      * Instance Variables for the persistent object Model.
      * @var type
      */
     public $timestamps = true;
-    protected $table = 'client_booking';
+    protected $table = 'service_category';
 
 }

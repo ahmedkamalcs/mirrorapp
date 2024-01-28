@@ -37,6 +37,11 @@ Route::group(['namespace' => 'App\Http\Controllers\api\v1\usermodel\client', 'pr
 //Rout booking
 Route::group(['namespace' => 'App\Http\Controllers\api\v1\client\client', 'prefix' => 'v1'], function() {
     Route::post('saveBooking', 'ClientBooking@saveBooking');
+    Route::post('updateBooking', 'ClientBooking@updateBooking');
+    Route::post('confirmBooking', 'ClientBooking@confirmBooking');
+    Route::post('cancellBooking', 'ClientBooking@cancellBooking');
+    Route::post('lstCategory', 'ClientBooking@lstCategory');
+    Route::post('lstSalonByCategory', 'ClientBooking@lstSalonByCategory');
     
 });
 /*Rout Payment Model. Group v1*/

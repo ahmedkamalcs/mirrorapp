@@ -72,8 +72,45 @@ class SalonServices extends Model implements ModelInterface{
      */
     public function construct2($userId, $eventTitleEn, $eventTitleAr) {
     }
+    
+        public function lstSalonByCategory(ServicesDTO $servicesDTO) {
+            $query ="select DISTINCT sm.id ,sm.user_phone_no,sm.arabic_name , sm.name,sm.working_hours_from, sm.working_hours_till,sm.working_monday,sm.working_tuesday,sm.working_wednesday";
+            $query=$query.",sm.working_thrusday,sm.working_friday,sm.working_saturday, sm.working_sunday, sm.offering_24h_services, sm.salon_services ,sm.home_services,sg.logo,sg.gallery";
+            $query=$query." FROM `salon_master` as sm" ;
+            $query=$query." inner join salon_services as ss on sm.user_phone_no=ss.user_phone_no";
+            $query=$query." left join salon_gallery as sg on sm.user_phone_no=sg.user_phone_no";
+            if($servicesDTO->getCategoryId()!=""){
+                $query=$query." where ss.category_id='".$servicesDTO->getCategoryId() ."' and ss.isactive=1"; 
+            }
+            $salons=DBUtil::select($query);
+        
+            $salonarry=[];
+            foreach($salons as $salon){
+                $gallery=explode("|",$salon->gallery);
+                $query = "select DISTINCT sc.id,sc.english_name , sc.arabic_name from salon_services ss";
+                $query=$query." inner join service_category sc on ss.category_id=sc.id";
+                $query=$query." where ss.user_phone_no='".$salon->user_phone_no ."' and isactive=1";
+                $salonservice = DBUtil::select($query);
+                if (!$salonservice){
+                    $salon->{"SalonServices"}=[];
+                }else{
+                    if(count($salonservice)==1){
+                        $salon->{"SalonServices"}=$salonservice[0];
+                    }else{
+                        $salon->{"SalonServices"}=$salonservice;
 
-    public function lstDefaultServices(ServicesDTO $servicesDTO) {
+                    }
+                    if(count($gallery)==1){
+                        $salon->{"Gallery"}=$gallery[0];
+                    }else{
+                        $salon->{"Gallery"}=$gallery;
+                    }
+                }
+                $salonarry[]=$salon;
+            }
+          return $salonarry;
+        }
+        public function lstDefaultServices(ServicesDTO $servicesDTO) {
         // get cateogories      
         if($servicesDTO->getCategoryId()!=""){
             $query = "select * from service_category where id='".$servicesDTO->getCategoryId()."'";
