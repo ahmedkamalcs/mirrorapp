@@ -16,7 +16,7 @@ namespace App\Http\Controllers\api\v1\dto;
 class AppDTO {
     // Salon Gallery & logo path
     public static $salonGalleryPath = "public/SalonGallery/";
-    public static $serverlink = "http://localhost/mirrorapp/public/";
+    public static $serverlink = "http://8.213.32.175/mirrorapp/public/";// --- http://localhost/mirrorapp/public/
     public static $salonLogoPath = "public/SalonLogo/";
     public static $salonCommercialPath = "public/SalonCommercial/";
     public static $salonTaxPath = "public/SalonTax/";

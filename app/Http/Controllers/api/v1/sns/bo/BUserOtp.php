@@ -119,56 +119,56 @@ class BUserOtp {
 
 
             return JsonHandler::getJsonMessage($jsonHandlerDto);
-        }
-
-
-        //Generate OTP
-        //$otp = rand(100000, 999999);
-        $otp = "1234";
-        $userOtpDTO->setOTP($otp);
-        $userOtp = new UserOTP();
-        if ($userOtpDTO->getUserType() == "Employee") {
-            $user = $userOtp->saveObject($userOtpDTO);
-            return $user;
-        }
-        if ($userOtp->saveObject($userOtpDTO)) {
-            // save the user
-            if (!$userarr) { // user does not exist
-                $userDTO->setIsPhoneVerified("0");
-                $userDTO->setUserActive("0");
-                $userarr = $user->createUser($userDTO);
+            exit();
+        } else {
+            //Generate OTP
+            //$otp = rand(100000, 999999);
+            $otp = "1234";
+            $userOtpDTO->setOTP($otp);
+            $userOtp = new UserOTP();
+            if ($userOtpDTO->getUserType() == "Employee") {
+                $user = $userOtp->saveObject($userOtpDTO);
+                return $user;
             }
+            if ($userOtp->saveObject($userOtpDTO)) {
+                // save the user
+                if (!$userarr) { // user does not exist
+                    $userDTO->setIsPhoneVerified("0");
+                    $userDTO->setUserActive("0");
+                    $userarr = $user->createUser($userDTO);
+                }
 
 
-            if ($userOtpDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
-                //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
-                //$response['Message'] = "OTP Sent!";
-                $jsonHandlerDto = new JsonHandlerDTO();
-                $jsonHandlerDto->setMessage("OTP has been sent to user!");
-                $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                if ($userOtpDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+                    //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
+                    //$response['Message'] = "OTP Sent!";
+                    $jsonHandlerDto = new JsonHandlerDTO();
+                    $jsonHandlerDto->setMessage("OTP has been sent to user!");
+                    $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
 
 //                $response = ['Message' => "OTP has been sent to user!",
 //                    'isSucces' => APICodes::$TRANSACTION_SUCCESS];
 
 
-                return JsonHandler::getJsonMessage($jsonHandlerDto);
+                    return JsonHandler::getJsonMessage($jsonHandlerDto);
+                } else {
+                    return AppDTO::$TRUE_AS_STRING;
+                }
             } else {
-                return AppDTO::$TRUE_AS_STRING;
-            }
-        } else {
-            if ($userOtpDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
-                //$response['Status'] = APICodes::$TRANSACTION_FAILUE;
-                //$response['Message'] = "Something went wrong!";
-                //
+                if ($userOtpDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+                    //$response['Status'] = APICodes::$TRANSACTION_FAILUE;
+                    //$response['Message'] = "Something went wrong!";
+                    //
 //                $response = ['Message' => "Something went wrong!",
 //                    'isSucces' => APICodes::$TRANSACTION_FAILUE];
-                $jsonHandlerDto = new JsonHandlerDTO();
-                $jsonHandlerDto->setMessage("Something went wrong!");
-                $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_FAILUE);
+                    $jsonHandlerDto = new JsonHandlerDTO();
+                    $jsonHandlerDto->setMessage("Something went wrong!");
+                    $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_FAILUE);
 
-                return JsonHandler::getJsonMessage($jsonHandlerDto);
-            } else {
-                return AppDTO::$FALSE_AS_STRING;
+                    return JsonHandler::getJsonMessage($jsonHandlerDto);
+                } else {
+                    return AppDTO::$FALSE_AS_STRING;
+                }
             }
         }
     }
@@ -225,17 +225,17 @@ class BUserOtp {
             if ($userOtpDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 //$response['Status'] = APICodes::$TRANSACTION_FAILUE;
                 //$response['Message'] = "Something went wrong!";
-                
-                
+
+
                 $jsonHandlerDto = new JsonHandlerDTO();
                 $jsonHandlerDto->setMessage("Something went wrong!");
                 $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_FAILUE);
-                
+
                 /*
-                $response = ['Message' => "Something went wrong!",
-                    'isSucces' => APICodes::$TRANSACTION_FAILUE];
-                */
-                
+                  $response = ['Message' => "Something went wrong!",
+                  'isSucces' => APICodes::$TRANSACTION_FAILUE];
+                 */
+
                 return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$FALSE_AS_STRING;
@@ -271,10 +271,10 @@ class BUserOtp {
 
         $userDTO->setFullName($userDataDTO->getFullName());
         $userDTO->setPhoneNumber($userDataDTO->getPhoneNumber());
-        
+
         $userarr = array();
         $userarr = $user->getUserByPhoneNumber($userDTO);
-        
+
         if (!$userarr) { // user not found
             //$response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;
             //$response['Message'] = "user not found!";
@@ -305,13 +305,13 @@ class BUserOtp {
             //$response['Message'] = "Verified";
             //$response['userDetails'] = $userarr;
 
-            
+
             $jsonHandlerDto = new JsonHandlerDTO();
             $jsonHandlerDto->setMessage("OTP has been Verified!");
             $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
             $jsonHandlerDto->setResultHead("userDetails");
             $jsonHandlerDto->setResultInArr($userarr);
-            
+
             /*
               $response = ['Message' => "OTP has been Verified!",
               'isSucces' => APICodes::$TRANSACTION_SUCCESS,

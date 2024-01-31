@@ -144,7 +144,7 @@ class SalonServices extends Model implements ModelInterface{
                         "service_description"=>"",
                         "service_duration"=>"",
                         "service_price"=>"",
-                        "is_active"=> "0"
+                        "is_active"=> 0
                     ];
                 }else{
                     

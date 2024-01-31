@@ -18,7 +18,7 @@ use App\Http\Controllers\api\v1\dto\JsonHandlerDTO;
 
 final class JsonHandler {
 
-    public static function getJsonMessage(JsonHandlerDTO $jsonHandlerDTO) {
+    public static function  getJsonMessage(JsonHandlerDTO $jsonHandlerDTO) {
       
 
         if (is_object($jsonHandlerDTO->getResultInArr() )) {

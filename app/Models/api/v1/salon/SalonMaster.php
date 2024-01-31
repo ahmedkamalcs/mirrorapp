@@ -23,10 +23,7 @@ use Illuminate\Validation\Rules\Exists;
  * @author Saad Aly
  * EventDetailsModel class. EventDetailsModel persistent object.
  */
-class SalonMaster extends Model implements ModelInterface{
-
-
-
+class SalonMaster extends Model implements ModelInterface {
 
     /**
      * Constructor routing function.
@@ -55,8 +52,9 @@ class SalonMaster extends Model implements ModelInterface{
     /*
      * Default constructor.
      */
-    public function construct0() {
 
+    public function construct0() {
+        
     }
 
     /**
@@ -64,6 +62,7 @@ class SalonMaster extends Model implements ModelInterface{
      * @param type $request
      */
     public function construct1($request) {
+        
     }
 
     /**
@@ -73,117 +72,128 @@ class SalonMaster extends Model implements ModelInterface{
      * @param type $taskDescription target task description.
      */
     public function construct2($userId, $eventTitleEn, $eventTitleAr) {
+        
     }
 
-   
     public function SaveSalonData(SalonDTO $salonDTO) {
-        
-        $SalonMaster= new SalonMaster();
-        
-        $SalonMaster->user_phone_no=$salonDTO->getUserPhoneNo();
-        $SalonMaster->name= $salonDTO->getSalonName();
-        $SalonMaster->arabic_name= $salonDTO->getSalonArabicName();
-        $SalonMaster->service_type= $salonDTO->getSalonServiceType();
-        $SalonMaster->business_type= $salonDTO->getSalonBusinessType();
-        $SalonMaster->team_member= $salonDTO->getSalonTeamMember();
-        $SalonMaster->branches_no= $salonDTO->getSalonBranchesNo();
-        $SalonMaster->working_days= $salonDTO->getSalonWorkingDaysNumbers();
-        $SalonMaster->working_hours_from= $salonDTO->getSalonWorkingHoursFrom();
-        $SalonMaster->working_hours_till= $salonDTO->getSalonWorkingHoursTill();
-        $SalonMaster->offering_24h_services= $salonDTO->getSalonIsOffering24Services();
-        $SalonMaster->clients_type= $salonDTO->getSalonClientsType();
-        $SalonMaster->save();
-        
-        return  $SalonMaster;
- 
-    }
-    public function saveSalonCommercial(SalonDTO $salonDTO){
-        $SalonMaster= SalonMaster::find($salonDTO->getSalonId());
 
-        $SalonMaster->commercial_file=$salonDTO->getCommercailFile();
-        $SalonMaster->tax_file= $salonDTO->getTaxDocument();
-        $SalonMaster->bank_id= $salonDTO->getBank();
-        $SalonMaster->IBAN_file= $salonDTO->getIBANDocument();
-        
-        $SalonMaster->save();
-        return  $SalonMaster;
+        $SalonMaster = new SalonMaster();
 
+        $SalonMaster->user_phone_no = $salonDTO->getUserPhoneNo();
+        $SalonMaster->name = $salonDTO->getSalonName();
+        $SalonMaster->arabic_name = $salonDTO->getSalonArabicName();
+        $SalonMaster->service_type = $salonDTO->getSalonServiceType();
+        $SalonMaster->business_type = $salonDTO->getSalonBusinessType();
+        $SalonMaster->team_member = $salonDTO->getSalonTeamMember();
+        $SalonMaster->branches_no = $salonDTO->getSalonBranchesNo();
+        $SalonMaster->working_days = $salonDTO->getSalonWorkingDaysNumbers();
+        $SalonMaster->working_hours_from = $salonDTO->getSalonWorkingHoursFrom();
+        $SalonMaster->working_hours_till = $salonDTO->getSalonWorkingHoursTill();
+        $SalonMaster->offering_24h_services = $salonDTO->getSalonIsOffering24Services();
+        $SalonMaster->clients_type = $salonDTO->getSalonClientsType();
+        $SalonMaster->save();
+
+        return $SalonMaster;
     }
+
+    public function saveSalonCommercial(SalonDTO $salonDTO) {
+        $SalonMaster = SalonMaster::find($salonDTO->getSalonId());
+
+        $SalonMaster->commercial_file = $salonDTO->getCommercailFile();
+        $SalonMaster->tax_file = $salonDTO->getTaxDocument();
+        $SalonMaster->bank_id = $salonDTO->getBank();
+        $SalonMaster->IBAN_file = $salonDTO->getIBANDocument();
+
+        $SalonMaster->save();
+        return $SalonMaster;
+    }
+
     public function updateSalonData(SalonDTO $salonDTO) {
-        
-        $SalonMaster= SalonMaster::find($salonDTO->getSalonId());
 
-        $SalonMaster->user_phone_no=$salonDTO->getUserPhoneNo();
-        $SalonMaster->name= $salonDTO->getSalonName();
-        $SalonMaster->arabic_name= $salonDTO->getSalonArabicName();
-        $SalonMaster->service_type= $salonDTO->getSalonServiceType();
-        $SalonMaster->business_type= $salonDTO->getSalonBusinessType();
-        $SalonMaster->team_member= $salonDTO->getSalonTeamMember();
-        $SalonMaster->branches_no= $salonDTO->getSalonBranchesNo();
-        $SalonMaster->working_days= $salonDTO->getSalonWorkingDaysNumbers();
-        $SalonMaster->working_hours_from= $salonDTO->getSalonWorkingHoursFrom();
-        $SalonMaster->working_hours_till= $salonDTO->getSalonWorkingHoursTill();
-        $SalonMaster->offering_24h_services= $salonDTO->getSalonIsOffering24Services();
-        $SalonMaster->clients_type= $salonDTO->getSalonClientsType();
+        $SalonMaster = SalonMaster::find($salonDTO->getSalonId());
+
+        $SalonMaster->user_phone_no = $salonDTO->getUserPhoneNo();
+        $SalonMaster->name = $salonDTO->getSalonName();
+        $SalonMaster->arabic_name = $salonDTO->getSalonArabicName();
+        $SalonMaster->service_type = $salonDTO->getSalonServiceType();
+        $SalonMaster->business_type = $salonDTO->getSalonBusinessType();
+        $SalonMaster->team_member = $salonDTO->getSalonTeamMember();
+        $SalonMaster->branches_no = $salonDTO->getSalonBranchesNo();
+        $SalonMaster->working_days = $salonDTO->getSalonWorkingDaysNumbers();
+        $SalonMaster->working_hours_from = $salonDTO->getSalonWorkingHoursFrom();
+        $SalonMaster->working_hours_till = $salonDTO->getSalonWorkingHoursTill();
+        $SalonMaster->offering_24h_services = $salonDTO->getSalonIsOffering24Services();
+        $SalonMaster->clients_type = $salonDTO->getSalonClientsType();
         $SalonMaster->save();
-        return  $SalonMaster;
+        return $SalonMaster;
     }
+
     public function saveSalonWorkStyle(SalonDTO $salonDTO) {
-        
-        $SalonMaster= SalonMaster::find($salonDTO->getSalonId());
-        $SalonMaster->work_style=$salonDTO->getSalonWorkStyle();
-        $SalonMaster->save();
-        return  $SalonMaster;
-       
-    }
-    public function saveSalonServiceType(SalonDTO $salonDTO) {
-        
-        $SalonMaster= SalonMaster::find($salonDTO->getSalonId());
-        $SalonMaster->salon_services=$salonDTO->getIsSalonServices();
-        $SalonMaster->home_services=$salonDTO->getIsHomeServices();
-        $SalonMaster->save();
-        return  $SalonMaster;
-       
-    }
-    public function saveSalonServiceGender(SalonDTO $salonDTO) {
-        
-        $SalonMaster= SalonMaster::find($salonDTO->getSalonId());
-        $SalonMaster->serving_females=$salonDTO->getIsServingFemales();
-        $SalonMaster->serving_males=$salonDTO->getIsServingMales();
-        $SalonMaster->save();
-        return  $SalonMaster;
-       
-    }
-    public function saveSalonWorkingDays(SalonDTO $salonDTO){
-        $SalonMaster= SalonMaster::find($salonDTO->getSalonId());
 
-        $SalonWorkingDays= $salonDTO->getSalonWorkingDays();
-        $SalonMaster->working_monday=$SalonWorkingDays['Monday'];
-        $SalonMaster->working_tuesday=$SalonWorkingDays['Tuesday'];
-        $SalonMaster->working_wednesday=$SalonWorkingDays['Wednesday'];
-        $SalonMaster->working_thrusday=$SalonWorkingDays['Thrusday'];
-        $SalonMaster->working_friday=$SalonWorkingDays['Friday'];
-        $SalonMaster->working_saturday=$SalonWorkingDays['Saturday'];
-        $SalonMaster->working_sunday=$SalonWorkingDays['Sunday'];
+        $SalonMaster = SalonMaster::find($salonDTO->getSalonId());
+        $SalonMaster->work_style = $salonDTO->getSalonWorkStyle();
         $SalonMaster->save();
-        return  $SalonMaster;
+        return $SalonMaster;
     }
-   public Function getSalonDataByPhoneNumber($phoneNumber){
-    $SalonMaster= SalonMaster::where("user_phone_no",$phoneNumber)->get();
-    $query=" select gallery from salon_gallery where user_phone_no='".$phoneNumber."'";
-    $galleryResult=DBUtil::select($query);
-    $galleries=explode("|",$galleryResult[0]->gallery);
-    foreach($galleries as $gallery){
-        $galleryarr[]=AppDTO::$serverlink . "" . AppDTO::$salonGalleryPath . $gallery;
+
+    public function saveSalonServiceType(SalonDTO $salonDTO) {
+
+        $SalonMaster = SalonMaster::find($salonDTO->getSalonId());
+        $SalonMaster->salon_services = $salonDTO->getIsSalonServices();
+        $SalonMaster->home_services = $salonDTO->getIsHomeServices();
+        $SalonMaster->save();
+        return $SalonMaster;
     }
-    $SalonMaster[0]->{"Gallery"}=$galleryarr; 
-    return $SalonMaster;
-   
-   }
-   public Function getSalonDataById($salonId){
-    $SalonMaster= SalonMaster::where("id",$salonId)->get();
-    return $SalonMaster;    
-   }
+
+    public function saveSalonServiceGender(SalonDTO $salonDTO) {
+
+        $SalonMaster = SalonMaster::find($salonDTO->getSalonId());
+        $SalonMaster->serving_females = $salonDTO->getIsServingFemales();
+        $SalonMaster->serving_males = $salonDTO->getIsServingMales();
+        $SalonMaster->save();
+        return $SalonMaster;
+    }
+
+    public function saveSalonWorkingDays(SalonDTO $salonDTO) {
+        $SalonMaster = SalonMaster::find($salonDTO->getSalonId());
+
+        $SalonWorkingDays = $salonDTO->getSalonWorkingDays();
+        $SalonMaster->working_monday = $SalonWorkingDays['Monday'];
+        $SalonMaster->working_tuesday = $SalonWorkingDays['Tuesday'];
+        $SalonMaster->working_wednesday = $SalonWorkingDays['Wednesday'];
+        $SalonMaster->working_thrusday = $SalonWorkingDays['Thrusday'];
+        $SalonMaster->working_friday = $SalonWorkingDays['Friday'];
+        $SalonMaster->working_saturday = $SalonWorkingDays['Saturday'];
+        $SalonMaster->working_sunday = $SalonWorkingDays['Sunday'];
+        $SalonMaster->save();
+        return $SalonMaster;
+    }
+
+    public Function getSalonDataByPhoneNumber($phoneNumber) {
+        $SalonMaster = SalonMaster::where("user_phone_no", $phoneNumber)->get();
+        $query = " select gallery from salon_gallery where user_phone_no='" . $phoneNumber . "'";
+        $galleryResult = DBUtil::select($query);
+
+//        $galleryarr = [];
+//        $galleries = [];
+//        if ($galleryResult != null && $galleryResult != "" && sizeof($galleryResult) != 0) {
+//            $galleries = explode("|", $galleryResult[0]->gallery);
+//            foreach ($galleries as $gallery) {
+//                $galleryarr[] = AppDTO::$serverlink . "" . AppDTO::$salonGalleryPath . $gallery;
+//            }
+//        }
+//
+//
+//        $SalonMaster[0]->{"Gallery"} = $galleryarr;
+
+        return $SalonMaster;
+    }
+
+    public Function getSalonDataById($salonId) {
+        $SalonMaster = SalonMaster::where("id", $salonId)->get();
+        return $SalonMaster;
+    }
+
     /**
      * Instance Variables for the persistent object Model.
      * @var type
