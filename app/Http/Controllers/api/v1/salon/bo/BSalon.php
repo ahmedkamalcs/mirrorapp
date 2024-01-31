@@ -150,7 +150,7 @@ class BSalon extends Controller implements BusinessInterface {
     public function lstSalonData(SalonDTO $salonDTO) {
         $salonMasterModel = new SalonMaster();
         $salonData = $salonMasterModel->getSalonDataByPhoneNumber($salonDTO->getUserPhoneNo());
-        if ($salonData) {
+        if (!$salonData->isempty()) {
             if ($salonDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
                 //$response['Message'] = "Salone Master Data ";

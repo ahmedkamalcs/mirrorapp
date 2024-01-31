@@ -174,18 +174,18 @@ class SalonMaster extends Model implements ModelInterface {
         $query = " select gallery from salon_gallery where user_phone_no='" . $phoneNumber . "'";
         $galleryResult = DBUtil::select($query);
 
-//        $galleryarr = [];
-//        $galleries = [];
-//        if ($galleryResult != null && $galleryResult != "" && sizeof($galleryResult) != 0) {
-//            $galleries = explode("|", $galleryResult[0]->gallery);
-//            foreach ($galleries as $gallery) {
-//                $galleryarr[] = AppDTO::$serverlink . "" . AppDTO::$salonGalleryPath . $gallery;
-//            }
-//        }
-//
-//
-//        $SalonMaster[0]->{"Gallery"} = $galleryarr;
+       $galleryarr = [];
+        $galleries = [];
+        if ($galleryResult ) {
+            $galleries = explode("|", $galleryResult[0]->gallery);
+            foreach ($galleries as $gallery) {
+                $galleryarr[] = AppDTO::$serverlink . "" . AppDTO::$salonGalleryPath . $gallery;
+            }
+        }
 
+        if(!$SalonMaster->isEmpty()){
+            $SalonMaster[0]->{"Gallery"} = $galleryarr;
+        }
         return $SalonMaster;
     }
 
