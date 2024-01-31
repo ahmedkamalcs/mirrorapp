@@ -106,8 +106,8 @@ class BUserOtp {
         $userDTO = new UserDTO("", "");
         $userDTO->setFullName($userOtpDTO->getFullName());
         $userDTO->setPhoneNumber($userOtpDTO->getPhoneNumber());
-        $userarr = $user->getUserByPhoneNumber($userDTO);
-        if ($userarr) { // user  exist
+        $userarr = $user->getActiveUserByPhoneNumber($userDTO);
+        if ($userarr and  $userOtpDTO->getUserType() != "Employee") { // user  exist
             $jsonHandlerDto = new JsonHandlerDTO();
             $jsonHandlerDto->setMessage("User Already Exist!");
             $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_ALREADY_EXIST);
@@ -119,7 +119,7 @@ class BUserOtp {
 
 
             return JsonHandler::getJsonMessage($jsonHandlerDto);
-            exit();
+            
         } else {
             //Generate OTP
             //$otp = rand(100000, 999999);
@@ -127,8 +127,15 @@ class BUserOtp {
             $userOtpDTO->setOTP($otp);
             $userOtp = new UserOTP();
             if ($userOtpDTO->getUserType() == "Employee") {
-                $user = $userOtp->saveObject($userOtpDTO);
-                return $user;
+                if (!$userarr) { // user does not exist
+                    $userotpob = $userOtp->saveObject($userOtpDTO);
+                    $userDTO->setIsPhoneVerified("1");
+                    $userDTO->setUserActive("1");
+                    $userarr = $user->createUser($userDTO);
+                    return $userotpob;
+
+                }
+                return ;
             }
             if ($userOtp->saveObject($userOtpDTO)) {
                 // save the user
@@ -178,24 +185,44 @@ class BUserOtp {
         $userDTO = new UserDTO("", "");
         $userDTO->setFullName($userOtpDTO->getFullName());
         $userDTO->setPhoneNumber($userOtpDTO->getPhoneNumber());
-        $userarr = $user->getUserByPhoneNumber($userDTO);
+        $userarr = $user->getActiveUserByPhoneNumber($userDTO);
         if (!$userarr) { // user not exist exist
 //            $response = ['Message' => "User does not Exist!",
 //                'isSucces' => APICodes::$TRANSACTION_DATA_NOT_FOUND,
 //                'jsonData' => []];
             $jsonHandlerDto = new JsonHandlerDTO();
-            $jsonHandlerDto->setMessage("User does not Exist!");
+            $jsonHandlerDto->setMessage("Please register!");
             $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
 
             return JsonHandler::getJsonMessage($jsonHandlerDto);
         }
+        $userOtp = new UserOTP();
+        $userDataDTO = $userOtp->getDataDTO($userOtpDTO);
+        if($userDataDTO){
+            if ($userOtpDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+                //$response['Status'] = APICodes::$TRANSACTION_SUCCESS;
+                //$response['Message'] = "OTP Sent!";
 
 
+                $jsonHandlerDto = new JsonHandlerDTO();
+                $jsonHandlerDto->setMessage("OTP has been sent to user!");
+                $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+
+                /*
+                  $response = ['Message' => "OTP has been sent to user!",
+                  'isSucces' => APICodes::$TRANSACTION_SUCCESS];
+                 */
+
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
+            } else {
+                return AppDTO::$TRUE_AS_STRING;
+            }
+        }
         //Generate OTP
         //$otp = rand(100000, 999999);
         $otp = "1234";
         $userOtpDTO->setOTP($otp);
-        $userOtp = new UserOTP();
+        
         if ($userOtpDTO->getUserType() == "Employee") {
             $user = $userOtp->saveObject($userOtpDTO);
             return $user;
@@ -250,6 +277,7 @@ class BUserOtp {
         $user = new User();
 
         $userDataDTO = $userOtp->getDataDTO($userOtpDto);
+      
         if ($userDataDTO == null || $userOtpDto->getOTP() != $userDataDTO->getOTP()) {
             if ($userOtpDto->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 //$response['Status'] = APICodes::$TRANSACTION_DATA_NOT_FOUND;

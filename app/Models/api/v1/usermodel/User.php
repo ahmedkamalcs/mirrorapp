@@ -56,7 +56,13 @@ class User extends Model implements ModelInterface{
         return $result;
     }
 
+    public function getActiveUserByPhoneNumber(UserDTO $userDTO) {
+        $query = "select * from isg_user where user_phone_no ='" . $userDTO->getPhoneNumber() ."'" . " and user_active ='". AppDTO::$TRUE_AS_STRING ."'";
 
+        $result = DBUtil::select($query);
+
+        return $result;
+    }
 
     public function createUser(UserDTO $userDTO) {
         //Create New User
