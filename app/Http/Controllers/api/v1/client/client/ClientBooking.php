@@ -64,4 +64,17 @@ public function lstSalonByCategory(Request $request){
     return $booking->lstSalonByCategory($serviceDTO);
 
 }
+public function lstAvailableTimeSlot(Request $request){
+    $bookingDTO= new BookingDTO();
+    $bookingDTO->setServiceCategory($request['categoryId']);
+    $bookingDTO->setServicesubCategory($request['subCategoryId']);
+    $bookingDTO->setBookingDate($request['bookingDate']);
+    $bookingDTO->setSalonId($request['salonId']);
+    $bookingDTO->setServiceDuration($request['serviceDuration']);
+
+    $booking = new BBooking();
+
+    return $booking->lstAvailableTimeSlot($bookingDTO);
+
+}
 }

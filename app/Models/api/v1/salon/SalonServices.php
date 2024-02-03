@@ -8,6 +8,7 @@
 
 namespace App\Models\api\v1\salon;
 
+use App\Http\Controllers\api\v1\dto\AppDTO;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Controllers\api\v1\dto\ServicesDTO;
 use App\Http\Controllers\api\v1\dto\PaymentVendorDetailsDTO;
@@ -75,9 +76,10 @@ class SalonServices extends Model implements ModelInterface{
     
         public function lstSalonByCategory(ServicesDTO $servicesDTO) {
             $query ="select DISTINCT sm.id ,sm.user_phone_no,sm.arabic_name , sm.name,sm.working_hours_from, sm.working_hours_till,sm.working_monday,sm.working_tuesday,sm.working_wednesday";
-            $query=$query.",sm.working_thrusday,sm.working_friday,sm.working_saturday, sm.working_sunday, sm.offering_24h_services, sm.salon_services ,sm.home_services,sg.logo,sg.gallery";
+            $query=$query.",sm.working_thrusday,sm.working_friday,sm.working_saturday, sm.working_sunday, sm.offering_24h_services, sm.salon_services ,sm.home_services,sg.logo,sg.gallery , sb.address ,sb.longtitude,sb.latitude";
             $query=$query." FROM `salon_master` as sm" ;
             $query=$query." inner join salon_services as ss on sm.user_phone_no=ss.user_phone_no";
+            $query=$query." inner join salon_branches as sb on sm.id=sb.salon_id";
             $query=$query." left join salon_gallery as sg on sm.user_phone_no=sg.user_phone_no";
             if($servicesDTO->getCategoryId()!=""){
                 $query=$query." where ss.category_id='".$servicesDTO->getCategoryId() ."' and ss.isactive=1"; 
@@ -86,8 +88,21 @@ class SalonServices extends Model implements ModelInterface{
         
             $salonarry=[];
             foreach($salons as $salon){
-                $gallery=explode("|",$salon->gallery);
-                $query = "select DISTINCT sc.id,sc.english_name , sc.arabic_name from salon_services ss";
+                $gallery=array();
+                $galleryarry=explode("|",$salon->gallery);
+                foreach($galleryarry as $galle){
+                   if($galle!=""){ 
+                    $gallery[]= AppDTO::$serverlink . "" . $galle;
+                   }else{
+                    $gallery[]=[];
+                   }
+                }
+                if($salon->logo!=""){
+                    $salon->logo=AppDTO::$serverlink ."" . $salon->logo;
+                }else{
+                    $salon->logo="";
+                }
+                    $query = "select DISTINCT sc.id,sc.english_name , sc.arabic_name from salon_services ss";
                 $query=$query." inner join service_category sc on ss.category_id=sc.id";
                 $query=$query." where ss.user_phone_no='".$salon->user_phone_no ."' and isactive=1";
                 $salonservice = DBUtil::select($query);
@@ -195,6 +210,12 @@ class SalonServices extends Model implements ModelInterface{
         return  $salonservice;
     }
 
+    public function LstSalonService(ServicesDTO $servicesDTO){
+        $query = "select * from salon_services  inner join salon_master on salon_services.user_phone_no=salon_master.user_phone_no 
+where salon_services.category_id='".$servicesDTO->getCategoryId()."' and salon_services.subcategory_id='".$servicesDTO->getSubCategoryId()."' and salon_master.id='".$servicesDTO->getsalonId()."'";
+        $salonService = DBUtil::select($query);
+        return $salonService;
+    }
     /**
      * Instance Variables for the persistent object Model.
      * @var type

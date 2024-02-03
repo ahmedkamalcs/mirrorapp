@@ -28,6 +28,7 @@ class ServicesDTO implements DTOInterface {
     private $serviceDescription;
     private $serviceDuration;
     private $servicePrice;
+    private $salonId;
     private $apiCall = '1'; //API Calls Active by Default
     function getApiCall() {
         return $this->apiCall;
@@ -49,6 +50,12 @@ class ServicesDTO implements DTOInterface {
     }
     function getSubcategory() {
         return $this->subcategory;
+    }
+    function setSalonId($salonId){
+        $this->salonId=$salonId;
+    }
+     function getSalonId(){
+        return $this->salonId;
     }
     function setUserPhoneNo($userPhoneNo) {
         $this->userPhoneNo = $userPhoneNo;

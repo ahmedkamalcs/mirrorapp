@@ -42,6 +42,7 @@ Route::group(['namespace' => 'App\Http\Controllers\api\v1\client\client', 'prefi
     Route::post('cancellBooking', 'ClientBooking@cancellBooking');
     Route::post('lstCategory', 'ClientBooking@lstCategory');
     Route::post('lstSalonByCategory', 'ClientBooking@lstSalonByCategory');
+    Route::post('lstAvailableTimeSlot', 'ClientBooking@lstAvailableTimeSlot');
     
 });
 /*Rout Payment Model. Group v1*/

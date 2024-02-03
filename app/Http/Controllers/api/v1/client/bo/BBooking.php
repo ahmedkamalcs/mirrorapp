@@ -324,4 +324,89 @@ class BBooking extends Controller implements BusinessInterface {
             }
         }
     }
+    public function lstAvailableTimeSlot(BookingDTO $bookingDTO){
+        $servicesDTO= new ServicesDTO();
+        $servicesDTO->setSalonId($bookingDTO->getSalonId());
+        $servicesDTO->setCategoryId($bookingDTO->getServiceCategory());
+        $servicesDTO->setSubcategoryId($bookingDTO->getServiceSubCategory());
+        $salonServiceModel= new SalonServices();
+        $salonBookingModel=new  ClientBooking();
+        $allBooked=$salonBookingModel->lstServiceBooking($bookingDTO);
+        $serviceDateails=$salonServiceModel->LstSalonService($servicesDTO);
+        $bookingSeat=1;
+        if ($serviceDateails){
+            if($serviceDateails[0]->working_hours_till=="12:00 AM"){
+                $serviceDateails[0]->working_hours_till="23:59:59 PM";
+            }
+            $stackSlot = array();
+            $bookedSlot = array();
+            $bookingDuration=$serviceDateails[0]->service_duration;
+            for ($time = $serviceDateails[0]->working_hours_from; $time < $serviceDateails[0]->working_hours_till;) {
+                $bookedSeat=0; 
+                $availableSeat=0;   
+                $timeAndDuration = date("H:i:s", (strtotime($bookingDuration) + strtotime($time)));
+
+                foreach($allBooked as $bookedslot){
+                        $bookedEndTime = date("H:i A", strtotime($bookedslot->booking_to));
+                        $bookedStartTime = date("H:i A", strtotime($bookedslot->booking_from));
+                        if ((($time >= $bookedStartTime && $time < $bookedEndTime) || ($bookedStartTime >= $time && $bookedStartTime < $timeAndDuration)) ){
+                            $bookedSeat += $bookedslot->quantity;
+                        } else {
+                            $bookedSeat += 0;
+                        }
+                    }
+                    $availableSeat=$bookingSeat-$bookedSeat;
+                    if($availableSeat>0){
+                     array_push($stackSlot,date("H:i:s", strtotime($time)));
+                    }
+                    $time=strtotime($time)- strtotime("00:00:00") + strtotime(date("H:i:s",$bookingDuration*60));
+                    IF($time>strtotime("23:59:59")){
+                        break;
+                    }
+                        $time = date("H:i:s", $time);
+                  
+           }
+           $finalSlot=array();
+           date_default_timezone_set("Asia/Riyadh");
+            $currentTime= date("H:i:s");
+            $currentDate=date("Y-m-d");
+            echo $currentDate;
+           foreach($stackSlot as $slot){
+                if ($currentDate==$bookingDTO->getBookingDate()){
+                    if ($slot>$currentTime){
+                        $endtime=date("h:i A",strtotime($slot)  + strtotime(date("H:i:s",$bookingDuration*60)));
+                        $slot= date("h:i A", strtotime($slot)) . " - ". $endtime;
+                        array_push($finalSlot,$slot);
+                    }
+
+                }else {
+                    $endtime=date("h:i A",strtotime($slot)  + strtotime(date("H:i:s",$bookingDuration*60)));
+                    $slot= date("h:i A", strtotime($slot)) . " - ". $endtime;
+                    array_push($finalSlot,$slot);
+                }
+           }
+           if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+            $jsonHandlerDto = new JsonHandlerDTO();
+            $jsonHandlerDto->setMessage("Available Times");
+            $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+            $jsonHandlerDto->setResultHead("Time Slot");
+            $jsonHandlerDto->setResultInArr($finalSlot);
+            return JsonHandler::getJsonMessage($jsonHandlerDto);
+        } else {
+            return AppDTO::$TRUE_AS_STRING;
+        }
+        }else {
+            if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+                $finalSlot=array();
+                $jsonHandlerDto = new JsonHandlerDTO();
+                $jsonHandlerDto->setMessage("Service does not exist");
+                $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                $jsonHandlerDto->setResultInArr($finalSlot);
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
+            } else {
+                return AppDTO::$FALSE_AS_STRING;
+            }
+        }
+
+    }
 }

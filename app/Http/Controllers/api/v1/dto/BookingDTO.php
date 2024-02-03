@@ -29,6 +29,7 @@ class BookingDTO implements DTOInterface {
      private $serviceSubCategory;
      private $quantity ;
      private $price;
+     private $serviceDuration;
      private $bookingDate;
 
     private $apiCall = '1'; //API Calls Active by Default
@@ -40,6 +41,12 @@ class BookingDTO implements DTOInterface {
         $this->apiCall = $apiCall;
     }
         public function getDTOById($id) {
+    }
+    function setServiceDuration($serviceDuration){
+        $this->serviceDuration=$serviceDuration;
+    }
+    function getServiceDuration(){
+        return $this->serviceDuration;
     }
     function setServiceCategory($serviceCategory){
         $this->serviceCategory=$serviceCategory;

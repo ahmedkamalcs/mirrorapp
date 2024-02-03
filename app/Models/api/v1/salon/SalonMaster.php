@@ -171,7 +171,7 @@ class SalonMaster extends Model implements ModelInterface {
 
     public Function getSalonDataByPhoneNumber($phoneNumber) {
         $SalonMaster = SalonMaster::where("user_phone_no", $phoneNumber)->get();
-        $query = " select gallery from salon_gallery where user_phone_no='" . $phoneNumber . "'";
+        $query = " select gallery from salon_gallery where user_phone_no='+" . $phoneNumber . "'";
         $galleryResult = DBUtil::select($query);
 
        $galleryarr = [];

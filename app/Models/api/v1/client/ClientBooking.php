@@ -138,6 +138,14 @@ class ClientBooking extends Model implements ModelInterface{
     public function lstBooking(BookingDTO $bookingDTO){
         
     }
+    public function lstServiceBooking(BookingDTO $bookingDTO){
+        $query = "select * from client_booking  
+        where category_id='".$bookingDTO->getServiceCategory()."' and subcategory_id='".$bookingDTO->getServiceSubCategory()."' and salon_id='".$bookingDTO->getsalonId()."'
+         and booking_status!='Cancelled' and booking_date='".$bookingDTO->getBookingDate()."'";
+         $bookingDetails = DBUtil::select($query);
+
+        return $bookingDetails;
+    }
     /**
      * Instance Variables for the persistent object Model.
      * @var type
