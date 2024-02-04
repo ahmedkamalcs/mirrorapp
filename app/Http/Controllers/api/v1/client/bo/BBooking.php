@@ -370,7 +370,7 @@ class BBooking extends Controller implements BusinessInterface {
            date_default_timezone_set("Asia/Riyadh");
             $currentTime= date("H:i:s");
             $currentDate=date("Y-m-d");
-            echo $currentDate;
+//            echo $currentDate;
            foreach($stackSlot as $slot){
                 if ($currentDate==$bookingDTO->getBookingDate()){
                     if ($slot>$currentTime){
