@@ -115,11 +115,12 @@ class SalonServices extends Model implements ModelInterface{
                         $salon->{"SalonServices"}=$salonservice;
 
                     }
-                    if(count($gallery)==1){
-                        $salon->{"Gallery"}=$gallery[0];
-                    }else{
-                        $salon->{"Gallery"}=$gallery;
-                    }
+//                    if(count($gallery)==1){
+//                        $salon->{"Gallery"}=$gallery[0];
+//                    }else{
+//                        $salon->{"Gallery"}=$gallery;
+//                    }
+                    $salon->{"Gallery"}=$gallery;
                 }
                 $salonarry[]=$salon;
             }
