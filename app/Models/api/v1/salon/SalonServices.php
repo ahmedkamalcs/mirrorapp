@@ -19,7 +19,7 @@ use App\Http\Controllers\api\v1\dto\SnsDTO;
 use App\Http\Controllers\isgapi\api\v1\util\StringUtil;
 
 /**
- * @author Saad Aly
+ * @author ISG
  * EventDetailsModel class. EventDetailsModel persistent object.
  */
 class SalonServices extends Model implements ModelInterface{
@@ -147,6 +147,7 @@ class SalonServices extends Model implements ModelInterface{
             foreach($subcategories as $subcategory){
                 $query = "select isactive ,serving_females,serving_males,service_description,service_duration,service_price from salon_services where category_id='".$subcategory->category_id ."' and subcategory_id='".$subcategory->id."' and user_phone_no='".$servicesDTO->getUserPhoneNo()."'";
                 $salonservice = DBUtil::select($query);
+                
                 if (!$salonservice){
                     
                     $subitem[]=[

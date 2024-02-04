@@ -9,12 +9,13 @@
 /**
  * Description of ApplicationDTO
  *
- * @author Saad Aly
+ * @author ISG
  */
 
 namespace App\Http\Controllers\api\v1\dto;
 
 use App\Http\Controllers\api\v1\util\StringUtil;
+use App\Http\Controllers\api\v1\dto\SnsDTO;
 
 class SalonDTO implements DTOInterface {    
     private $userPhoneNo;
@@ -90,7 +91,8 @@ class SalonDTO implements DTOInterface {
         return $this->salonGallery;
     }
     function setUserPhoneNo($userPhoneNo) {
-        $this->userPhoneNo = $userPhoneNo;
+        $userPhoneNo1 = SnsDTO::formatePhoneNumber($userPhoneNo);
+        $this->userPhoneNo = $userPhoneNo1;
     }
     function getUserPhoneNo() {
         return $this->userPhoneNo;

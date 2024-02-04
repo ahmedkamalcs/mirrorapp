@@ -20,7 +20,7 @@ use App\Http\Controllers\isgapi\api\v1\util\StringUtil;
 use Illuminate\Validation\Rules\Exists;
 
 /**
- * @author Saad Aly
+ * @author ISG
  * EventDetailsModel class. EventDetailsModel persistent object.
  */
 class SalonMaster extends Model implements ModelInterface {
