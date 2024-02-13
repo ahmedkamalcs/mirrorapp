@@ -85,7 +85,7 @@ class BookingDTO implements DTOInterface {
         return $this->bookingId;
     }
     function setClientPhoneNumber($clientPhoneNumber){
-        $this->clientPhoneNumber=$clientPhoneNumber;
+        $this->clientPhoneNumber=SnsDTO::formatePhoneNumber($clientPhoneNumber);
     }
     function getClientPhoneNumber(){
        return $this->clientPhoneNumber;

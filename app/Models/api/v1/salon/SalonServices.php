@@ -92,14 +92,14 @@ class SalonServices extends Model implements ModelInterface{
                 $galleryarry=explode("|",$salon->gallery);
                 foreach($galleryarry as $galle){
                    if($galle!=""){ 
-                    $path=AppDTO::$serverlink . "" . $galle;
+                    $path=AppDTO::$serverlink . "" . AppDTO::$salonGalleryPath . $galle;
                     array_push($gallery, $path);
                    }else{
                     $gallery[]=[];
                    }
                 }
                 if($salon->logo!=""){
-                    $salon->logo=AppDTO::$serverlink ."" . $salon->logo;
+                    $salon->logo=AppDTO::$serverlink ."" . AppDTO::$salonLogoPath . $salon->logo;
                 }else{
                     $salon->logo="";
                 }
@@ -110,12 +110,12 @@ class SalonServices extends Model implements ModelInterface{
                 if (!$salonservice){
                     $salon->{"SalonServices"}=[];
                 }else{
-                    if(count($salonservice)==1){
-                        $salon->{"SalonServices"}=$salonservice[0];
-                    }else{
-                        $salon->{"SalonServices"}=$salonservice;
+                    //if(count($salonservice)==1){
+                    //    $salon->{"SalonServices"}=$salonservice[0];
+                    //}else{
+                     //   $salon->{"SalonServices"}=$salonservice;
 
-                    }
+                    //}
 
                     $salon->{"Gallery"}=$gallery;
 
