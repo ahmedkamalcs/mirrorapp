@@ -17,7 +17,7 @@ use App\Http\Controllers\api\v1\dto\SnsDTO;
 use App\Http\Controllers\isgapi\api\v1\util\StringUtil;
 
 /**
- * @author Saad Aly
+ * @author ISG
  * EventDetailsModel class. EventDetailsModel persistent object.
  */
 class Bank extends Model implements ModelInterface{
