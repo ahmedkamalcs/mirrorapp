@@ -92,7 +92,8 @@ class SalonServices extends Model implements ModelInterface{
                 $galleryarry=explode("|",$salon->gallery);
                 foreach($galleryarry as $galle){
                    if($galle!=""){ 
-                    $gallery[]= AppDTO::$serverlink . "" . $galle;
+                    $path=AppDTO::$serverlink . "" . $galle;
+                    array_push($gallery, $path);
                    }else{
                     $gallery[]=[];
                    }
@@ -115,11 +116,10 @@ class SalonServices extends Model implements ModelInterface{
                         $salon->{"SalonServices"}=$salonservice;
 
                     }
-                    if(count($gallery)==1){
-                        $salon->{"Gallery"}=$gallery[0];
-                    }else{
+                   
                         $salon->{"Gallery"}=$gallery;
-                    }
+                  
+    
                 }
                 $salonarry[]=$salon;
             }

@@ -21,6 +21,7 @@ class AppDTO {
     public static $salonCommercialPath = "public/SalonCommercial/";
     public static $salonTaxPath = "public/SalonTax/";
     public static $salonIBANPath = "public/SalonIBAN/";
+    public static $serviceCategoryIconPath = "public/ServiceIcone/";
     public static $_EP = true;
     public static $TRUE_AS_STRING = '1';
     public static $FALSE_AS_STRING = '0';
