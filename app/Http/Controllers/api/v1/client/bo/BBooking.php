@@ -17,6 +17,7 @@ use App\Http\Controllers\api\v1\util\JsonHandler;
 use Random\RandomError;
 use App\Http\Controllers\api\v1\dto\JsonHandlerDTO;
 use App\Models\api\v1\client\ClientBooking;
+use PhpOffice\PhpSpreadsheet\Calculation\Category;
 
 class BBooking extends Controller implements BusinessInterface { 
         
@@ -205,13 +206,18 @@ class BBooking extends Controller implements BusinessInterface {
         $bookingDTO=new BookingDTO();
         $serviceCategoryModel=new ServiceCategory();
         $categoryarr=$serviceCategoryModel->lstCategory();
+        $categoryresult=array();
         if ($categoryarr) {
+            foreach( $categoryarr as $Category){
+                $Category->icone=AppDTO::$serverlink . AppDTO::$serviceCategoryIconPath . $Category->icone;
+                $categoryresult[]=$Category;
+            }
             if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 $jsonHandlerDto = new JsonHandlerDTO();
                 $jsonHandlerDto->setMessage("Category List");
                 $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
                 $jsonHandlerDto->setResultHead("CategoriesLst");
-                $jsonHandlerDto->setResultInArr($categoryarr);
+                $jsonHandlerDto->setResultInArr($categoryresult);
                 return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
