@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\v1\client\client;
 use App\Http\Controllers\api\v1\client\bo\BBooking;
 use App\Http\Controllers\api\v1\dto\BookingDTO;
 use App\Http\Controllers\api\v1\dto\ServicesDTO;
+use App\Http\Controllers\api\v1\dto\SalonInvoiceDTO;
 use App\Http\Controllers\api\v1\salon\bo\BBooking as BoBBooking;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -77,4 +78,24 @@ public function lstAvailableTimeSlot(Request $request){
     return $booking->lstAvailableTimeSlot($bookingDTO);
 
 }
+public function savePayment(Request $request){
+    $salonInvoiceDTO=new SalonInvoiceDTO();
+    $salonInvoiceDTO->setClientId($request["client_id"]);
+    $salonInvoiceDTO->setClientMobile($request["client_mob_num"]);
+    $salonInvoiceDTO->setSalonMobile($request["salon_mob_num"]);
+    $salonInvoiceDTO->setSalonId($request["salon_id"]);
+    $salonInvoiceDTO->setInvoiceAmount($request["amount"]);
+    $salonInvoiceDTO->setBookingId($request["booking_id"]);
+    $salonInvoiceDTO->setClientId($request["client_id"]);
+    $salonInvoiceDTO->setPaymentStatus($request["payment_status"]);
+    $salonInvoiceDTO->setPaymentResponse($request["payment_response"]);
+   
+    $booking = new BBooking();
+    if($salonInvoiceDTO->getPaymentStatus()=="Not Paid"){
+        return $booking->savePayment($salonInvoiceDTO);
+    }else{
+        return $booking->updatePayment($salonInvoiceDTO);
+    }
+}
+
 }

@@ -15,6 +15,9 @@
 namespace App\Http\Controllers\api\v1\dto;
 class AppDTO {
     // Salon Gallery & logo path
+    public static $access_code="rxaCBohhRdmZopQxc4gu";
+    public static $merchant_identifier="649f24c2";
+    PUBLIC STATIC $request_pharse="51Jc4kI8CSOQ8U1O7cq3ny}_";
     public static $salonGalleryPath = "public/SalonGallery/";
     public static $serverlink = "http://8.213.32.175/mirrorapp/public/";// --- http://localhost/mirrorapp/public/
     public static $salonLogoPath = "public/SalonLogo/";

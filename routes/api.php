@@ -43,6 +43,7 @@ Route::group(['namespace' => 'App\Http\Controllers\api\v1\client\client', 'prefi
     Route::post('lstCategory', 'ClientBooking@lstCategory');
     Route::post('lstSalonByCategory', 'ClientBooking@lstSalonByCategory');
     Route::post('lstAvailableTimeSlot', 'ClientBooking@lstAvailableTimeSlot');
+    Route::post('savePayment', 'ClientBooking@savePayment');
     
 });
 /*Rout Payment Model. Group v1*/
@@ -126,6 +127,7 @@ Route::group(['namespace' => 'App\Http\Controllers\api\v1\aps\client', 'prefix' 
     Route::post('signature', 'APSClient@signature');
     Route::post('tokenRequest', 'APSClient@tokenRequest');
     Route::post('getSignatureForToken', 'APSClient@getSignatureForToken');
+    Route::post('iOStokenRequest', 'APSClient@iOStokenRequest');
 });
 
 /*Privacy Policy*/

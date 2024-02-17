@@ -110,6 +110,12 @@ class ClientBooking extends Model implements ModelInterface{
         return  $booking;
  
     }
+    public function updateInvoiceReference($id,$invoiceReference){
+         $booking= ClientBooking::find($id);
+         $booking->invoice_reference=$invoiceReference;
+         $booking->save();
+         return $booking;
+    }
     public function confirmBooking(BookingDTO $bookingDTO) {
 
         $booking= ClientBooking::find($bookingDTO->getBookingId());
@@ -142,6 +148,13 @@ class ClientBooking extends Model implements ModelInterface{
         $query = "select * from client_booking  
         where category_id='".$bookingDTO->getServiceCategory()."' and subcategory_id='".$bookingDTO->getServiceSubCategory()."' and salon_id='".$bookingDTO->getsalonId()."'
          and booking_status!='Cancelled' and booking_date='".$bookingDTO->getBookingDate()."'";
+         $bookingDetails = DBUtil::select($query);
+
+        return $bookingDetails;
+    }
+    public function getBookingById($bookingId){
+        $query = "select * from client_booking  
+        where id='". $bookingId ."'";
          $bookingDetails = DBUtil::select($query);
 
         return $bookingDetails;

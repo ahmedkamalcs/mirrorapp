@@ -10,11 +10,14 @@ use App\Models\api\v1\salon\SalonMaster;
 use App\Models\api\v1\salon\SalonBranches;
 use App\Models\api\v1\salon\SalonServices;
 use App\Models\api\v1\salon\SalonEmployee;
+use App\Models\api\v1\salon\SalonInvoices;
+use App\Models\api\v1\salon\PaymentInvoices;
 use App\Models\api\v1\client\ServiceCategory;
 use App\Http\Controllers\api\v1\dto\SalonEmployeeDTO;
 use App\Http\Controllers\api\v1\dto\SalonBranchesDTO;
 use App\Http\Controllers\api\v1\util\JsonHandler;
 use Random\RandomError;
+use App\Http\Controllers\api\v1\dto\SalonInvoiceDTO;
 use App\Http\Controllers\api\v1\dto\JsonHandlerDTO;
 use App\Models\api\v1\client\ClientBooking;
 use PhpOffice\PhpSpreadsheet\Calculation\Category;
@@ -414,5 +417,122 @@ class BBooking extends Controller implements BusinessInterface {
             }
         }
 
+    }
+    public function savePayment(SalonInvoiceDTO $salonInvoiceDTO){
+        $salonMasterModel=new SalonMaster();
+        $bookingModel = new ClientBooking();
+        $salonInvoiceModel=new SalonInvoices();
+        $isNewInvoice=false;
+        $salonData=$salonMasterModel->getSalonDataById($salonInvoiceDTO->getSalonId());
+    
+        if($salonData->isEmpty()){
+            if ($salonInvoiceDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Salon '" .$salonInvoiceDTO->getSalonId() . "' does not exist!");
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
+
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
+            } else {
+                return AppDTO::$TRUE_AS_STRING;
+            }
+        }
+
+        $salonBookigs=$salonInvoiceDTO->getBookingId();
+        $invoice=array();
+        foreach($salonBookigs as $booking){
+            $bookDetails=$bookingModel->getBookingById($booking);
+            
+            if($bookDetails){
+                if($bookDetails[0]->invoice_reference=="" or $bookDetails[0]->invoice_reference==null){
+                    $salonInvoiceDTO->setBookingId($booking);
+                    $invoice=$salonInvoiceModel->saveSalonInvoice($salonInvoiceDTO);
+                    $isNewInvoice=true;
+                    break;
+                }
+            }
+        }
+        if($isNewInvoice){
+            foreach($salonBookigs as $booking){
+                $bookDetails=$bookingModel->getBookingById($booking);
+                if($bookDetails[0]->invoice_reference=="" or $bookDetails[0]->invoice_reference==null){
+                $bookDetails=$bookingModel->updateInvoiceReference($booking,$invoice['id']);
+                }
+            }
+            if ($salonInvoiceDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+                $jsonHandlerDto = new JsonHandlerDTO();
+                $jsonHandlerDto->setMessage("Saved Successfully");
+                $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                $jsonHandlerDto->setResultHead("PaymentDetails");
+                $jsonHandlerDto->setResultInArr($invoice);
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
+            } else {
+                return AppDTO::$TRUE_AS_STRING;
+            }
+        }
+
+        if ($salonInvoiceDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+            $jsonHandlerDto = new JsonHandlerDTO();
+            $jsonHandlerDto->setMessage("Booking already has invoice References");
+            $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+            $jsonHandlerDto->setResultHead("PaymentDetails");
+            $jsonHandlerDto->setResultInArr($invoice);
+            return JsonHandler::getJsonMessage($jsonHandlerDto);
+        } else {
+            return AppDTO::$TRUE_AS_STRING;
+        }
+
+
+    }
+    public function updatePayment(SalonInvoiceDTO $salonInvoiceDTO){
+        $salonMasterModel=new SalonMaster();
+        $bookingModel = new ClientBooking();
+        $paymentInvoiceModel= new PaymentInvoices();
+        $salonInvoiceModel=new SalonInvoices();
+        $salonData=$salonMasterModel->getSalonDataById($salonInvoiceDTO->getSalonId());
+    
+        if($salonData->isEmpty()){
+            if ($salonInvoiceDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Salon '" .$salonInvoiceDTO->getSalonId() . "' does not exist!");
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
+
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
+            } else {
+                return AppDTO::$TRUE_AS_STRING;
+            }
+        }
+       
+        $salonBookigs=$salonInvoiceDTO->getBookingId();
+        $invoice=array();
+        $prevouse_invocie="";
+        foreach($salonBookigs as $booking){
+            $bookDetails=$bookingModel->getBookingById($booking); 
+            if($bookDetails){
+                
+                if($bookDetails[0]->invoice_reference != $prevouse_invocie){
+                    $prevouse_invocie=$bookDetails[0]->invoice_reference;
+                    if($salonInvoiceDTO->getPaymentStatus()=="Paid"){
+                        $invoice= $salonInvoiceModel->updatePaymentStatus($bookDetails[0]->invoice_reference,$salonInvoiceDTO->getPaymentStatus(),$salonInvoiceDTO->getPaymentResponse());
+                        $salonInvoiceDTO->setInvoiceId($bookDetails[0]->invoice_reference);
+                        $payment=$paymentInvoiceModel->savePayment($salonInvoiceDTO);
+                    }else{
+                        $invoice=$salonInvoiceModel->updatePaymentStatus($bookDetails[0]->invoice_reference,$salonInvoiceDTO->getPaymentStatus(),$salonInvoiceDTO->getPaymentResponse());
+                    }
+                }
+            }
+        }
+
+            if ($salonInvoiceDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+                $jsonHandlerDto = new JsonHandlerDTO();
+                $jsonHandlerDto->setMessage("Saved Successfully");
+                $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                $jsonHandlerDto->setResultHead("PaymentDetails");
+                $jsonHandlerDto->setResultInArr($invoice);
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
+            } else {
+                return AppDTO::$TRUE_AS_STRING;
+            }
     }
 }

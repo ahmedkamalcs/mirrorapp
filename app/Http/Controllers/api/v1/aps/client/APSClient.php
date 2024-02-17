@@ -12,7 +12,8 @@ use App\Http\Controllers\api\v1\util\JsonHandler;
 use App\Models\api\v1\paymentmodel\InvoiceModel;
 use App\Http\Controllers\api\v1\dto\BusinessInterface;
 use App\Http\Controllers\api\v1\dto\APSDTO;
-
+use App\Http\Controllers\api\v1\dto\APPDTO;
+use App\Http\Controllers\api\v1\dto\JsonHandlerDTO;
 
 /* * *
  * @author ISG.
@@ -123,6 +124,29 @@ class APSClient {
 //        // your request signature
 //        return $signature;
 //    }
+public function iOSsignature(Request $request) {
+    $shaString  = '';
+
+    $arrData    = array(
+    'service_command'    =>'SDK_TOKEN',
+    'access_code'        =>APPDTO::$access_code,
+    'merchant_identifier'=>APPDTO::$merchant_identifier,
+    'device_id'=> $request['device_id'],
+    'language'           =>$request['langugage'],
+    );
+  
+    // sort an array by key
+    ksort($arrData);
+    foreach ($arrData as $key => $value) {
+        $shaString .= "$key=$value";
+    }
+    // make sure to fill your sha request pass phrase
+    $shaString = APPDTO::$request_pharse . $shaString . APPDTO::$request_pharse;
+
+    $signature = hash("SHA256", $shaString);
+    // your request signature
+    return $signature;
+}
 
     public function tokenRequest() {
 
@@ -158,6 +182,60 @@ class APSClient {
         curl_close($ch);
         
         return $responseData;
+
+        /*
+          $resposne = "Done!";
+          $jsonResult = json_encode($resposne);
+          header('Content-Type: application/json; charset=utf-8');
+          echo $jsonResult;
+          exit(); */
+    }
+    public function iOStokenRequest(Request $request) {
+   
+        $apsDTO = new APSDTO(APSDTO::$TRANS_TYPE_TOKENIZATION);
+        $apsDTO->init();
+        $appClient=new APSClient();
+        $url = 'https://sbpaymentservices.payfort.com/FortAPI/paymentApi';
+
+        $arrData = array(
+        'service_command' => 'SDK_TOKEN',
+        'access_code' =>APPDTO::$access_code,
+        'merchant_identifier' => APPDTO::$merchant_identifier,
+        'language' => $request['langugage'],
+        'device_id'=> $request['device_id'],
+        'signature' => $appClient->iOSsignature($request),
+        );
+
+        $ch = curl_init( $url );
+        # Setup request to send json via POST.
+        $data = json_encode($arrData);
+        curl_setopt( $ch, CURLOPT_POSTFIELDS, $data );
+        curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+        # Return response instead of printing.
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+        # Send request.
+        $result = json_decode(curl_exec($ch));
+        curl_close($ch);
+        # Print response.
+        if (curl_errno($ch)) {
+            
+            return curl_error($ch);
+        }
+        curl_close($ch);
+        if($result->status=="22"){
+            $response = ['sdk_token' =>$result->sdk_token,
+            'response_message' => $result->response_message,
+            'response_code' => $result->response_code,
+            'status'=>$result->status];                   
+        }else{
+            $response = ['sdk_token' =>"",
+            'response_message' => $result->response_message,
+            'response_code' => $result->response_code,
+            'status'=>$result->status];  
+        }
+
+        $jsonResult = json_encode($response);
+        return $jsonResult;
 
         /*
           $resposne = "Done!";
