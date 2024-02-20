@@ -212,8 +212,10 @@ class BBooking extends Controller implements BusinessInterface {
         $categoryresult=array();
         if ($categoryarr) {
             foreach( $categoryarr as $Category){
-                $Category->icon=AppDTO::$serverlink . AppDTO::$serviceCategoryIconPath . $Category->icon;
-                $categoryresult[]=$Category;
+                If($Category->icon != null  or $Category->icon !=""){
+                    $Category->icon=AppDTO::$serverlink . AppDTO::$serviceCategoryIconPath . $Category->icon;
+                }
+                    $categoryresult[]=$Category;
             }
             if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 $jsonHandlerDto = new JsonHandlerDTO();
