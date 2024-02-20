@@ -221,6 +221,7 @@ public function iOSsignature(Request $request) {
             
             return curl_error($ch);
         }
+      
         curl_close($ch);
         if($result->status=="22"){
             $response = ['sdk_token' =>$result->sdk_token,

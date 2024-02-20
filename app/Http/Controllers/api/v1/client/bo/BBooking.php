@@ -212,7 +212,7 @@ class BBooking extends Controller implements BusinessInterface {
         $categoryresult=array();
         if ($categoryarr) {
             foreach( $categoryarr as $Category){
-                $Category->icone=AppDTO::$serverlink . AppDTO::$serviceCategoryIconPath . $Category->icone;
+                $Category->icon=AppDTO::$serverlink . AppDTO::$serviceCategoryIconPath . $Category->icon;
                 $categoryresult[]=$Category;
             }
             if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
@@ -257,7 +257,7 @@ class BBooking extends Controller implements BusinessInterface {
                 return AppDTO::$TRUE_AS_STRING;
             }
         }
-        if($bookingDTO->getEmployeeId()!="" or $bookingDTO->getEmployeeId()!=null){
+       /* if($bookingDTO->getEmployeeId()!="" or $bookingDTO->getEmployeeId()!=null){
                 //Checking Emplyee
                 $salonEmplyeeDTO=new SalonEmployeeDTO();
                 $salonEmplyeeDTO->setEmployeehId($bookingDTO->getEmployeeId());
@@ -276,7 +276,7 @@ class BBooking extends Controller implements BusinessInterface {
                     }
 
                 }   
-        }
+        }*/
         $clientBookingModel= new ClientBooking();
         $bookingObject=$clientBookingModel->lstBooking($bookingDTO);
         if ($bookingObject) {

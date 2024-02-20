@@ -142,7 +142,8 @@ class ClientBooking extends Model implements ModelInterface{
     }
 
     public function lstBooking(BookingDTO $bookingDTO){
-        
+        //$query = "select * from client_booking "
+          // if($bookingDTO->)
     }
     public function lstServiceBooking(BookingDTO $bookingDTO){
         $query = "select * from client_booking  
