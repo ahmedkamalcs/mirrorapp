@@ -580,7 +580,9 @@ class BBooking extends Controller implements BusinessInterface {
                                      "serviceDuration"=>$booking->service_duration,
                                      "servicePrice"=>$booking->price,
                                      "quantity"=>$booking->quantity];
-                                     $notes=$notes." ".$booking->notes;
+                                     if($booking->notes!=""){
+                                        $notes=$notes." ".$booking->notes;
+                                     }
                 }
             $paymentDetails=[
                 "salonLogo"=>AppDTO::$serverlink ."" . AppDTO::$salonLogoPath . $bookingObject[0]->salonLogo,
