@@ -12,7 +12,7 @@ use App\Http\Controllers\api\v1\util\JsonHandler;
 use App\Models\api\v1\paymentmodel\InvoiceModel;
 use App\Http\Controllers\api\v1\dto\BusinessInterface;
 use App\Http\Controllers\api\v1\dto\APSDTO;
-use App\Http\Controllers\api\v1\dto\APPDTO;
+use App\Http\Controllers\api\v1\dto\AppDTO;
 use App\Http\Controllers\api\v1\dto\JsonHandlerDTO;
 
 /* * *
@@ -129,8 +129,8 @@ public function iOSsignature(Request $request) {
 
     $arrData    = array(
     'service_command'    =>'SDK_TOKEN',
-    'access_code'        =>APPDTO::$access_code,
-    'merchant_identifier'=>APPDTO::$merchant_identifier,
+    'access_code'        =>AppDTO::$access_code,
+    'merchant_identifier'=>AppDTO::$merchant_identifier,
     'device_id'=> $request['device_id'],
     'language'           =>$request['langugage'],
     );
@@ -141,7 +141,7 @@ public function iOSsignature(Request $request) {
         $shaString .= "$key=$value";
     }
     // make sure to fill your sha request pass phrase
-    $shaString = APPDTO::$request_pharse . $shaString . APPDTO::$request_pharse;
+    $shaString = AppDTO::$request_pharse . $shaString . AppDTO::$request_pharse;
 
     $signature = hash("SHA256", $shaString);
     // your request signature
@@ -199,8 +199,8 @@ public function iOSsignature(Request $request) {
 
         $arrData = array(
         'service_command' => 'SDK_TOKEN',
-        'access_code' =>APPDTO::$access_code,
-        'merchant_identifier' => APPDTO::$merchant_identifier,
+        'access_code' =>AppDTO::$access_code,
+        'merchant_identifier' => AppDTO::$merchant_identifier,
         'language' => $request['langugage'],
         'device_id'=> $request['device_id'],
         'signature' => $appClient->iOSsignature($request),
