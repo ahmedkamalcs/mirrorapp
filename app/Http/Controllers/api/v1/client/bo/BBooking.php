@@ -621,16 +621,12 @@ class BBooking extends Controller implements BusinessInterface {
     }
     public function saveBookingNotes(BookingDTO $bookingDTO){
         $bookingModel = new ClientBooking();
-        $bookingobject=$bookingModel->saveBookingNotes($bookingDTO);
-
-        $salonMasterModel=new SalonMaster();
-        $salonData=$salonMasterModel->getSalonDataById($bookingDTO->getSalonId());
-    
-        if($salonData->isEmpty()){
+        $bookingobject=$bookingModel->getBookingById($bookingDTO->getBookingId());
+        if(!$bookingobject){
             if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
 
                         $jsonHandlerDto = new JsonHandlerDTO();
-                        $jsonHandlerDto->setMessage("Salon '" .$bookingDTO->getSalonId() . "' does not exist!");
+                        $jsonHandlerDto->setMessage("Booking '" .$bookingDTO->getBookingId() . "' does not exist!");
                         $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
 
                 return JsonHandler::getJsonMessage($jsonHandlerDto);
@@ -638,6 +634,9 @@ class BBooking extends Controller implements BusinessInterface {
                 return AppDTO::$TRUE_AS_STRING;
             }
         }
+
+        $bookingobject=$bookingModel->saveBookingNotes($bookingDTO);
+
 
         if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
             $jsonHandlerDto = new JsonHandlerDTO();
