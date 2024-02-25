@@ -110,6 +110,15 @@ class ClientBooking extends Model implements ModelInterface{
         return  $booking;
  
     }
+    public function saveBookingNotes(BookingDTO $bookingDTO){
+         $booking= ClientBooking::find($bookingDTO->getBookingId());
+        
+        $booking->notes=$bookingDTO->getbookingNotes();
+        
+    
+        $booking->save();
+        return $booking;
+    }
     public function updateInvoiceReference($id,$invoiceReference){
          $booking= ClientBooking::find($id);
          $booking->invoice_reference=$invoiceReference;
@@ -156,6 +165,30 @@ class ClientBooking extends Model implements ModelInterface{
     public function getBookingById($bookingId){
         $query = "select * from client_booking  
         where id='". $bookingId ."'";
+         $bookingDetails = DBUtil::select($query);
+
+        return $bookingDetails;
+    }
+    public function updateBookingPaidStatus($id,$Paidstatus){
+        $booking= ClientBooking::find($id);
+        
+        $booking->ispaid=$Paidstatus;
+        
+    
+        $booking->save();
+        
+        return  $booking;
+    }
+    public function lstSalonPaymentDetailsByClientPhone(BookingDTO $bookingDTO){
+        $query = "select cb.id bookingId, sg.logo salonLogo, sm.name salonEnglishName, sm.arabic_name salonArabicName,br.address salonAddress,br.longtitude,br.latitude,cb.notes,cb.booking_date , cb.booking_from , cb.booking_to
+        ,ssub.arabic_name serviceArabicName, ssub.english_name serviceEnglishName,sser.service_duration ,cb.quantity,cb.price from 
+        client_booking cb inner join salon_master sm on sm.id=cb.salon_id 
+        left join salon_branches br on br.id=cb.branch_id  and br.salon_id=cb.salon_id
+        left join salon_gallery sg on sm.user_phone_no=sg.user_phone_no 
+        inner join services_subcategory ssub on cb.category_id=ssub.category_id and ssub.id=cb.subcategory_id
+        inner join salon_services sser on sser.user_phone_no=sm.user_phone_no and cb.category_id=sser.category_id and cb.subcategory_id=sser.subcategory_id
+         where cb.salon_id='".$bookingDTO->getSalonId()."' and cb.client_phone='".$bookingDTO->getClientPhoneNumber(). "'
+          and cb.ispaid=0 ORDER by cb.booking_date , cb.booking_from ";
          $bookingDetails = DBUtil::select($query);
 
         return $bookingDetails;

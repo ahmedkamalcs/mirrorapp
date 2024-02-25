@@ -65,6 +65,14 @@ public function lstSalonByCategory(Request $request){
     return $booking->lstSalonByCategory($serviceDTO);
 
 }
+public function paymentDetails(Request $request){
+    $bookingDTO= new BookingDTO();
+    $bookingDTO->setSalonId($request["SalonId"]);
+    $bookingDTO->setClientPhoneNumber($request["ClientPhoneNumber"]);
+    $booking = new BBooking();
+
+    return $booking->paymentDetails($bookingDTO);
+}
 public function lstAvailableTimeSlot(Request $request){
     $bookingDTO= new BookingDTO();
     $bookingDTO->setServiceCategory($request['categoryId']);
@@ -97,5 +105,12 @@ public function savePayment(Request $request){
         return $booking->updatePayment($salonInvoiceDTO);
     }
 }
+public function saveBookingNotes(Request $request){
+    $bookingDTO= new BookingDTO();
+    $bookingDTO->setBookingId($request["bookingId"]);
+    $bookingDTO->setbookingNotes($request["notes"]);
+    $booking = new BBooking();
+    return $booking->saveBookingNotes($bookingDTO);
 
+}
 }

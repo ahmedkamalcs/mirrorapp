@@ -476,7 +476,7 @@ class BBooking extends Controller implements BusinessInterface {
         if ($salonInvoiceDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
             $jsonHandlerDto = new JsonHandlerDTO();
             $jsonHandlerDto->setMessage("Booking already has invoice References");
-            $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+            $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_ALREADY_EXIST);
             $jsonHandlerDto->setResultHead("PaymentDetails");
             $jsonHandlerDto->setResultInArr($invoice);
             return JsonHandler::getJsonMessage($jsonHandlerDto);
@@ -518,6 +518,7 @@ class BBooking extends Controller implements BusinessInterface {
                     if($salonInvoiceDTO->getPaymentStatus()=="Paid"){
                         $invoice= $salonInvoiceModel->updatePaymentStatus($bookDetails[0]->invoice_reference,$salonInvoiceDTO->getPaymentStatus(),$salonInvoiceDTO->getPaymentResponse());
                         $salonInvoiceDTO->setInvoiceId($bookDetails[0]->invoice_reference);
+                        $updateobject=$bookingModel->updateBookingPaidStatus($booking,"1");
                         $payment=$paymentInvoiceModel->savePayment($salonInvoiceDTO);
                     }else{
                         $invoice=$salonInvoiceModel->updatePaymentStatus($bookDetails[0]->invoice_reference,$salonInvoiceDTO->getPaymentStatus(),$salonInvoiceDTO->getPaymentResponse());
@@ -536,5 +537,98 @@ class BBooking extends Controller implements BusinessInterface {
             } else {
                 return AppDTO::$TRUE_AS_STRING;
             }
+    }
+    public function paymentDetails(BookingDTO $bookingDTO){
+        $salonMasterModel=new SalonMaster();
+        $salonData=$salonMasterModel->getSalonDataById($bookingDTO->getSalonId());
+    
+        if($salonData->isEmpty()){
+            if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+
+                        $jsonHandlerDto = new JsonHandlerDTO();
+                        $jsonHandlerDto->setMessage("Salon '" .$bookingDTO->getSalonId() . "' does not exist!");
+                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
+
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
+            } else {
+                return AppDTO::$TRUE_AS_STRING;
+            }
+        }
+
+        $clientBookingModel= new ClientBooking();
+        $bookingObject=$clientBookingModel->lstSalonPaymentDetailsByClientPhone($bookingDTO);
+        $paymentDetails=array();
+        $bookingTime=array();
+        $bookedServices=array();
+        if ($bookingObject) {
+            $countArray=count($bookingObject);
+            $bookingTime=[
+                "start"=>[
+                    "date"=>$bookingObject[0]->booking_date,
+                    "time"=>$bookingObject[0]->booking_from
+                    ],
+                "end"=>[
+                    "date"=>$bookingObject[$countArray-1]->booking_date,
+                    "time"=>$bookingObject[$countArray-1]->booking_to
+                    ]
+                ];
+                foreach($bookingObject as $booking){
+                    $bookedServices[]=["bookingId"=>$booking->bookingId,
+                                     "englishName"=>$booking->serviceEnglishName,
+                                     "arabicName"=>$booking->serviceArabicName,
+                                     "serviceDuration"=>$booking->service_duration,
+                                     "servicePrice"=>$booking->price,
+                                     "quantity"=>$booking->quantity];
+                }
+            $paymentDetails=[
+                "salonLogo"=>AppDTO::$serverlink ."" . AppDTO::$salonLogoPath . $bookingObject[0]->salonLogo,
+                "salonName"=>$bookingObject[0]->salonEnglishName,
+                "salonNameArabic"=>$bookingObject[0]->salonArabicName,
+                "salonAddress"=>$bookingObject[0]->salonAddress,
+                "salonLat"=>$bookingObject[0]->latitude,
+                "salonLong"=>$bookingObject[0]->longtitude,
+                "bookingNotes"=>$bookingObject[0]->notes,
+                "bookingTime"=>$bookingTime,
+                "bookedServices"=>$bookedServices
+            ];
+
+            if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+                $jsonHandlerDto = new JsonHandlerDTO();
+                $jsonHandlerDto->setMessage("Salon List");
+                $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                $jsonHandlerDto->setResultHead("PaymentDetails");
+                $jsonHandlerDto->setResultInArr($paymentDetails);
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
+            } else {
+                return AppDTO::$TRUE_AS_STRING;
+            }
+        } else {
+            if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+               
+                $jsonHandlerDto = new JsonHandlerDTO();
+                $jsonHandlerDto->setMessage("No booking is awaiting payment!");
+                $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_FAILUE);
+                $jsonHandlerDto->setResultHead("PaymentDetails");
+                $jsonHandlerDto->setResultInArr($paymentDetails);
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
+            } else {
+                return AppDTO::$FALSE_AS_STRING;
+            }
+        }
+
+    }
+    public function saveBookingNotes(BookingDTO $bookingDTO){
+        $bookingModel = new ClientBooking();
+        $bookingobject=$bookingModel->saveBookingNotes($bookingDTO);
+        if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+            $jsonHandlerDto = new JsonHandlerDTO();
+            $jsonHandlerDto->setMessage("Saved Successfully");
+            $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+            $jsonHandlerDto->setResultHead("BookingDetails");
+            $jsonHandlerDto->setResultInArr($bookingobject);
+            return JsonHandler::getJsonMessage($jsonHandlerDto);
+        } else {
+            return AppDTO::$TRUE_AS_STRING;
+        }
     }
 }

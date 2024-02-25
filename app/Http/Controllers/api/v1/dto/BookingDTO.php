@@ -31,6 +31,7 @@ class BookingDTO implements DTOInterface {
      private $price;
      private $serviceDuration;
      private $bookingDate;
+     private $bookingNotes;
 
     private $apiCall = '1'; //API Calls Active by Default
     function getApiCall() {
@@ -41,6 +42,12 @@ class BookingDTO implements DTOInterface {
         $this->apiCall = $apiCall;
     }
         public function getDTOById($id) {
+    }
+    function setbookingNotes($bookingNotes){
+        $this->bookingNotes=$bookingNotes;
+    }
+    function getbookingNotes(){
+        return $this->bookingNotes;
     }
     function setServiceDuration($serviceDuration){
         $this->serviceDuration=$serviceDuration;
