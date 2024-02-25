@@ -560,6 +560,7 @@ class BBooking extends Controller implements BusinessInterface {
         $paymentDetails=array();
         $bookingTime=array();
         $bookedServices=array();
+        $notes="";
         if ($bookingObject) {
             $countArray=count($bookingObject);
             $bookingTime=[
@@ -579,6 +580,7 @@ class BBooking extends Controller implements BusinessInterface {
                                      "serviceDuration"=>$booking->service_duration,
                                      "servicePrice"=>$booking->price,
                                      "quantity"=>$booking->quantity];
+                                     $notes=$notes." ".$booking->notes;
                 }
             $paymentDetails=[
                 "salonLogo"=>AppDTO::$serverlink ."" . AppDTO::$salonLogoPath . $bookingObject[0]->salonLogo,
@@ -587,7 +589,7 @@ class BBooking extends Controller implements BusinessInterface {
                 "salonAddress"=>$bookingObject[0]->salonAddress,
                 "salonLat"=>$bookingObject[0]->latitude,
                 "salonLong"=>$bookingObject[0]->longtitude,
-                "bookingNotes"=>$bookingObject[0]->notes,
+                "bookingNotes"=>trim($notes),
                 "bookingTime"=>$bookingTime,
                 "bookedServices"=>$bookedServices
             ];
@@ -636,7 +638,7 @@ class BBooking extends Controller implements BusinessInterface {
                 return AppDTO::$TRUE_AS_STRING;
             }
         }
-        
+
         if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
             $jsonHandlerDto = new JsonHandlerDTO();
             $jsonHandlerDto->setMessage("Saved Successfully");
