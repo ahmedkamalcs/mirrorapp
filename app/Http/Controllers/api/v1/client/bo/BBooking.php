@@ -352,21 +352,26 @@ class BBooking extends Controller implements BusinessInterface {
             $stackSlot = array();
             $bookedSlot = array();
             $bookingDuration=$serviceDateails[0]->service_duration;
-            for ($time = $serviceDateails[0]->working_hours_from; $time < $serviceDateails[0]->working_hours_till;) {
+            for ($time = date("H:i:s", strtotime($serviceDateails[0]->working_hours_from)) ; $time <date("H:i:s", strtotime( $serviceDateails[0]->working_hours_till)) ;) {
                 $bookedSeat=0; 
                 $availableSeat=0;   
                 $timeAndDuration = date("H:i:s", (strtotime($bookingDuration) + strtotime($time)));
-
+                
                 foreach($allBooked as $bookedslot){
-                        $bookedEndTime = date("H:i A", strtotime($bookedslot->booking_to));
-                        $bookedStartTime = date("H:i A", strtotime($bookedslot->booking_from));
-                        if ((($time >= $bookedStartTime && $time < $bookedEndTime) || ($bookedStartTime >= $time && $bookedStartTime < $timeAndDuration)) ){
+                        $bookedEndTime = date("H:i:s", strtotime($bookedslot->booking_to));
+                        $bookedStartTime = date("H:i:s", strtotime($bookedslot->booking_from));
+                      
+                        
+                        if ((($time >= $bookedStartTime && $time < $bookedEndTime) || ($bookedStartTime >= $time && $bookedEndTime < $timeAndDuration)) ){
+                            
                             $bookedSeat += $bookedslot->quantity;
                         } else {
+                           
                             $bookedSeat += 0;
                         }
                     }
                     $availableSeat=$bookingSeat-$bookedSeat;
+                    
                     if($availableSeat>0){
                      array_push($stackSlot,date("H:i:s", strtotime($time)));
                     }
@@ -382,6 +387,7 @@ class BBooking extends Controller implements BusinessInterface {
             $currentTime= date("H:i:s");
             $currentDate=date("Y-m-d");
 //            echo $currentDate;
+          //print_r($stackSlot);
            foreach($stackSlot as $slot){
                 if ($currentDate==$bookingDTO->getBookingDate()){
                     if ($slot>$currentTime){
@@ -584,8 +590,13 @@ class BBooking extends Controller implements BusinessInterface {
                                         $notes=$notes." ".$booking->notes;
                                      }
                 }
+            if($bookingObject[0]->salonLogo!=""){
+                $logo=AppDTO::$serverlink ."" . AppDTO::$salonLogoPath . $bookingObject[0]->salonLogo;
+            }else{  
+                $logo="";
+            }
             $paymentDetails=[
-                "salonLogo"=>AppDTO::$serverlink ."" . AppDTO::$salonLogoPath . $bookingObject[0]->salonLogo,
+                "salonLogo"=>$logo,
                 "salonName"=>$bookingObject[0]->salonEnglishName,
                 "salonNameArabic"=>$bookingObject[0]->salonArabicName,
                 "salonAddress"=>$bookingObject[0]->salonAddress,
