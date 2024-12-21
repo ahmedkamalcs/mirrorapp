@@ -344,15 +344,21 @@ class BBooking extends Controller implements BusinessInterface {
         $salonBookingModel=new  ClientBooking();
         $allBooked=$salonBookingModel->lstServiceBooking($bookingDTO);
         $serviceDateails=$salonServiceModel->LstSalonService($servicesDTO);
+        
         $bookingSeat=1;
         if ($serviceDateails){
             if($serviceDateails[0]->working_hours_till=="12:00 AM"){
-                $serviceDateails[0]->working_hours_till="23:59:59 PM";
+                //$serviceDateails[0]->working_hours_till="23:59:59 PM";
+                $working_hours_till="23:59:59";
+            }else {
+                $working_hours_till=date("H:i:s", strtotime($serviceDateails[0]->working_hours_till));
             }
             $stackSlot = array();
             $bookedSlot = array();
             $bookingDuration=$serviceDateails[0]->service_duration;
-            for ($time = date("H:i:s", strtotime($serviceDateails[0]->working_hours_from)) ; $time <date("H:i:s", strtotime( $serviceDateails[0]->working_hours_till)) ;) {
+           
+            for ($time = date("H:i:s", strtotime($serviceDateails[0]->working_hours_from)) ; $time <$working_hours_till;) {
+                
                 $bookedSeat=0; 
                 $availableSeat=0;   
                 $timeAndDuration = date("H:i:s", (strtotime($bookingDuration) + strtotime($time)));
@@ -375,13 +381,16 @@ class BBooking extends Controller implements BusinessInterface {
                     if($availableSeat>0){
                      array_push($stackSlot,date("H:i:s", strtotime($time)));
                     }
+                    
                     $time=strtotime($time)- strtotime("00:00:00") + strtotime(date("H:i:s",$bookingDuration*60));
+                    
                     IF($time>strtotime("23:59:59")){
                         break;
                     }
                         $time = date("H:i:s", $time);
-                  
+                 
            }
+           
            $finalSlot=array();
            date_default_timezone_set("Asia/Riyadh");
             $currentTime= date("H:i:s");
