@@ -1,0 +1,1 @@
+UPDATE `salon_master` SET `working_hours_from` = '12:00 AM', `working_hours_till` = '12:00 AM' WHERE `salon_master`.`id` = 39;
