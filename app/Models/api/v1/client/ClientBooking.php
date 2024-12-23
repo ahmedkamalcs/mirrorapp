@@ -192,11 +192,11 @@ class ClientBooking extends Model implements ModelInterface{
             $bookingArray["salonName"]=$booking->name;
             $bookingArray["salonNameArabic"]=$booking->arabic_name;
             $bookingArray["salonAddress"]=$booking->address;
-            $bookingArray["salonLate"]=$booking->latitude;
+            $bookingArray["salonLat"]=$booking->latitude;
             $bookingArray["salonLong"]=$booking->longtitude;
-            $bookingArray["bookingDate"]=$bookingTime;
+            
 
-            $query="select client_booking.id 'bookingId' ,services_subcategory.english_name 'englishName',services_subcategory.arabic_name 'arabicName',salon_services.service_duration 'duration',client_booking.price,client_booking.notes 'bookingNotes'  FROM `client_booking` ";
+            $query="select client_booking.id 'bookingId' ,services_subcategory.english_name 'englishName',services_subcategory.arabic_name 'arabicName',salon_services.service_duration 'serviceDuration',client_booking.price as 'servicePrice',client_booking.notes 'bookingNotes'  FROM `client_booking` ";
             $query=$query." inner join salon_master on salon_master.id=client_booking.salon_id";
             $query=$query." inner join salon_services on client_booking.category_id=salon_services.category_id and client_booking.subcategory_id=salon_services.subcategory_id and salon_services.user_phone_no=salon_master.user_phone_no";
             $query=$query." inner join services_subcategory on client_booking.subcategory_id=services_subcategory.id and  client_booking.category_id=services_subcategory.category_id";
@@ -207,6 +207,7 @@ class ClientBooking extends Model implements ModelInterface{
                 $notes= trim($notes." ".$service->bookingNotes);
             }
             $bookingArray["bookingNotes"]=$notes;
+            $bookingArray["bookingTime"]=$bookingTime;
             if($ServicesDetails){
                 $bookingArray["bookedServices"]=$ServicesDetails;
             }else{
