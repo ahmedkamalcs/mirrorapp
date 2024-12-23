@@ -73,6 +73,15 @@ public function paymentDetails(Request $request){
 
     return $booking->paymentDetails($bookingDTO);
 }
+
+public function bookingDetails(Request $request){
+    $bookingDTO= new BookingDTO();
+    $bookingDTO->setSalonId($request["SalonId"]);
+    $bookingDTO->setClientPhoneNumber($request["ClientPhoneNumber"]);
+    $booking = new BBooking();
+
+    return $booking->lstSalonBooking($bookingDTO);
+}
 public function lstAvailableTimeSlot(Request $request){
     $bookingDTO= new BookingDTO();
     $bookingDTO->setServiceCategory($request['categoryId']);

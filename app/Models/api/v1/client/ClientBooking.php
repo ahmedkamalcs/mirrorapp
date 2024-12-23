@@ -16,6 +16,7 @@ use App\Http\Controllers\api\v1\util\DBUtil;
 use App\Http\Controllers\api\v1\sns\bo\BSnsService;
 use App\Http\Controllers\api\v1\dto\SnsDTO;
 use App\Http\Controllers\isgapi\api\v1\util\StringUtil;
+use App\Http\Controllers\api\v1\dto\AppDTO;
 
 /**
  * @author ISG
@@ -151,8 +152,72 @@ class ClientBooking extends Model implements ModelInterface{
     }
 
     public function lstBooking(BookingDTO $bookingDTO){
-        //$query = "select * from client_booking "
-          // if($bookingDTO->)
+        $query = "select salon_master.id , salon_master.name,salon_master.arabic_name,salon_branches.address , salon_branches.longtitude ";
+        $query=$query.",salon_branches.latitude ,salon_gallery.logo,client_booking.booking_date,client_booking.branch_id,client_booking.booking_date,client_booking.client_phone , MIN(client_booking.booking_from)'booking_from' , MAX(client_booking.booking_to) 'booking_to' FROM `client_booking` ";
+        $query=$query."inner join salon_master on salon_master.id=client_booking.salon_id ";
+        $query=$query."left join salon_branches on client_booking.salon_id=salon_branches.salon_id and client_booking.branch_id=salon_branches.id ";
+        $query=$query."left join salon_gallery on salon_master.user_phone_no=salon_gallery.user_phone_no ";
+        if($bookingDTO->getClientPhoneNumber()==""){
+            $query=$query."where client_booking.client_phone=''";
+        }
+        else{
+            $query=$query."where client_booking.client_phone='".$bookingDTO->getClientPhoneNumber()."'";
+        }
+
+        if($bookingDTO->getSalonId()==""){
+            $query=$query." and client_booking.salon_id=''";
+        }
+        else{
+            $query=$query." and client_booking.salon_id='".$bookingDTO->getSalonId()."'";
+        }
+        $query=$query."group BY salon_master.id , salon_master.name,salon_master.arabic_name,salon_branches.address , salon_branches.longtitude ,salon_branches.latitude ,salon_gallery.logo,client_booking.booking_date,client_booking.branch_id,client_booking.booking_date,client_booking.client_phone ORDER by client_booking.booking_date DESC , 'booking_from' ASC; ";
+        
+         $bookingDetails = DBUtil::select($query);
+
+         $bookingArray=[];
+         $bookingTime=[];
+        $bookingResultArray=[];
+        foreach($bookingDetails as $booking){
+           
+            $bookingTime["bookingDate"]=$booking->booking_date;
+            $bookingTime["startTime"]=$booking->booking_from;
+            $bookingTime["endTime"]=$booking->booking_to;
+
+            $bookingArray["id"]=$booking->id;
+            if($booking->logo!=""){
+                $bookingArray["salonLogo"]=AppDTO::$serverlink ."" . AppDTO::$salonLogoPath . $booking->logo;
+            }else{
+                $bookingArray["salonLogo"]->logo="";
+            }
+            $bookingArray["salonName"]=$booking->name;
+            $bookingArray["salonNameArabic"]=$booking->arabic_name;
+            $bookingArray["salonAddress"]=$booking->address;
+            $bookingArray["salonLate"]=$booking->latitude;
+            $bookingArray["salonLong"]=$booking->longtitude;
+            $bookingArray["bookingDate"]=$bookingTime;
+
+            $query="select client_booking.id 'bookingId' ,services_subcategory.english_name 'englishName',services_subcategory.arabic_name 'arabicName',salon_services.service_duration 'duration',client_booking.price,client_booking.notes 'bookingNotes'  FROM `client_booking` ";
+            $query=$query." inner join salon_master on salon_master.id=client_booking.salon_id";
+            $query=$query." inner join salon_services on client_booking.category_id=salon_services.category_id and client_booking.subcategory_id=salon_services.subcategory_id and salon_services.user_phone_no=salon_master.user_phone_no";
+            $query=$query." inner join services_subcategory on client_booking.subcategory_id=services_subcategory.id and  client_booking.category_id=services_subcategory.category_id";
+            $query=$query." where client_booking.booking_date='".$booking->booking_date."' and client_booking.salon_id='".$booking->id."' and client_booking.client_phone='".$booking->client_phone."' and client_booking.branch_id='".$booking->branch_id."'";
+            $ServicesDetails = DBUtil::select($query);
+            $notes="";
+            foreach ($ServicesDetails as $service) {
+                $notes= trim($notes." ".$service->bookingNotes);
+            }
+            $bookingArray["bookingNotes"]=$notes;
+            if($ServicesDetails){
+                $bookingArray["bookedServices"]=$ServicesDetails;
+            }else{
+                $bookingArray["bookedServices"]=[];
+            }
+            $bookingArray["vat"]="15";
+            $bookingArray["employeeReward"]="10";
+            $bookingArray["discount_code"]="";
+            $bookingResultArray[]=$bookingArray;
+        }
+        return  $bookingResultArray;
     }
     public function lstServiceBooking(BookingDTO $bookingDTO){
         $query = "select * from client_booking  

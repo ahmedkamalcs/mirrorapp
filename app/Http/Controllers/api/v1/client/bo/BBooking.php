@@ -246,7 +246,7 @@ class BBooking extends Controller implements BusinessInterface {
          //checking salon
         $salonMasterModel=new SalonMaster();
         $salonData=$salonMasterModel->getSalonDataById($bookingDTO->getSalonId());
-    
+        
         if($salonData->isEmpty()){
             if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
 
