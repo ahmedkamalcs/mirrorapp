@@ -25,8 +25,8 @@ final class JsonHandler {
             
             $response = ['Message' => $jsonHandlerDTO->getMessage(),
                 'isSucces' => $jsonHandlerDTO->getIsSuccess(),
-                'jsonData' => [$jsonHandlerDTO->getResultHead() => $jsonHandlerDTO->getResultInArr()]];
-
+                //'jsonData' => [$jsonHandlerDTO->getResultHead() => $jsonHandlerDTO->getResultInArr()]];
+                $jsonHandlerDTO->getResultHead() => $jsonHandlerDTO->getResultInArr()];
             $jsonResult = json_encode($response);
             header('Content-Type: application/json; charset=utf-8');
             echo $jsonResult;
@@ -34,8 +34,8 @@ final class JsonHandler {
         } else if ($jsonHandlerDTO->getResultInArr() == null || count($jsonHandlerDTO->getResultInArr()) == 0) {
             $response = ['Message' => $jsonHandlerDTO->getMessage(),
                 'isSucces' => $jsonHandlerDTO->getIsSuccess(),
-                'jsonData' => []];
-
+                //'jsonData' => []];
+                $jsonHandlerDTO->getResultHead()=> []];
             $jsonResult = json_encode($response);
             header('Content-Type: application/json; charset=utf-8');
             echo $jsonResult;
@@ -44,8 +44,8 @@ final class JsonHandler {
 
             $response = ['Message' => $jsonHandlerDTO->getMessage(),
                 'isSucces' => $jsonHandlerDTO->getIsSuccess(),
-                'jsonData' => [$jsonHandlerDTO->getResultHead() => (object) $jsonHandlerDTO->getResultInArr()[0]]];
-
+              //  'jsonData' => [$jsonHandlerDTO->getResultHead() => (object) $jsonHandlerDTO->getResultInArr()[0]]];
+              $jsonHandlerDTO->getResultHead() => (object) $jsonHandlerDTO->getResultInArr()[0]];
             $jsonResult = json_encode($response);
             header('Content-Type: application/json; charset=utf-8');
             echo $jsonResult;
@@ -53,8 +53,8 @@ final class JsonHandler {
         } else if (count($jsonHandlerDTO->getResultInArr()) > 1) {
             $response = ['Message' => $jsonHandlerDTO->getMessage(),
                 'isSucces' => $jsonHandlerDTO->getIsSuccess(),
-                'jsonData' => [$jsonHandlerDTO->getResultHead() => $jsonHandlerDTO->getResultInArr()]];
-
+                //'jsonData' => [$jsonHandlerDTO->getResultHead() => $jsonHandlerDTO->getResultInArr()]];
+                $jsonHandlerDTO->getResultHead() => $jsonHandlerDTO->getResultInArr()];
             $jsonResult = json_encode($response);
             header('Content-Type: application/json; charset=utf-8');
             echo $jsonResult;
