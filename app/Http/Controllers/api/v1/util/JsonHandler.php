@@ -32,10 +32,17 @@ final class JsonHandler {
             echo $jsonResult;
             exit();
         } else if ($jsonHandlerDTO->getResultInArr() == null || count($jsonHandlerDTO->getResultInArr()) == 0) {
-            $response = ['Message' => $jsonHandlerDTO->getMessage(),
+           
+            if( $jsonHandlerDTO->getResultHead() == "" ){
+                $response = ['Message' => $jsonHandlerDTO->getMessage(),
+                'isSucces' => $jsonHandlerDTO->getIsSuccess()];
+            }else{
+                $response = ['Message' => $jsonHandlerDTO->getMessage(),
                 'isSucces' => $jsonHandlerDTO->getIsSuccess(),
                 //'jsonData' => []];
                 $jsonHandlerDTO->getResultHead() => []];
+            }
+
             $jsonResult = json_encode($response);
             header('Content-Type: application/json; charset=utf-8');
             echo $jsonResult;

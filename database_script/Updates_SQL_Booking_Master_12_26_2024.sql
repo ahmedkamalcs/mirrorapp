@@ -38,5 +38,26 @@ UPDATE `service_category` SET `icon` = 'HairExtension.JPG' WHERE `service_catego
 UPDATE `service_category` SET `icon` = 'Hair.JPG' WHERE `service_category`.`id` = 3;
 UPDATE `service_category` SET `icon` = 'massage.JPG' WHERE `service_category`.`id` = 15;
 
-ALTER TABLE client_booking ADD client_booking int;
+alter table client_booking drop column booking_refrence;
+ALTER TABLE client_booking ADD booking_reference int;
+
+
+UPDATE `service_category` SET `icon` = 'Makeup.svg' WHERE `service_category`.`id` = 20;
+UPDATE `service_category` SET `icon` = 'Eyelashesicon.svg' WHERE `service_category`.`id` = 19;
+UPDATE `service_category` SET `icon` = 'MoroccanBath.svg' WHERE `service_category`.`id` = 18;
+UPDATE `service_category` SET `icon` = 'Facial.svg' WHERE `service_category`.`id` = 17;
+UPDATE `service_category` SET `icon` = 'SelfCare.svg' WHERE `service_category`.`id` = 16;
+UPDATE `service_category` SET `icon` = 'ManicurePedicure.svg' WHERE `service_category`.`id` = 14;
+UPDATE `service_category` SET `icon` = 'Nailpolish.svg' WHERE `service_category`.`id` = 13;
+UPDATE `service_category` SET `icon` = 'Gelnailsextension.svg' WHERE `service_category`.`id` = 12;
+UPDATE `service_category` SET `icon` = 'fakenails.svg' WHERE `service_category`.`id` = 11;
+UPDATE `service_category` SET `icon` = 'Paraffine.svg' WHERE `service_category`.`id` = 10;
+UPDATE `service_category` SET `icon` = 'Hairdyeing.svg' WHERE `service_category`.`id` = 9;
+UPDATE `service_category` SET `icon` = 'coldhairtreatment.svg' WHERE `service_category`.`id` = 7;
+UPDATE `service_category` SET `icon` = 'hothairtreatment.svg' WHERE `service_category`.`id` = 8;
+UPDATE `service_category` SET `icon` = 'haircut.svg' WHERE `service_category`.`id` = 6;
+UPDATE `service_category` SET `icon` = 'Hairdryer.svg' WHERE `service_category`.`id` = 5;
+UPDATE `service_category` SET `icon` = 'HairExtension.svg' WHERE `service_category`.`id` = 4;
+UPDATE `service_category` SET `icon` = 'Hair.svg' WHERE `service_category`.`id` = 3;
+UPDATE `service_category` SET `icon` = 'massage.svg' WHERE `service_category`.`id` = 15;
 
