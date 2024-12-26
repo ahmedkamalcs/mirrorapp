@@ -13,13 +13,15 @@ use App\Models\api\v1\salon\SalonEmployee;
 use App\Models\api\v1\salon\SalonInvoices;
 use App\Models\api\v1\salon\PaymentInvoices;
 use App\Models\api\v1\client\ServiceCategory;
+use App\Models\api\v1\client\ClientBooking;
+use App\Models\api\v1\client\ClientBookingMaster;
 use App\Http\Controllers\api\v1\dto\SalonEmployeeDTO;
 use App\Http\Controllers\api\v1\dto\SalonBranchesDTO;
 use App\Http\Controllers\api\v1\util\JsonHandler;
 use Random\RandomError;
 use App\Http\Controllers\api\v1\dto\SalonInvoiceDTO;
 use App\Http\Controllers\api\v1\dto\JsonHandlerDTO;
-use App\Models\api\v1\client\ClientBooking;
+
 use PhpOffice\PhpSpreadsheet\Calculation\Category;
 
 class BBooking extends Controller implements BusinessInterface { 
@@ -35,7 +37,7 @@ class BBooking extends Controller implements BusinessInterface {
                         $jsonHandlerDto = new JsonHandlerDTO();
                         $jsonHandlerDto->setMessage("Salon '" .$bookingDTO->getSalonId() . "' does not exist!");
                         $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
-
+                        $jsonHandlerDto->setResultHead("BookingDetails");
                 return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
@@ -55,7 +57,7 @@ class BBooking extends Controller implements BusinessInterface {
                         $jsonHandlerDto->setMessage("Employee does not exist! ");
 
                         $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
-
+                        $jsonHandlerDto->setResultHead("BookingDetails");
                 return JsonHandler::getJsonMessage($jsonHandlerDto);
             }
 
@@ -83,6 +85,9 @@ class BBooking extends Controller implements BusinessInterface {
             }
         }*/  
         //Save Booking 
+        $clientBookingMasterModel= new ClientBookingMaster();
+        $bookingMasterObject=$clientBookingMasterModel->SaveBooking($bookingDTO);
+        $bookingDTO->setbookingReference($bookingMasterObject->id);
         $clientBookingModel= new ClientBooking();
         $bookingObject=$clientBookingModel->SaveBooking($bookingDTO);
         if ($bookingObject) {
@@ -102,7 +107,7 @@ class BBooking extends Controller implements BusinessInterface {
                 $jsonHandlerDto = new JsonHandlerDTO();
                 $jsonHandlerDto->setMessage("Something went wrong!");
                 $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_FAILUE);
-
+                $jsonHandlerDto->setResultHead("BookingDetails");
                 return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$FALSE_AS_STRING;
@@ -115,7 +120,26 @@ class BBooking extends Controller implements BusinessInterface {
     public function UpdateBooking(BookingDTO $bookingDTO){
        
         $clientBookingModel= new ClientBooking();
-        $bookingObject=$clientBookingModel->updateBooking($bookingDTO);
+        $clientBookingMasterModel= new ClientBookingMaster();
+        $bookingMasterObject=$clientBookingMasterModel->updateBooking($bookingDTO);
+        if(!$bookingMasterObject){
+            if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+               
+                $jsonHandlerDto = new JsonHandlerDTO();
+                $jsonHandlerDto->setMessage("Something went wrong!");
+                $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_FAILUE);
+                $jsonHandlerDto->setResultHead("BookingDetails");
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
+            } else {
+                return AppDTO::$FALSE_AS_STRING;
+            }
+        }
+        $bookingList=$clientBookingModel->LstBookingByReferenceId($bookingDTO->getBookingById());
+        foreach($bookingList as $booking ){
+            $bookingDTO->setBookingId($booking->id);
+            $bookingObject=$clientBookingModel->updateBooking($bookingDTO);
+        }
+        
         if ($bookingObject) {
             if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 $jsonHandlerDto = new JsonHandlerDTO();
@@ -133,7 +157,7 @@ class BBooking extends Controller implements BusinessInterface {
                 $jsonHandlerDto = new JsonHandlerDTO();
                 $jsonHandlerDto->setMessage("Something went wrong!");
                 $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_FAILUE);
-
+                $jsonHandlerDto->setResultHead("BookingDetails");
                 return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$FALSE_AS_STRING;
@@ -146,7 +170,26 @@ class BBooking extends Controller implements BusinessInterface {
     public function CancellBooking(BookingDTO $bookingDTO){
        
         $clientBookingModel= new ClientBooking();
-        $bookingObject=$clientBookingModel->cancellBooking($bookingDTO);
+        $clientBookingMasterModel= new ClientBookingMaster();
+        $bookingMasterObject=$clientBookingMasterModel->cancellBooking($bookingDTO);
+        if(!$bookingMasterObject){
+            if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+               
+                $jsonHandlerDto = new JsonHandlerDTO();
+                $jsonHandlerDto->setMessage("Something went wrong!");
+                $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_FAILUE);
+                $jsonHandlerDto->setResultHead("BookingDetails");
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
+            } else {
+                return AppDTO::$FALSE_AS_STRING;
+            }
+        }
+        $bookingList=$clientBookingModel->LstBookingByReferenceId($bookingDTO->getBookingById());
+        foreach($bookingList as $booking ){
+            $bookingDTO->setBookingId($booking->id);
+            $bookingObject=$clientBookingModel->cancellBooking($bookingDTO);
+        }
+        
         if ($bookingObject) {
             if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 $jsonHandlerDto = new JsonHandlerDTO();
@@ -164,7 +207,7 @@ class BBooking extends Controller implements BusinessInterface {
                 $jsonHandlerDto = new JsonHandlerDTO();
                 $jsonHandlerDto->setMessage("Something went wrong!");
                 $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_FAILUE);
-
+                $jsonHandlerDto->setResultHead("BookingDetails");
                 return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$FALSE_AS_STRING;
@@ -177,7 +220,26 @@ class BBooking extends Controller implements BusinessInterface {
     public function ConfirmBooking(BookingDTO $bookingDTO){
        
         $clientBookingModel= new ClientBooking();
-        $bookingObject=$clientBookingModel->confirmBooking($bookingDTO);
+        $clientBookingMasterModel= new ClientBookingMaster();
+        $bookingMasterObject=$clientBookingMasterModel->confirmBooking($bookingDTO);
+        if(!$bookingMasterObject){
+            if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+               
+                $jsonHandlerDto = new JsonHandlerDTO();
+                $jsonHandlerDto->setMessage("Something went wrong!");
+                $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_FAILUE);
+                $jsonHandlerDto->setResultHead("BookingDetails");
+                return JsonHandler::getJsonMessage($jsonHandlerDto);
+            } else {
+                return AppDTO::$FALSE_AS_STRING;
+            }
+        }
+        $bookingList=$clientBookingModel->LstBookingByReferenceId($bookingDTO->getBookingById());
+        foreach($bookingList as $booking ){
+            $bookingDTO->setBookingId($booking->id);
+            $bookingObject=$clientBookingModel->confirmBooking($bookingDTO);
+        }
+        
         if ($bookingObject) {
             if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 $jsonHandlerDto = new JsonHandlerDTO();
@@ -195,7 +257,7 @@ class BBooking extends Controller implements BusinessInterface {
                 $jsonHandlerDto = new JsonHandlerDTO();
                 $jsonHandlerDto->setMessage("Something went wrong!");
                 $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_FAILUE);
-
+                $jsonHandlerDto->setResultHead("BookingDetails");
                 return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$FALSE_AS_STRING;
@@ -233,7 +295,7 @@ class BBooking extends Controller implements BusinessInterface {
                 $jsonHandlerDto = new JsonHandlerDTO();
                 $jsonHandlerDto->setMessage("Something went wrong!");
                 $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_FAILUE);
-
+                $jsonHandlerDto->setResultHead("CategoriesLst");
                 return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$FALSE_AS_STRING;
@@ -243,22 +305,7 @@ class BBooking extends Controller implements BusinessInterface {
     }
     public function lstSalonBooking(BookingDTO $bookingDTO){
 
-         //checking salon
-        $salonMasterModel=new SalonMaster();
-        $salonData=$salonMasterModel->getSalonDataById($bookingDTO->getSalonId());
-        
-        if($salonData->isEmpty()){
-            if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
-
-                        $jsonHandlerDto = new JsonHandlerDTO();
-                        $jsonHandlerDto->setMessage("Salon '" .$bookingDTO->getSalonId() . "' does not exist!");
-                        $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
-
-                return JsonHandler::getJsonMessage($jsonHandlerDto);
-            } else {
-                return AppDTO::$TRUE_AS_STRING;
-            }
-        }
+     
        /* if($bookingDTO->getEmployeeId()!="" or $bookingDTO->getEmployeeId()!=null){
                 //Checking Emplyee
                 $salonEmplyeeDTO=new SalonEmployeeDTO();
@@ -286,7 +333,7 @@ class BBooking extends Controller implements BusinessInterface {
                 $jsonHandlerDto = new JsonHandlerDTO();
                 $jsonHandlerDto->setMessage("Booking List");
                 $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
-                $jsonHandlerDto->setResultHead("SalonBokingLst");
+                $jsonHandlerDto->setResultHead("SalonBookingLst");
                 $jsonHandlerDto->setResultInArr($bookingObject);
                 return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
@@ -298,7 +345,7 @@ class BBooking extends Controller implements BusinessInterface {
                 $jsonHandlerDto = new JsonHandlerDTO();
                 $jsonHandlerDto->setMessage("Something went wrong!");
                 $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_FAILUE);
-
+                $jsonHandlerDto->setResultHead("SalonBookingLst");
                 return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$FALSE_AS_STRING;
@@ -326,9 +373,9 @@ class BBooking extends Controller implements BusinessInterface {
             if ($serviceDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                
                 $jsonHandlerDto = new JsonHandlerDTO();
-                $jsonHandlerDto->setMessage("Something went wrong!");
+                $jsonHandlerDto->setMessage("Category ".$serviceDTO->getCategoryId()." does not exist!");
                 $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_FAILUE);
-
+                $jsonHandlerDto->setResultHead("SalonLst");
                 return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$FALSE_AS_STRING;
@@ -446,9 +493,9 @@ class BBooking extends Controller implements BusinessInterface {
             if ($salonInvoiceDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
 
                         $jsonHandlerDto = new JsonHandlerDTO();
-                        $jsonHandlerDto->setMessage("Salon '" .$salonInvoiceDTO->getSalonId() . "' does not exist!");
+                        $jsonHandlerDto->setMessage("Salon '" .$salonInvoiceDTO->getSalonId(). "' does not exist!");
                         $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
-
+                        $jsonHandlerDto->setResultHead("PaymentDetails");
                 return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
@@ -514,7 +561,7 @@ class BBooking extends Controller implements BusinessInterface {
                         $jsonHandlerDto = new JsonHandlerDTO();
                         $jsonHandlerDto->setMessage("Salon '" .$salonInvoiceDTO->getSalonId() . "' does not exist!");
                         $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
-
+                        $jsonHandlerDto->setResultHead("PaymentDetails");
                 return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
@@ -563,7 +610,7 @@ class BBooking extends Controller implements BusinessInterface {
                         $jsonHandlerDto = new JsonHandlerDTO();
                         $jsonHandlerDto->setMessage("Salon '" .$bookingDTO->getSalonId() . "' does not exist!");
                         $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
-
+                        $jsonHandlerDto->setResultHead("PaymentDetails");
                 return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;
@@ -650,7 +697,7 @@ class BBooking extends Controller implements BusinessInterface {
                         $jsonHandlerDto = new JsonHandlerDTO();
                         $jsonHandlerDto->setMessage("Booking '" .$bookingDTO->getBookingId() . "' does not exist!");
                         $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
-
+                        $jsonHandlerDto->setResultHead("BookingDetails");
                 return JsonHandler::getJsonMessage($jsonHandlerDto);
             } else {
                 return AppDTO::$TRUE_AS_STRING;

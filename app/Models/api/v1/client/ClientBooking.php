@@ -80,6 +80,7 @@ class ClientBooking extends Model implements ModelInterface{
         
         $booking->client_phone=$bookingDTO->getClientPhoneNumber();
         $booking->booking_status="Pending";
+        $booking->booking_reference=$bookingDTO->getbookingReference();
         $booking->booking_date=$bookingDTO->getBookingDate();
         $booking->booking_from= $bookingDTO->getBookingFrom();
         $booking->booking_to= $bookingDTO->getBookingTo();
@@ -138,6 +139,7 @@ class ClientBooking extends Model implements ModelInterface{
         return  $booking;
  
     }
+
     public function cancellBooking(BookingDTO $bookingDTO) {
 
         $booking= ClientBooking::find($bookingDTO->getBookingId());
@@ -153,24 +155,20 @@ class ClientBooking extends Model implements ModelInterface{
 
     public function lstBooking(BookingDTO $bookingDTO){
         $query = "select salon_master.id , salon_master.name,salon_master.arabic_name,salon_branches.address , salon_branches.longtitude ";
-        $query=$query.",salon_branches.latitude ,salon_gallery.logo,client_booking.booking_date,client_booking.branch_id,client_booking.booking_date,client_booking.client_phone , MIN(client_booking.booking_from)'booking_from' , MAX(client_booking.booking_to) 'booking_to' FROM `client_booking` ";
+        $query=$query.",salon_branches.latitude ,salon_gallery.logo,client_booking.booking_date,client_booking.branch_id,client_booking.booking_date,client_booking.client_phone , client_booking_master.start_time 'booking_from' , client_booking_master.end_time 'booking_to' FROM client_booking_master 
+         inner join `client_booking`  on client_booking_master.id=client_booking.booking_reference ";
         $query=$query."inner join salon_master on salon_master.id=client_booking.salon_id ";
         $query=$query."left join salon_branches on client_booking.salon_id=salon_branches.salon_id and client_booking.branch_id=salon_branches.id ";
         $query=$query."left join salon_gallery on salon_master.user_phone_no=salon_gallery.user_phone_no ";
-        if($bookingDTO->getClientPhoneNumber()==""){
-            $query=$query."where client_booking.client_phone=''";
+        if($bookingDTO->getbookingReference()==""){
+            $query=$query."where client_booking_master.id=''";
         }
         else{
-            $query=$query."where client_booking.client_phone='".$bookingDTO->getClientPhoneNumber()."'";
+            $query=$query."where client_booking_master.id='".$bookingDTO->getbookingReference()."'";
         }
 
-        if($bookingDTO->getSalonId()==""){
-            $query=$query." and client_booking.salon_id=''";
-        }
-        else{
-            $query=$query." and client_booking.salon_id='".$bookingDTO->getSalonId()."'";
-        }
-        $query=$query."group BY salon_master.id , salon_master.name,salon_master.arabic_name,salon_branches.address , salon_branches.longtitude ,salon_branches.latitude ,salon_gallery.logo,client_booking.booking_date,client_booking.branch_id,client_booking.booking_date,client_booking.client_phone ORDER by client_booking.booking_date DESC , 'booking_from' ASC; ";
+      
+        $query=$query."group BY salon_master.id , salon_master.name,salon_master.arabic_name,salon_branches.address , salon_branches.longtitude ,salon_branches.latitude ,salon_gallery.logo,client_booking.booking_date,client_booking.branch_id,client_booking.booking_date,client_booking.client_phone,client_booking_master.start_time,client_booking_master.end_time ORDER by client_booking.booking_date DESC , 'booking_from' ASC; ";
         
          $bookingDetails = DBUtil::select($query);
 
@@ -197,11 +195,12 @@ class ClientBooking extends Model implements ModelInterface{
             
 
             $query="select client_booking.id 'bookingId' ,services_subcategory.english_name 'englishName',services_subcategory.arabic_name 'arabicName',salon_services.service_duration 'serviceDuration',client_booking.price as 'servicePrice',client_booking.notes 'bookingNotes'  FROM `client_booking` ";
-            $query=$query." inner join salon_master on salon_master.id=client_booking.salon_id";
-            $query=$query." inner join salon_services on client_booking.category_id=salon_services.category_id and client_booking.subcategory_id=salon_services.subcategory_id and salon_services.user_phone_no=salon_master.user_phone_no";
-            $query=$query." inner join services_subcategory on client_booking.subcategory_id=services_subcategory.id and  client_booking.category_id=services_subcategory.category_id";
-            $query=$query." where client_booking.booking_date='".$booking->booking_date."' and client_booking.salon_id='".$booking->id."' and client_booking.client_phone='".$booking->client_phone."' and client_booking.branch_id='".$booking->branch_id."'";
+            $query=$query." left join salon_master on salon_master.id=client_booking.salon_id";
+            $query=$query." left join salon_services on client_booking.category_id=salon_services.category_id and client_booking.subcategory_id=salon_services.subcategory_id and salon_services.user_phone_no=salon_master.user_phone_no";
+            $query=$query." left join services_subcategory on client_booking.subcategory_id=services_subcategory.id and  client_booking.category_id=services_subcategory.category_id";
+            $query=$query." where client_booking.booking_reference='".$bookingDTO->getbookingReference()."'";
             $ServicesDetails = DBUtil::select($query);
+            
             $notes="";
             foreach ($ServicesDetails as $service) {
                 $notes= trim($notes." ".$service->bookingNotes);
@@ -231,6 +230,13 @@ class ClientBooking extends Model implements ModelInterface{
     public function getBookingById($bookingId){
         $query = "select * from client_booking  
         where id='". $bookingId ."'";
+         $bookingDetails = DBUtil::select($query);
+
+        return $bookingDetails;
+    }
+    public function LstBookingByReferenceId($bookingReferenceId){
+        $query = "select * from client_booking  
+        where booking_reference='". $Reference ."'";
          $bookingDetails = DBUtil::select($query);
 
         return $bookingDetails;

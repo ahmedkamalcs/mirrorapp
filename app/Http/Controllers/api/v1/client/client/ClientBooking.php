@@ -76,8 +76,8 @@ public function paymentDetails(Request $request){
 
 public function bookingDetails(Request $request){
     $bookingDTO= new BookingDTO();
-    $bookingDTO->setSalonId($request["SalonId"]);
-    $bookingDTO->setClientPhoneNumber($request["ClientPhoneNumber"]);
+    $bookingDTO->setbookingReference($request["booking_id"]);
+    
     $booking = new BBooking();
 
     return $booking->lstSalonBooking($bookingDTO);

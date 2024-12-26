@@ -35,7 +35,7 @@ final class JsonHandler {
             $response = ['Message' => $jsonHandlerDTO->getMessage(),
                 'isSucces' => $jsonHandlerDTO->getIsSuccess(),
                 //'jsonData' => []];
-                $jsonHandlerDTO->getResultHead()=> []];
+                $jsonHandlerDTO->getResultHead() => []];
             $jsonResult = json_encode($response);
             header('Content-Type: application/json; charset=utf-8');
             echo $jsonResult;
@@ -45,7 +45,7 @@ final class JsonHandler {
             $response = ['Message' => $jsonHandlerDTO->getMessage(),
                 'isSucces' => $jsonHandlerDTO->getIsSuccess(),
               //  'jsonData' => [$jsonHandlerDTO->getResultHead() => (object) $jsonHandlerDTO->getResultInArr()[0]]];
-              $jsonHandlerDTO->getResultHead() => (object) $jsonHandlerDTO->getResultInArr()[0]];
+              $jsonHandlerDTO->getResultHead() =>  $jsonHandlerDTO->getResultInArr()];
             $jsonResult = json_encode($response);
             header('Content-Type: application/json; charset=utf-8');
             echo $jsonResult;

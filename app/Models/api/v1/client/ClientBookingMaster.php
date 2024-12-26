@@ -22,7 +22,7 @@ use App\Http\Controllers\api\v1\dto\AppDTO;
  * @author ISG
  * EventDetailsModel class. EventDetailsModel persistent object.
  */
-class ServiceCategory extends Model implements ModelInterface{
+class ClientBookingMaster extends Model implements ModelInterface{
 
 
 
@@ -74,18 +74,79 @@ class ServiceCategory extends Model implements ModelInterface{
     public function construct2($userId, $eventTitleEn, $eventTitleAr) {
     }
 
-    public function lstCategory() {
-        $query = "select * from service_category ";
-        $categories = DBUtil::select($query);
-        return $categories;
+    public function SaveBooking(BookingDTO $bookingDTO) {
+
+        $booking= new ClientBookingMaster();
         
+        $booking->client_phone=$bookingDTO->getClientPhoneNumber();
+        $booking->booking_status="Pending";
+        $booking->booking_date=$bookingDTO->getBookingDate();
+        $booking->start_time= $bookingDTO->getBookingFrom();
+        $booking->end_time= $bookingDTO->getBookingTo();
+        $booking->total_price=$bookingDTO->getPrice();
+        
+        $booking->save();
+        
+        return  $booking;
+ 
     }
 
+    public function updateBooking(BookingDTO $bookingDTO) {
+
+        $booking= ClientBookingMaster::find($bookingDTO->getBookingId());
+        
+        $booking->booking_status="Pending";
+        $booking->booking_date=$bookingDTO->getBookingDate();
+        $booking->start_time= $bookingDTO->getBookingFrom();
+        $booking->end_time= $bookingDTO->getBookingTo();
+    
+        $booking->save();
+        
+        return  $booking;
+ 
+    }
+    
+ 
+    public function confirmBooking(BookingDTO $bookingDTO) {
+
+        $booking= ClientBookingMaster::find($bookingDTO->getBookingId());
+        
+        $booking->booking_status="Confirmed";
+        
+    
+        $booking->save();
+        
+        return  $booking;
+ 
+    }
+    public function cancellBooking(BookingDTO $bookingDTO) {
+
+        $booking= ClientBookingMaster::find($bookingDTO->getBookingId());
+        
+        $booking->booking_status="Cancelled";
+        
+    
+        $booking->save();
+        
+        return  $booking;
+ 
+    }
+
+    
+    public function getBookingById($bookingId){
+        $query = "select * from client_booking_master  
+        where id='". $bookingId ."'";
+         $bookingDetails = DBUtil::select($query);
+
+        return $bookingDetails;
+    }
+    
+    
     /**
      * Instance Variables for the persistent object Model.
      * @var type
      */
     public $timestamps = true;
-    protected $table = 'service_category';
+    protected $table = 'client_booking_master';
 
 }
