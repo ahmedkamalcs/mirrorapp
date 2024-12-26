@@ -17,4 +17,5 @@ UPDATE `service_category` SET `icon` = 'HairExtension.JPG' WHERE `service_catego
 UPDATE `service_category` SET `icon` = 'Hair.JPG' WHERE `service_category`.`id` = 3;
 UPDATE `service_category` SET `icon` = 'massage.JPG' WHERE `service_category`.`id` = 15;
 
-ALTER TABLE `client_booking` ADD `booking_refrence` INT(11) NULL DEFAULT NULL AFTER `id`;
+ALTER TABLE `client_booking` ADD `booking_reference` INT(11) NULL DEFAULT NULL AFTER `id`;
+ALTER TABLE `client_booking` ADD `duration` FLOAT NOT NULL AFTER `quantity`;

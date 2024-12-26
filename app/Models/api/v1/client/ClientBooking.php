@@ -236,7 +236,7 @@ class ClientBooking extends Model implements ModelInterface{
     }
     public function LstBookingByReferenceId($bookingReferenceId){
         $query = "select * from client_booking  
-        where booking_reference='". $Reference ."'";
+        where booking_reference='". $bookingReferenceId ."'";
          $bookingDetails = DBUtil::select($query);
 
         return $bookingDetails;

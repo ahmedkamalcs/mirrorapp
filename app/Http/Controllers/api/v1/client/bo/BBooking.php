@@ -184,7 +184,7 @@ class BBooking extends Controller implements BusinessInterface {
                 return AppDTO::$FALSE_AS_STRING;
             }
         }
-        $bookingList=$clientBookingModel->LstBookingByReferenceId($bookingDTO->getBookingById());
+        $bookingList=$clientBookingModel->LstBookingByReferenceId($bookingDTO->getBookingId());
         foreach($bookingList as $booking ){
             $bookingDTO->setBookingId($booking->id);
             $bookingObject=$clientBookingModel->cancellBooking($bookingDTO);
@@ -234,7 +234,7 @@ class BBooking extends Controller implements BusinessInterface {
                 return AppDTO::$FALSE_AS_STRING;
             }
         }
-        $bookingList=$clientBookingModel->LstBookingByReferenceId($bookingDTO->getBookingById());
+        $bookingList=$clientBookingModel->LstBookingByReferenceId($bookingDTO->getBookingId());
         foreach($bookingList as $booking ){
             $bookingDTO->setBookingId($booking->id);
             $bookingObject=$clientBookingModel->confirmBooking($bookingDTO);
