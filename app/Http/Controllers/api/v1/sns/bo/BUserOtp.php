@@ -338,7 +338,7 @@ class BUserOtp {
             $jsonHandlerDto->setMessage("OTP has been Verified!");
             $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
             $jsonHandlerDto->setResultHead("userDetails");
-            $jsonHandlerDto->setResultInArr($userarr);
+            $jsonHandlerDto->setResultInArr($userarr[0]);
 
             /*
               $response = ['Message' => "OTP has been Verified!",
