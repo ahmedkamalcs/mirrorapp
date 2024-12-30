@@ -134,7 +134,7 @@ class BBooking extends Controller implements BusinessInterface {
                 return AppDTO::$FALSE_AS_STRING;
             }
         }
-        $bookingList=$clientBookingModel->LstBookingByReferenceId($bookingDTO->getBookingById());
+        $bookingList=$clientBookingModel->LstBookingByReferenceId($bookingDTO->getBookingId());
         foreach($bookingList as $booking ){
             $bookingDTO->setBookingId($booking->id);
             $bookingObject=$clientBookingModel->updateBooking($bookingDTO);
@@ -486,6 +486,7 @@ class BBooking extends Controller implements BusinessInterface {
         $salonMasterModel=new SalonMaster();
         $bookingModel = new ClientBooking();
         $salonInvoiceModel=new SalonInvoices();
+        $clientBookingModel= new ClientBooking();
         $isNewInvoice=false;
         $salonData=$salonMasterModel->getSalonDataById($salonInvoiceDTO->getSalonId());
     
@@ -501,15 +502,16 @@ class BBooking extends Controller implements BusinessInterface {
                 return AppDTO::$TRUE_AS_STRING;
             }
         }
-
-        $salonBookigs=$salonInvoiceDTO->getBookingId();
+       
+       
+        $salonBookigs= $clientBookingModel->LstBookingByReferenceId($salonInvoiceDTO->getBookingId());
         $invoice=array();
         foreach($salonBookigs as $booking){
-            $bookDetails=$bookingModel->getBookingById($booking);
+            $bookDetails=$bookingModel->getBookingById($booking->id);
             
             if($bookDetails){
                 if($bookDetails[0]->invoice_reference=="" or $bookDetails[0]->invoice_reference==null){
-                    $salonInvoiceDTO->setBookingId($booking);
+                    $salonInvoiceDTO->setBookingId($booking->id);
                     $invoice=$salonInvoiceModel->saveSalonInvoice($salonInvoiceDTO);
                     $isNewInvoice=true;
                     break;
@@ -518,9 +520,9 @@ class BBooking extends Controller implements BusinessInterface {
         }
         if($isNewInvoice){
             foreach($salonBookigs as $booking){
-                $bookDetails=$bookingModel->getBookingById($booking);
+                $bookDetails=$bookingModel->getBookingById($booking->id);
                 if($bookDetails[0]->invoice_reference=="" or $bookDetails[0]->invoice_reference==null){
-                $bookDetails=$bookingModel->updateInvoiceReference($booking,$invoice['id']);
+                $bookDetails=$bookingModel->updateInvoiceReference($booking->id,$invoice['id']);
                 }
             }
             if ($salonInvoiceDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
@@ -551,7 +553,9 @@ class BBooking extends Controller implements BusinessInterface {
     public function updatePayment(SalonInvoiceDTO $salonInvoiceDTO){
         $salonMasterModel=new SalonMaster();
         $bookingModel = new ClientBooking();
+        $clientBookingModel= new ClientBooking();
         $paymentInvoiceModel= new PaymentInvoices();
+        $bookingModel = new ClientBooking();
         $salonInvoiceModel=new SalonInvoices();
         $salonData=$salonMasterModel->getSalonDataById($salonInvoiceDTO->getSalonId());
     
@@ -568,11 +572,12 @@ class BBooking extends Controller implements BusinessInterface {
             }
         }
        
-        $salonBookigs=$salonInvoiceDTO->getBookingId();
+        $salonBookigs=$salonBookigs= $clientBookingModel->LstBookingByReferenceId($salonInvoiceDTO->getBookingId());
         $invoice=array();
         $prevouse_invocie="";
+        
         foreach($salonBookigs as $booking){
-            $bookDetails=$bookingModel->getBookingById($booking); 
+            $bookDetails=$bookingModel->getBookingById($booking->id); 
             if($bookDetails){
                 
                 if($bookDetails[0]->invoice_reference != $prevouse_invocie){
@@ -580,7 +585,7 @@ class BBooking extends Controller implements BusinessInterface {
                     if($salonInvoiceDTO->getPaymentStatus()=="Paid"){
                         $invoice= $salonInvoiceModel->updatePaymentStatus($bookDetails[0]->invoice_reference,$salonInvoiceDTO->getPaymentStatus(),$salonInvoiceDTO->getPaymentResponse());
                         $salonInvoiceDTO->setInvoiceId($bookDetails[0]->invoice_reference);
-                        $updateobject=$bookingModel->updateBookingPaidStatus($booking,"1");
+                        $updateobject=$bookingModel->updateBookingPaidStatus($booking->id,"1");
                         $payment=$paymentInvoiceModel->savePayment($salonInvoiceDTO);
                     }else{
                         $invoice=$salonInvoiceModel->updatePaymentStatus($bookDetails[0]->invoice_reference,$salonInvoiceDTO->getPaymentStatus(),$salonInvoiceDTO->getPaymentResponse());

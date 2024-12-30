@@ -80,7 +80,7 @@ class ClientBooking extends Model implements ModelInterface{
         
         $booking->client_phone=$bookingDTO->getClientPhoneNumber();
         $booking->booking_status="Pending";
-        $booking->booking_reference=$bookingDTO->getbookingReference();
+        $booking->bookingId=$bookingDTO->getbookingReference();
         $booking->booking_date=$bookingDTO->getBookingDate();
         $booking->booking_from= $bookingDTO->getBookingFrom();
         $booking->booking_to= $bookingDTO->getBookingTo();
@@ -156,7 +156,7 @@ class ClientBooking extends Model implements ModelInterface{
     public function lstBooking(BookingDTO $bookingDTO){
         $query = "select salon_master.id , salon_master.name,salon_master.arabic_name,salon_branches.address , salon_branches.longtitude ";
         $query=$query.",salon_branches.latitude ,salon_gallery.logo,client_booking.booking_date,client_booking.branch_id,client_booking.booking_date,client_booking.client_phone , client_booking_master.start_time 'booking_from' , client_booking_master.end_time 'booking_to' FROM client_booking_master 
-         inner join `client_booking`  on client_booking_master.id=client_booking.booking_reference ";
+         inner join `client_booking`  on client_booking_master.id=client_booking.bookingId ";
         $query=$query."inner join salon_master on salon_master.id=client_booking.salon_id ";
         $query=$query."left join salon_branches on client_booking.salon_id=salon_branches.salon_id and client_booking.branch_id=salon_branches.id ";
         $query=$query."left join salon_gallery on salon_master.user_phone_no=salon_gallery.user_phone_no ";
@@ -198,7 +198,7 @@ class ClientBooking extends Model implements ModelInterface{
             $query=$query." left join salon_master on salon_master.id=client_booking.salon_id";
             $query=$query." left join salon_services on client_booking.category_id=salon_services.category_id and client_booking.subcategory_id=salon_services.subcategory_id and salon_services.user_phone_no=salon_master.user_phone_no";
             $query=$query." left join services_subcategory on client_booking.subcategory_id=services_subcategory.id and  client_booking.category_id=services_subcategory.category_id";
-            $query=$query." where client_booking.booking_reference='".$bookingDTO->getbookingReference()."'";
+            $query=$query." where client_booking.bookingId='".$bookingDTO->getbookingReference()."'";
             $ServicesDetails = DBUtil::select($query);
             
             $notes="";
@@ -236,7 +236,7 @@ class ClientBooking extends Model implements ModelInterface{
     }
     public function LstBookingByReferenceId($bookingReferenceId){
         $query = "select * from client_booking  
-        where booking_reference='". $bookingReferenceId ."'";
+        where bookingId='". $bookingReferenceId ."'";
          $bookingDetails = DBUtil::select($query);
 
         return $bookingDetails;

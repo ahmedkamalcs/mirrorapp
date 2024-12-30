@@ -76,7 +76,7 @@ public function paymentDetails(Request $request){
 
 public function bookingDetails(Request $request){
     $bookingDTO= new BookingDTO();
-    $bookingDTO->setbookingReference($request["booking_id"]);
+    $bookingDTO->setbookingReference($request["bookingId"]);
     
     $booking = new BBooking();
 
@@ -102,7 +102,7 @@ public function savePayment(Request $request){
     $salonInvoiceDTO->setSalonMobile($request["salon_mob_num"]);
     $salonInvoiceDTO->setSalonId($request["salon_id"]);
     $salonInvoiceDTO->setInvoiceAmount($request["amount"]);
-    $salonInvoiceDTO->setBookingId($request["booking_id"]);
+    $salonInvoiceDTO->setBookingId($request["bookingId"]);
     $salonInvoiceDTO->setClientId($request["client_id"]);
     $salonInvoiceDTO->setPaymentStatus($request["payment_status"]);
     $salonInvoiceDTO->setPaymentResponse($request["payment_response"]);
