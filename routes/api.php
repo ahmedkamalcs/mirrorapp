@@ -46,8 +46,8 @@ Route::group(['namespace' => 'App\Http\Controllers\api\v1\client\client', 'prefi
     Route::post('savePayment', 'ClientBooking@savePayment');
     Route::post('paymentDetails', 'ClientBooking@paymentDetails');
     Route::post('bookingDetails', 'ClientBooking@bookingDetails');
-    Route::post('saveBookingNotes', 'ClientBooking@saveBookingNotes');
-    
+    Route::post('saveBookingNotes', 'ClientBooking@saveBookingNotes'); 
+    Route::post('lstSalonInbox', 'ClientBooking@lstSalonInbox');
 });
 /*Rout Payment Model. Group v1*/
 Route::group(['namespace' => 'App\Http\Controllers\api\v1\paymentmodel\client', 'prefix' => 'v1'], function() {

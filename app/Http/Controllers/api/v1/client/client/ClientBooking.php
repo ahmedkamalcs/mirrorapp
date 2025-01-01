@@ -57,6 +57,15 @@ public function lstCategory(){
 
     return $booking->lstCategory();
 }
+public function lstSalonInbox(Request $request){
+    $bookingDTO= new BookingDTO();
+    $bookingDTO->setSalonId($request['SalonId']);
+    $bookingDTO->setClientPhoneNumber($request['ClientPhoneNumber']);
+    $booking = new BBooking();
+
+    return $booking->lstSalonInbox($bookingDTO);
+
+}
 public function lstSalonByCategory(Request $request){
     $serviceDTO=new ServicesDTO();
     $serviceDTO->setCategoryId($request['categoryId']);
@@ -120,6 +129,6 @@ public function saveBookingNotes(Request $request){
     $bookingDTO->setbookingNotes($request["notes"]);
     $booking = new BBooking();
     return $booking->saveBookingNotes($bookingDTO);
-
+    
 }
 }

@@ -33,6 +33,7 @@ class BookingDTO implements DTOInterface {
      private $bookingDate;
      private $bookingNotes;
      private $bookingReference;
+     private $bookingType;
 
     private $apiCall = '1'; //API Calls Active by Default
     function getApiCall() {
@@ -49,6 +50,12 @@ class BookingDTO implements DTOInterface {
     }
     function getbookingNotes(){
         return $this->bookingNotes;
+    }
+    function setbookingType($bookingType){
+        $this->bookingType=$bookingType;
+    }
+    function getbookingType(){
+        return $this->bookingType;
     }
     function setbookingReference($bookingReference){
         $this->bookingReference=$bookingReference;

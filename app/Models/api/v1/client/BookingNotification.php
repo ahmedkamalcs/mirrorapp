@@ -22,7 +22,7 @@ use App\Http\Controllers\api\v1\dto\AppDTO;
  * @author ISG
  * EventDetailsModel class. EventDetailsModel persistent object.
  */
-class ClientBookingMaster extends Model implements ModelInterface{
+class BookingNotification extends Model implements ModelInterface{
 
 
 
@@ -74,31 +74,31 @@ class ClientBookingMaster extends Model implements ModelInterface{
     public function construct2($userId, $eventTitleEn, $eventTitleAr) {
     }
 
-    public function SaveBooking(BookingDTO $bookingDTO) {
+    public function SaveBookingNotification(BookingDTO $bookingDTO) {
 
-        $booking= new ClientBookingMaster();
+        $bookingNotification= new BookingNotification();
         
-        $booking->client_phone=$bookingDTO->getClientPhoneNumber();
-        $booking->booking_status="New";
-        $booking->booking_date=$bookingDTO->getBookingDate();
-        $booking->start_time= $bookingDTO->getBookingFrom();
-        $booking->end_time= $bookingDTO->getBookingTo();
-        $booking->total_price=$bookingDTO->getPrice();
+        $bookingNotification->salonId=$bookingDTO->getSalonId();
+        $bookingNotification->bookingId=$bookingDTO->getbookingReference();
+        $bookingNotification->client_mob_num=$bookingDTO->getClientPhoneNumber();
+        $bookingNotification->bookingType=$bookingDTO->getbookingType();
+        $bookingNotification->isNotificationOpened=0;
         
-        $booking->save();
         
-        return  $booking;
+        $bookingNotification->save();
+        
+        return  $bookingNotification;
  
     }
 
     public function updateBooking(BookingDTO $bookingDTO) {
 
-        $booking= ClientBookingMaster::find($bookingDTO->getBookingId());
+        $booking= ClientBooking::find($bookingDTO->getBookingId());
         
-        $booking->booking_status="Updated";
+        $booking->booking_status="Pending";
         $booking->booking_date=$bookingDTO->getBookingDate();
-        $booking->start_time= $bookingDTO->getBookingFrom();
-        $booking->end_time= $bookingDTO->getBookingTo();
+        $booking->booking_from= $bookingDTO->getBookingFrom();
+        $booking->booking_to= $bookingDTO->getBookingTo();
     
         $booking->save();
         
@@ -106,47 +106,30 @@ class ClientBookingMaster extends Model implements ModelInterface{
  
     }
     
- 
-    public function confirmBooking(BookingDTO $bookingDTO) {
 
-        $booking= ClientBookingMaster::find($bookingDTO->getBookingId());
-        
-        $booking->booking_status="Confirmed";
-        
-    
-        $booking->save();
-        
-        return  $booking;
- 
-    }
-    public function cancellBooking(BookingDTO $bookingDTO) {
+    public function lstSalonInbox(BookingDTO $bookingDTO){
+        $query = "select booking_inbox.id,'' 'clinetProfileImageUrl',isg_user.first_name 'clientName' ,client_booking_master.booking_date 'date',booking_inbox.bookingId , booking_inbox.isNotificationOpened ,booking_inbox.bookingType 'bookingType' from booking_inbox
+                  left join isg_user on booking_inbox.client_mob_num=isg_user.user_phone_no
+                  inner join client_booking_master on client_booking_master.id=booking_inbox.bookingId
+        where ''=''";
+        if($bookingDTO->getSalonId()!=""){
+            $query=$query." and booking_inbox.salonId='".$bookingDTO->getSalonId()."'";
+        }
 
-        $booking= ClientBookingMaster::find($bookingDTO->getBookingId());
-        
-        $booking->booking_status="Cancelled";
-        
-    
-        $booking->save();
-        
-        return  $booking;
- 
+        if($bookingDTO->getClientPhoneNumber()!="" and $bookingDTO->getClientPhoneNumber()!="+"){
+            $query=$query." and booking_inbox.client_mob_num='".$bookingDTO->getClientPhoneNumber()."'";
+        }
+        $query=$query." order by booking_inbox.created_at DESC , booking_inbox.updated_at DESC";
+         $SalonInbox = DBUtil::select($query);
+
+        return $SalonInbox;
     }
 
-    
-    public function getBookingById($bookingId){
-        $query = "select * from client_booking_master  
-        where id='". $bookingId ."'";
-         $bookingDetails = DBUtil::select($query);
-
-        return $bookingDetails;
-    }
-    
-    
     /**
      * Instance Variables for the persistent object Model.
      * @var type
      */
     public $timestamps = true;
-    protected $table = 'client_booking_master';
+    protected $table = 'booking_inbox';
 
 }

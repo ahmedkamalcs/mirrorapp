@@ -79,7 +79,7 @@ class ClientBooking extends Model implements ModelInterface{
         $booking= new ClientBooking();
         
         $booking->client_phone=$bookingDTO->getClientPhoneNumber();
-        $booking->booking_status="Pending";
+        $booking->booking_status="New";
         $booking->bookingId=$bookingDTO->getbookingReference();
         $booking->booking_date=$bookingDTO->getBookingDate();
         $booking->booking_from= $bookingDTO->getBookingFrom();
@@ -102,7 +102,7 @@ class ClientBooking extends Model implements ModelInterface{
 
         $booking= ClientBooking::find($bookingDTO->getBookingId());
         
-        $booking->booking_status="Pending";
+        $booking->booking_status="Updated";
         $booking->booking_date=$bookingDTO->getBookingDate();
         $booking->booking_from= $bookingDTO->getBookingFrom();
         $booking->booking_to= $bookingDTO->getBookingTo();

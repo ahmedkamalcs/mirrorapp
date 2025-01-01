@@ -14,6 +14,7 @@ use App\Models\api\v1\salon\SalonInvoices;
 use App\Models\api\v1\salon\PaymentInvoices;
 use App\Models\api\v1\client\ServiceCategory;
 use App\Models\api\v1\client\ClientBooking;
+use App\Models\api\v1\client\BookingNotification;
 use App\Models\api\v1\client\ClientBookingMaster;
 use App\Http\Controllers\api\v1\dto\SalonEmployeeDTO;
 use App\Http\Controllers\api\v1\dto\SalonBranchesDTO;
@@ -90,7 +91,12 @@ class BBooking extends Controller implements BusinessInterface {
         $bookingDTO->setbookingReference($bookingMasterObject->id);
         $clientBookingModel= new ClientBooking();
         $bookingObject=$clientBookingModel->SaveBooking($bookingDTO);
+
+        
         if ($bookingObject) {
+            $bookingNotificationModel= new BookingNotification();
+            $bookingDTO->setbookingtype("New");
+            $bookingNotificationObject=$bookingNotificationModel->SaveBookingNotification($bookingDTO);
             if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 $jsonHandlerDto = new JsonHandlerDTO();
                 $jsonHandlerDto->setMessage("Booked Successfully!");
@@ -134,13 +140,19 @@ class BBooking extends Controller implements BusinessInterface {
                 return AppDTO::$FALSE_AS_STRING;
             }
         }
+        $bookingId=$bookingDTO->getBookingId();
         $bookingList=$clientBookingModel->LstBookingByReferenceId($bookingDTO->getBookingId());
+        $bookingDTO->setbookingtype("Updated");
         foreach($bookingList as $booking ){
             $bookingDTO->setBookingId($booking->id);
+            $bookingDTO->setSalonId($booking->salon_id);
             $bookingObject=$clientBookingModel->updateBooking($bookingDTO);
         }
         
         if ($bookingObject) {
+            $bookingDTO->setbookingReference($bookingId);
+            $bookingNotificationModel= new BookingNotification();
+            $bookingNotificationObject=$bookingNotificationModel->SaveBookingNotification($bookingDTO);
             if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 $jsonHandlerDto = new JsonHandlerDTO();
                 $jsonHandlerDto->setMessage("Booked Successfully!");
@@ -184,13 +196,20 @@ class BBooking extends Controller implements BusinessInterface {
                 return AppDTO::$FALSE_AS_STRING;
             }
         }
+        $bookingId=$bookingDTO->getBookingId();
+        $bookingDTO->setClientPhoneNumber($bookingMasterObject['client_phone']);
+        $bookingDTO->setbookingtype("Cancelled");
         $bookingList=$clientBookingModel->LstBookingByReferenceId($bookingDTO->getBookingId());
         foreach($bookingList as $booking ){
             $bookingDTO->setBookingId($booking->id);
+            $bookingDTO->setSalonId($booking->salon_id);
             $bookingObject=$clientBookingModel->cancellBooking($bookingDTO);
         }
         
         if ($bookingObject) {
+            $bookingDTO->setbookingReference($bookingId);
+            $bookingNotificationModel= new BookingNotification();
+            $bookingNotificationObject=$bookingNotificationModel->SaveBookingNotification($bookingDTO);
             if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 $jsonHandlerDto = new JsonHandlerDTO();
                 $jsonHandlerDto->setMessage("Cancelled Successfully!");
@@ -234,13 +253,20 @@ class BBooking extends Controller implements BusinessInterface {
                 return AppDTO::$FALSE_AS_STRING;
             }
         }
+        $bookingId=$bookingDTO->getBookingId();
+        $bookingDTO->setbookingtype("Confirmed");
+        $bookingDTO->setClientPhoneNumber($bookingMasterObject['client_phone']);
         $bookingList=$clientBookingModel->LstBookingByReferenceId($bookingDTO->getBookingId());
         foreach($bookingList as $booking ){
             $bookingDTO->setBookingId($booking->id);
+            $bookingDTO->setSalonId($booking->salon_id);
             $bookingObject=$clientBookingModel->confirmBooking($bookingDTO);
         }
         
         if ($bookingObject) {
+            $bookingDTO->setbookingReference($bookingId);
+            $bookingNotificationModel= new BookingNotification();
+            $bookingNotificationObject=$bookingNotificationModel->SaveBookingNotification($bookingDTO);
             if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
                 $jsonHandlerDto = new JsonHandlerDTO();
                 $jsonHandlerDto->setMessage("Confirmed Successfully!");
@@ -303,6 +329,58 @@ class BBooking extends Controller implements BusinessInterface {
         }
 
     }
+
+    public function lstSalonInbox(BookingDTO $bookingDTO){
+
+     
+        /* if($bookingDTO->getEmployeeId()!="" or $bookingDTO->getEmployeeId()!=null){
+                 //Checking Emplyee
+                 $salonEmplyeeDTO=new SalonEmployeeDTO();
+                 $salonEmplyeeDTO->setEmployeehId($bookingDTO->getEmployeeId());
+                 $salonEmplyeeDTO->setSalonId($bookingDTO->getSalonId());
+                 $salonEmployeeModel= new SalonEmployee();
+                 $employeeData= $salonEmployeeModel->getSalonEmployeebyId($salonEmplyeeDTO);
+                 
+                 if(!$employeeData){
+                     if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+                                 $jsonHandlerDto = new JsonHandlerDTO();
+                                 $jsonHandlerDto->setMessage("Employee does not exist! ");
+ 
+                                 $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_DATA_NOT_FOUND);
+ 
+                         return JsonHandler::getJsonMessage($jsonHandlerDto);
+                     }
+ 
+                 }   
+         }*/
+         $bookingNotificationModel= new BookingNotification();
+         $bookingNotificationObject=$bookingNotificationModel->lstSalonInbox($bookingDTO);
+         if ($bookingNotificationObject) {
+             if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+                 $jsonHandlerDto = new JsonHandlerDTO();
+                 $jsonHandlerDto->setMessage("Notification Fetched");
+                 $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_SUCCESS);
+                 $jsonHandlerDto->setResultHead("Notification");
+                 $jsonHandlerDto->setResultInArr($bookingNotificationObject);
+                 return JsonHandler::getJsonMessage($jsonHandlerDto);
+             } else {
+                 return AppDTO::$TRUE_AS_STRING;
+             }
+         } else {
+             if ($bookingDTO->getApiCall() == AppDTO::$TRUE_AS_STRING) {
+                
+                 $jsonHandlerDto = new JsonHandlerDTO();
+                 $jsonHandlerDto->setMessage("Something went wrong!");
+                 $jsonHandlerDto->setIsSuccess(APICodes::$TRANSACTION_FAILUE);
+                 $jsonHandlerDto->setResultHead("Notification");
+                 return JsonHandler::getJsonMessage($jsonHandlerDto);
+             } else {
+                 return AppDTO::$FALSE_AS_STRING;
+             }
+         }
+ 
+         
+     }
     public function lstSalonBooking(BookingDTO $bookingDTO){
 
      
