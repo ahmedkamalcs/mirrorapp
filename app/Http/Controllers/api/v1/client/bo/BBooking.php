@@ -470,6 +470,7 @@ class BBooking extends Controller implements BusinessInterface {
         $allBooked=$salonBookingModel->lstServiceBooking($bookingDTO);
         $serviceDateails=$salonServiceModel->LstSalonService($servicesDTO);
         
+        
         $bookingSeat=1;
         if ($serviceDateails){
             if($serviceDateails[0]->working_hours_till=="12:00 AM"){
