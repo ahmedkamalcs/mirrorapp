@@ -108,7 +108,7 @@ class BookingNotification extends Model implements ModelInterface{
     
 
     public function lstSalonInbox(BookingDTO $bookingDTO){
-        $query = "select booking_inbox.id,'' 'clinetProfileImageUrl',isg_user.first_name 'clientName' ,client_booking_master.booking_date 'date',booking_inbox.bookingId , booking_inbox.isNotificationOpened ,booking_inbox.bookingType 'bookingType' from booking_inbox
+        $query = "select booking_inbox.id,'' as 'clinetProfileImageUrl',isg_user.first_name 'clientName' ,client_booking_master.booking_date 'date',booking_inbox.bookingId , booking_inbox.isNotificationOpened ,booking_inbox.bookingType 'bookingType' from booking_inbox
                   left join isg_user on booking_inbox.client_mob_num=isg_user.user_phone_no
                   inner join client_booking_master on client_booking_master.id=booking_inbox.bookingId
         where ''=''";
